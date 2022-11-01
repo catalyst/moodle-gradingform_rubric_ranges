@@ -543,26 +543,30 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
         return $html;
     }
 
-    public function arrange_score($levels) {
-        $levelsonly = array_values($levels);
-        foreach ($levelsonly as $levelkey => $level) {
-            if (count($levelsonly)-1 == $levelkey) {
-                $levels[$level['id']]['score'] = $level['score'].' to > 0';
-            } else {
-                $levels[$level['id']]['score'] = $level['score'].' to > '. $levelsonly[$levelkey+1]['score'];
-            }
-        }
-        return $levels;
-    }
-
-    public function display_range_score($mode, $levels, $isranged = false){
+    public function display_range_score($mode, $levels, $sortlevels, $isranged = false){
         if ($isranged) {
             if (in_array($mode, array(
                 gradingform_rubric_ranges_controller::DISPLAY_REVIEW ,
                 gradingform_rubric_ranges_controller::DISPLAY_VIEW,
                 gradingform_rubric_ranges_controller::DISPLAY_PREVIEW,
                 ))) {
-                return $this->arrange_score($levels);
+                    $levelsonly = array_values($levels);
+                    $rangecheck = count($levelsonly)-1;
+                    if ($sortlevels) {
+                        $rangecheck = 0;
+                    }
+                    foreach ($levelsonly as $levelkey => $level) {
+                        if ( $rangecheck == $levelkey) {
+                            $levels[$level['id']]['score'] = ($sortlevels) ?
+                            '0 to '. $level['score'] :
+                            $level['score'].' to 0';
+                        } else {
+                            $levels[$level['id']]['score'] = ($sortlevels) ?
+                            ($levelsonly[$levelkey-1]['score'] + 1).' to '. $level['score']:
+                            $level['score'].' to '. ($levelsonly[$levelkey+1]['score'] + 1);
+                        }
+                    }
+                    return $levels;
             }
         }
         return $levels;
@@ -584,7 +588,6 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
      * @return string
      */
     public function display_rubric($criteria, $options, $mode, $elementname = null, $values = null) {
-
         $criteriastr = '';
         $cnt = 0;
         foreach ($criteria as $id => $criterion) {
@@ -599,7 +602,7 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
             }
             $index = 1;
 
-            $criterion['levels'] = $this->display_range_score($mode,$criterion['levels'],$criterion['isranged']);
+            $criterion['levels'] = $this->display_range_score($mode, $criterion['levels'], $options['sortlevelsasc'], $criterion['isranged']);
             foreach ($criterion['levels'] as $levelid => $level) {
                 $level['id'] = $levelid;
                 $level['class'] = $this->get_css_class_suffix($levelcnt++, sizeof($criterion['levels']) -1);
