@@ -450,10 +450,13 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         $new = parent::get_definition_copy($target);
         $old = $this->get_definition_for_editing();
         $new->description_editor = $old->description_editor;
-        $new->rubric = array('criteria' => array(), 'options' => $old->rubric['options']);
+        echo '<pre>';
+        print_r($old);
+        echo '</pre>';
+        $new->rubricranges = array('criteria' => array(), 'options' => $old->rubricranges['options']);
         $newcritid = 1;
         $newlevid = 1;
-        foreach ($old->rubric['criteria'] as $oldcritid => $oldcrit) {
+        foreach ($old->rubricranges['criteria'] as $oldcritid => $oldcrit) {
             unset($oldcrit['id']);
             if (isset($oldcrit['levels'])) {
                 foreach ($oldcrit['levels'] as $oldlevid => $oldlev) {
@@ -465,7 +468,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
             } else {
                 $oldcrit['levels'] = array();
             }
-            $new->rubric['criteria']['NEWID'.$newcritid] = $oldcrit;
+            $new->rubricranges['criteria']['NEWID'.$newcritid] = $oldcrit;
             $newcritid++;
         }
 
