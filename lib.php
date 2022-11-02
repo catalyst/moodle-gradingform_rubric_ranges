@@ -163,7 +163,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
             $newcriteria = $newdefinition->rubricranges['criteria']; // new ones to be saved
         }
         $currentcriteria = $currentdefinition->rubric_criteria;
-        $criteriafields = array('sortorder', 'description', 'descriptionformat', 'isranged', 'points');
+        $criteriafields = array('sortorder', 'description', 'descriptionformat', 'isranged');
         $levelfields = array('score', 'definition', 'definitionformat');
         foreach ($newcriteria as $id => $criterion) {
             // get list of submitted levels
@@ -310,7 +310,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         global $DB;
         $sql = "SELECT gd.*,
                        rc.id AS rcid, rc.sortorder AS rcsortorder, rc.description AS rcdescription, rc.descriptionformat AS rcdescriptionformat,
-                       rc.isranged AS rcisranged, rc.points AS rcpoints,
+                       rc.isranged AS rcisranged,
                        rl.id AS rlid, rl.score AS rlscore, rl.definition AS rldefinition, rl.definitionformat AS rldefinitionformat
                   FROM {grading_definitions} gd
              LEFT JOIN {gform_rubric_ranges_criteria} rc ON (rc.definitionid = gd.id)
@@ -333,20 +333,25 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
             }
             // pick the criterion data
             if (!empty($record->rcid) and empty($this->definition->rubric_criteria[$record->rcid])) {
-                foreach (array('id', 'sortorder','isranged', 'description', 'descriptionformat', 'points') as $fieldname) {
+                foreach (array('id', 'sortorder','isranged', 'description', 'descriptionformat') as $fieldname) {
                     $this->definition->rubric_criteria[$record->rcid][$fieldname] = $record->{'rc'.$fieldname};
                 }
                 $this->definition->rubric_criteria[$record->rcid]['levels'] = array();
             }
             // pick the level data
             if (!empty($record->rlid)) {
+                $maxpoint = 0;
                 foreach (array('id', 'score', 'definition', 'definitionformat') as $fieldname) {
                     $value = $record->{'rl'.$fieldname};
                     if ($fieldname == 'score') {
                         $value = (float)$value; // To prevent display like 1.00000
+                        if ($value > $maxpoint) {
+                            $maxpoint = $value;
+                        }
                     }
                     $this->definition->rubric_criteria[$record->rcid]['levels'][$record->rlid][$fieldname] = $value;
                 }
+                $this->definition->rubric_criteria[$record->rcid]['points'] = $maxpoint;
             }
         }
         $rs->close();

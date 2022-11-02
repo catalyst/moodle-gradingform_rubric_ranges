@@ -63,12 +63,11 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
                 'id' => '{CRITERION-id}',
                 'description' => '{CRITERION-description}',
                 'sortorder' => '{CRITERION-sortorder}',
-                'points'    => '{CRITERION-points}',
                 'isranged'    => '{CRITERION-isranged}',
                 'class' => '{CRITERION-class}'
             );
         } else {
-            foreach (array('sortorder', 'description', 'points', 'isranged', 'class') as $key) {
+            foreach (array('sortorder', 'description', 'isranged', 'class') as $key) {
                 // set missing array elements to empty strings to avoid warnings
                 if (!array_key_exists($key, $criterion)) {
                     $criterion[$key] = '';
@@ -179,22 +178,12 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
             $levelsstrtable .= html_writer::tag('div', $button, array('class' => 'addlevel'));
         }
         $criteriontemplate .= html_writer::tag('td', $levelsstrtable, array('class' => $levelsclass));
-        $pointstemplate = html_writer::start_tag('div', array('class' => 'points'));
-        if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EDIT_FULL) {
-            $pointsattributes = array(
-                'cols' => '5', 'rows' => '1',
-                'name'  => '{NAME}[criteria][{CRITERION-id}][points]',
-                'id'    => '{NAME}-criteria-{CRITERION-id}-points'
-            );
-            $pointstemplate .= html_writer::tag('textarea', $criterion['points'], $pointsattributes);
-        } else {
-            if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EDIT_FROZEN) {
-                $pointstemplate .= html_writer::empty_tag('input', array('type' => 'hidden', 'name' => '{NAME}[criteria][{CRITERION-id}][points]', 'value' => $criterion['points']));
-            }   
-            $pointstemplate .= $criterion['points'];
-        }
+        ;
+        $pointstemplate = html_writer::start_tag('div', array('id' => '{NAME}-criteria-{CRITERION-id}-points'));
+        $pointstemplate .= isset($criterion['points'])?$criterion['points']:0;
         $pointstemplate .= ' '.get_string('pts', 'gradingform_rubric_ranges');
         $pointstemplate .= html_writer::end_tag('div'); // .points
+
         $criteriontemplate .= html_writer::tag('td', $pointstemplate, array('class' => 'points'));
 
         $displayremark = ($options['enableremarks'] && ($mode != gradingform_rubric_ranges_controller::DISPLAY_VIEW || $options['showremarksstudent']));

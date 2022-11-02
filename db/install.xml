@@ -12,7 +12,6 @@
         <FIELD NAME="isranged" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="description" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" COMMENT="The criterion description"/>
         <FIELD NAME="descriptionformat" TYPE="int" LENGTH="2" NOTNULL="false" SEQUENCE="false" COMMENT="The format of the description field"/>
-        <FIELD NAME="points" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Total Points"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

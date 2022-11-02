@@ -26,15 +26,41 @@ M.gradingform_rubric_rangeseditor.addhandlers = function() {
     if (M.gradingform_rubric_rangeseditor.eventhandler) M.gradingform_rubric_rangeseditor.eventhandler.detach()
     M.gradingform_rubric_rangeseditor.eventhandler = Y.on('click', M.gradingform_rubric_rangeseditor.buttonclick, '#rubric-'+name+' input[type=submit]', null);
 }
-
 // switches all input text elements to non-edit mode
 M.gradingform_rubric_rangeseditor.disablealleditors = function() {
     var Y = M.gradingform_rubric_rangeseditor.Y
     var name = M.gradingform_rubric_rangeseditor.name
 
-    Y.all('#rubric-'+name+' .level').each( function(node) {M.gradingform_rubric_rangeseditor.editmode(node, false)} );
-    Y.all('#rubric-'+name+' .description').each( function(node) {M.gradingform_rubric_rangeseditor.editmode(node, false)} );
-    Y.all('#rubric-'+name+' .points').each( function(node) {M.gradingform_rubric_rangeseditor.editmode(node, false)} );
+    Y.all('#rubric-'+name+' .level').each( function(node) {
+        M.gradingform_rubric_rangeseditor.editmode(node, false)
+        node.one('.score input[type=text]').on(['keyup', 'change'], M.gradingform_rubric_rangeseditor.keyupanywhere)
+    });
+    Y.all('#rubric-'+name+' .description').each( function(node) {M.gradingform_rubric_rangeseditor.editmode(node, false)});
+}
+
+M.gradingform_rubric_rangeseditor.keyupanywhere = function(e) {
+    var el = e.target
+    if(Math.floor(el.get('value')) == el.get('value')) {
+        var scoreid = el.get('id'); //rubricranges[criteria][NEWID1][levels][NEWID0][score]
+        var start = scoreid.indexOf("[NEWID")+6;
+        scoreid = scoreid.substr(start);
+        var end = scoreid.indexOf("]");
+        scoreid = scoreid.substr(0,end);
+        var points = 0;
+
+        //Level table
+        //rubricranges-criteria-NEWID1-levels-table
+        Y.all('#rubricranges-criteria-NEWID'+scoreid+'-levels-table .scorevalue').each( function(node) {
+            if (points < node.one('input[type=text]').get('value')) {
+                points = node.one('input[type=text]').get('value');
+            }
+        })
+        // Set points in total points
+        //rubricranges-criteria-NEWID2-points
+        Y.one('#rubricranges-criteria-NEWID'+scoreid+'-points').set('innerHTML',points);
+    } else {
+        el.focus();
+    }
 }
 
 // function invoked on each click on the page. If level and/or criterion description is clicked
@@ -59,7 +85,7 @@ M.gradingform_rubric_rangeseditor.clickanywhere = function(e) {
     // else if clicked on level and this level is not enabled - enable it
     // or if clicked on description and this description is not enabled - enable it
     var focustb = false
-    while (el && !(el.hasClass('level') || el.hasClass('description') || el.hasClass('points'))) {
+    while (el && !(el.hasClass('level') || el.hasClass('description'))) {
         if (el.hasClass('score')) focustb = true
         el = el.get('parentNode')
     }
@@ -116,7 +142,6 @@ M.gradingform_rubric_rangeseditor.editmode = function(el, editmode, focustb) {
     } else {
         // if we need to show the input fields, set the width/height for textarea so it fills the cell
         try {
-            console.log(ta);
             var width = parseFloat(ta.get('parentNode').getComputedStyle('width')),
                 height
             if (el.hasClass('level')) height = parseFloat(el.getComputedStyle('height')) - parseFloat(el.one('.score').getComputedStyle('height'))
