@@ -34,30 +34,49 @@ M.gradingform_rubric_rangeseditor.disablealleditors = function() {
     Y.all('#rubric-'+name+' .level').each( function(node) {
         M.gradingform_rubric_rangeseditor.editmode(node, false)
         node.one('.score input[type=text]').on(['keyup', 'change'], M.gradingform_rubric_rangeseditor.keyupanywhere)
+        node.one('.score input[type=text]').on('keypress', M.gradingform_rubric_rangeseditor.onlynumbers)
     });
     Y.all('#rubric-'+name+' .description').each( function(node) {M.gradingform_rubric_rangeseditor.editmode(node, false)});
+}
+
+M.gradingform_rubric_rangeseditor.onlynumbers = function(e) {
+    // Handle paste
+    if (e.type === 'paste') {
+        key = e.clipboardData.getData('text/plain');
+    } else {
+    // Handle key press
+        var key = e.keyCode || e.which;
+        key = String.fromCharCode(key);
+    }
+    var regex = /[0-9]/;
+    if( !regex.test(key) ) {
+        e.returnValue = false;
+        if(e.preventDefault) e.preventDefault();
+    }
 }
 
 M.gradingform_rubric_rangeseditor.keyupanywhere = function(e) {
     var el = e.target
     if(Math.floor(el.get('value')) == el.get('value')) {
         var scoreid = el.get('id'); //rubricranges[criteria][NEWID1][levels][NEWID0][score]
-        var start = scoreid.indexOf("[NEWID")+6;
+        var start = scoreid.indexOf("][")+2;
         scoreid = scoreid.substr(start);
-        var end = scoreid.indexOf("]");
+        var end = scoreid.indexOf("][");
         scoreid = scoreid.substr(0,end);
         var points = 0;
 
         //Level table
         //rubricranges-criteria-NEWID1-levels-table
-        Y.all('#rubricranges-criteria-NEWID'+scoreid+'-levels-table .scorevalue').each( function(node) {
-            if (points < node.one('input[type=text]').get('value')) {
-                points = node.one('input[type=text]').get('value');
+        Y.all('#rubricranges-criteria-'+scoreid+'-levels-table .scorevalue').each( function(node) {
+            if (points < parseInt(node.one('input[type=text]').get('value'))) {
+                points = parseInt(node.one('input[type=text]').get('value'));
             }
         })
         // Set points in total points
         //rubricranges-criteria-NEWID2-points
-        Y.one('#rubricranges-criteria-NEWID'+scoreid+'-points').set('innerHTML',points);
+        points = points + ' ' + M.util.get_string('pts', 'gradingform_rubric_ranges');
+
+        Y.one('#rubricranges-criteria-'+scoreid+'-points').set('innerHTML',points);
     } else {
         el.focus();
     }

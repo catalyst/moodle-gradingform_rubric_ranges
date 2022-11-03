@@ -119,7 +119,7 @@ class MoodleQuickForm_rubricrangeseditor extends HTML_QuickForm_input {
             $module = array('name'=>'gradingform_rubric_rangeseditor', 'fullpath'=>'/grade/grading/form/rubric_ranges/js/rubricrangeseditor.js',
                 'requires' => array('base', 'dom', 'event', 'event-touch', 'escape'),
                 'strings' => array(array('confirmdeletecriterion', 'gradingform_rubric_ranges'), array('confirmdeletelevel', 'gradingform_rubric_ranges'),
-                    array('criterionempty', 'gradingform_rubric_ranges'), array('levelempty', 'gradingform_rubric_ranges')
+                    array('criterionempty', 'gradingform_rubric_ranges'), array('levelempty', 'gradingform_rubric_ranges'), array('pts', 'gradingform_rubric_ranges')
                 ));
             $PAGE->requires->js_init_call('M.gradingform_rubric_rangeseditor.init', array(
                 array('name' => $this->getName(),
