@@ -15,8 +15,32 @@ M.gradingform_rubric_ranges.init = function(Y, options) {
         node.addClass('checked');
       }
     });
+
+    Y.all('#rubric-'+options.name+' .points').each( function(node) {
+      node.one('input[type=text]').on('keypress', M.gradingform_rubric_ranges.onlynumbers)
+      node.one('.score input[type=text]').on(['keyup', 'change'], M.gradingform_rubric_ranges.selectrange)
+  });
 };
 
+
+M.gradingform_rubric_ranges.selectrange = function(e) {
+  
+}
+M.gradingform_rubric_ranges.onlynumbers = function(e) {
+  // Handle paste
+  if (e.type === 'paste') {
+      key = e.clipboardData.getData('text/plain');
+  } else {
+  // Handle key press
+      var key = e.keyCode || e.which;
+      key = String.fromCharCode(key);
+  }
+  var regex = /[0-9]/;
+  if( !regex.test(key) ) {
+      e.returnValue = false;
+      if(e.preventDefault) e.preventDefault();
+  }
+}
 M.gradingform_rubric_ranges.levelclick = function(e, Y, name) {
     var el = e.target
     while (el && !el.hasClass('level')) el = el.get('parentNode')
