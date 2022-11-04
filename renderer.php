@@ -128,7 +128,7 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
                 $criteriontemplate .= html_writer::empty_tag('input', array('type' => 'hidden', 'name' => '{NAME}[criteria][{CRITERION-id}][isranged]', 'value' => $criterion['isranged']));
             }
             $description = s($criterion['description']);
-            $description .= ($criterion['isranged'])?'(Ranged)':'';
+            //$description .= ($criterion['isranged'])?'(Ranged)':'';
         }
 
         $description .= $controlstemplate;
@@ -195,13 +195,14 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
             $remarklabeltext = get_string('criterionremark', 'gradingform_rubric_ranges', $remarkinfo);
 
             if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EVAL) {
-                $gradeparams = array(
-                    'name' => '{NAME}[criteria][{CRITERION-id}][grade]',
-                    'id' => '{NAME}-criteria-{CRITERION-id}-grade',
-                    'type' => 'text',
-                );
-                $gradetemplate = html_writer::tag('input', '', $gradeparams);
-
+                if ($criterion['isranged']) {
+                    $gradeparams = array(
+                        'name' => '{NAME}[criteria][{CRITERION-id}][grade]',
+                        'id' => '{NAME}-criteria-{CRITERION-id}-grade',
+                        'type' => 'text',
+                    );
+                    $gradetemplate = html_writer::tag('input', '', $gradeparams);
+                }
                 // HTML parameters for remarks text area.
                 $remarkparams = array(
                     'name' => '{NAME}[criteria][{CRITERION-id}][remark]',
