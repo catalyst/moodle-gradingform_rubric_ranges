@@ -43,7 +43,7 @@ if (!$controller->is_form_defined() || empty($options['alwaysshowdefinition'])) 
 }
 
 $title = get_string('gradingof', 'gradingform_rubric_ranges', $manager->get_area_title());
-$PAGE->set_url(new moodle_url('/grade/grading/form/rubric/preview.php', array('areaid' => $areaid)));
+$PAGE->set_url(new moodle_url('/grade/grading/form/rubric_ranges/preview.php', array('areaid' => $areaid)));
 $PAGE->set_title($title);
 $PAGE->set_heading($title);
 

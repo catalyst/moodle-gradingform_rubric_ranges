@@ -321,6 +321,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
 
         $rs = $DB->get_recordset_sql($sql, $params);
         $this->definition = false;
+        $maxpoint = 0;
         foreach ($rs as $record) {
             // pick the common definition data
             if ($this->definition === false) {
@@ -340,10 +341,10 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
             }
             // pick the level data
             if (!empty($record->rlid)) {
-                $maxpoint = 0;
                 foreach (array('id', 'score', 'definition', 'definitionformat') as $fieldname) {
                     $value = $record->{'rl'.$fieldname};
                     if ($fieldname == 'score') {
+                        echo '<br> score = '.$value;
                         $value = (float)$value; // To prevent display like 1.00000
                         if ($value > $maxpoint) {
                             $maxpoint = $value;
@@ -351,9 +352,9 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
                     }
                     $this->definition->rubric_criteria[$record->rcid]['levels'][$record->rlid][$fieldname] = $value;
                 }
-                $this->definition->rubric_criteria[$record->rcid]['points'] = $maxpoint;
             }
         }
+        $this->definition->rubric_criteria[$record->rcid]['points'] = $maxpoint;
         $rs->close();
         $options = $this->get_options();
         if (!$options['sortlevelsasc']) {
@@ -784,7 +785,8 @@ class gradingform_rubric_ranges_instance extends gradingform_instance {
         $currentgrade = $this->get_rubric_filling();
         foreach ($currentgrade['criteria'] as $criterionid => $record) {
             $params = array('instanceid' => $instanceid, 'criterionid' => $criterionid,
-                'levelid' => $record['levelid'], 'remark' => $record['remark'], 'remarkformat' => $record['remarkformat']);
+                'levelid' => $record['levelid'], 'remark' => $record['remark'],
+                'remarkformat' => $record['remarkformat'], 'grade' => $record['grade']);
             $DB->insert_record('gform_rubric_ranges_fillings', $params);
         }
         return $instanceid;
@@ -877,14 +879,20 @@ class gradingform_rubric_ranges_instance extends gradingform_instance {
                 if (isset($record['remark'])) {
                     $newrecord['remark'] = $record['remark'];
                 }
+                if (isset($record['grade'])) {
+                    $newrecord['grade'] = $record['grade'];
+                }
                 $DB->insert_record('gform_rubric_ranges_fillings', $newrecord);
             } else {
                 $newrecord = array('id' => $currentgrade['criteria'][$criterionid]['id']);
-                foreach (array('levelid', 'remark'/*, 'remarkformat' */) as $key) {
+                foreach (array('levelid', 'remark', 'grade' /*, 'remarkformat' */) as $key) {
                     // TODO MDL-31235 format is not supported yet
                     if (isset($record[$key]) && $currentgrade['criteria'][$criterionid][$key] != $record[$key]) {
                         $newrecord[$key] = $record[$key];
                     }
+                    // if (isset($record['grade'])) {
+                    //     $newrecord['grade'] = $record['grade'];
+                    // }
                 }
                 if (count($newrecord) > 1) {
                     $DB->update_record('gform_rubric_ranges_fillings', $newrecord);

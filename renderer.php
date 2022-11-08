@@ -181,6 +181,7 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
 
         $remarktemplate = '';
         $gradetemplate = '';
+        $pointstemplate = '';
         $displayremark = ($options['enableremarks'] && ($mode != gradingform_rubric_ranges_controller::DISPLAY_VIEW || $options['showremarksstudent']));
         if ($displayremark) {
             $currentremark = '';
@@ -200,6 +201,8 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
                         'name' => '{NAME}[criteria][{CRITERION-id}][grade]',
                         'id' => '{NAME}-criteria-{CRITERION-id}-grade',
                         'type' => 'text',
+                        'size' => '3',
+                        'value' => (isset($value['grade']) ? $value['grade'] : 0)
                     );
                     $gradetemplate = html_writer::tag('input', '', $gradeparams);
                 }
@@ -225,11 +228,19 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
                 $remarktemplate .= html_writer::tag('div', s($currentremark), $remarkparams);
             }
         }
-        $pointstemplate = $gradetemplate;
-        $pointstemplate .= html_writer::start_tag('div', array('id' => '{NAME}-criteria-{CRITERION-id}-points'));
-        $pointstemplate .= isset($criterion['points'])?$criterion['points']:0;
-        $pointstemplate .= ' '.get_string('pts', 'gradingform_rubric_ranges');
-        $pointstemplate .= html_writer::end_tag('div'); // .points
+        if ($criterion['isranged']) {
+            echo '<pre>';
+            print_r($criterion);
+            echo '</pre>';
+            $pointstemplate = $gradetemplate;
+            $pointstemplate .= html_writer::start_tag('div', array('id' => '{NAME}-criteria-{CRITERION-id}-points'));
+            if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EVAL) {
+                $pointstemplate .= ' / ';
+            }
+            $pointstemplate .=  isset($criterion['points']) ? $criterion['points'] : 0;
+            $pointstemplate .= ' '.get_string('pts', 'gradingform_rubric_ranges');
+            $pointstemplate .= html_writer::end_tag('div'); // .points
+        }
         $pointstemplate .= $remarktemplate;
         $criteriontemplate .= html_writer::tag('td', $pointstemplate, array('class' => 'points'));
         $criteriontemplate .= html_writer::end_tag('tr'); // .criterion
@@ -551,21 +562,34 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
                 gradingform_rubric_ranges_controller::DISPLAY_PREVIEW,
                 gradingform_rubric_ranges_controller::DISPLAY_EVAL,
                 gradingform_rubric_ranges_controller::DISPLAY_PREVIEW_GRADED,
+                gradingform_rubric_ranges_controller::DISPLAY_EDIT_FROZEN,
+            );
+
+            $onlydata = array (
+                gradingform_rubric_ranges_controller::DISPLAY_EDIT_FROZEN,
             );
 
             if (in_array($mode, $rangedisplaymodes)) {
                     $levelsonly = array_values($levels);
                     $rangecheck = count($levelsonly)-1;
+                    $offset = 0;
                     if ($sortlevels) {
                         $rangecheck = 0;
+                        $offset = min(array_keys($levels));
                     }
+
                     foreach ($levelsonly as $levelkey => $level) {
-                        if ( $rangecheck == $levelkey) {
-                            $levels[$level['id']]['score'] = ($sortlevels) ?
+                        if (in_array($mode, $onlydata)) {
+                            $mainlevelkey = ($levelkey+$offset);
+                        } else {
+                            $mainlevelkey = $level['id'];
+                        }
+                        if ($rangecheck == $levelkey) {
+                            $levels[$mainlevelkey]['score'] = ($sortlevels) ?
                             '0 to '. $level['score'] :
                             $level['score'].' to 0';
                         } else {
-                            $levels[$level['id']]['score'] = ($sortlevels) ?
+                            $levels[$mainlevelkey]['score'] = ($sortlevels) ?
                             ($levelsonly[$levelkey-1]['score'] + 1).' to '. $level['score']:
                             $level['score'].' to '. ($levelsonly[$levelkey+1]['score'] + 1);
                         }
@@ -592,11 +616,15 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
      * @return string
      */
     public function display_rubric($criteria, $options, $mode, $elementname = null, $values = null) {
+        echo '<pre>display_rubric';
+        print_r($criteria);
+        echo '</pre>';
         $criteriastr = '';
         $cnt = 0;
         foreach ($criteria as $id => $criterion) {
             $criterion['class'] = $this->get_css_class_suffix($cnt++, sizeof($criteria) -1);
             $criterion['id'] = $id;
+            
             $levelsstr = '';
             $levelcnt = 0;
             if (isset($values['criteria'][$id])) {
@@ -695,6 +723,9 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
         if ($showdescription) {
             $output .= $this->box($instance->get_controller()->get_formatted_description(), 'gradingform_rubric_ranges-description');
         }
+        echo '<pre>display_instance';
+        print_r($criteria);
+        echo '</pre>';
         $output .= $this->display_rubric($criteria, $options, $mode, 'rubric'.$idx, $values);
         return $output;
     }

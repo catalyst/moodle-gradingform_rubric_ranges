@@ -21,16 +21,14 @@ M.gradingform_rubric_ranges.init = function(Y, options) {
     Y.all('#rubric-'+options.name+' .points').each( function(node) {
       if (node.one('input[type=text]')) {
         node.one('input[type=text]').on('keypress', M.gradingform_rubric_ranges.onlynumbers)
-        node.one('input[type=text]').on(['keyup', 'change'], M.gradingform_rubric_ranges.selectrange)
+        node.one('input[type=text]').on('keyup', M.gradingform_rubric_ranges.selectrange)
       }
   });
 };
 
-
 M.gradingform_rubric_ranges.selectrange = function(e) {
   var el = e.target
   var Y = M.gradingform_rubric_ranges.Y
-  var name = M.gradingform_rubric_ranges.name
 
   var gradepoints = parseInt(el.get('value'));
   if (!isNaN(gradepoints)) {
@@ -38,12 +36,12 @@ M.gradingform_rubric_ranges.selectrange = function(e) {
     el.get('parentNode').get('previousSibling').all('.scorevalue').each(function (node) {
       range = node.get('innerHTML').split(' to ');
       if (gradepoints >= range[0] && gradepoints <= range[1]) {
-        console.log(node.get('innerHTML'));
-        //Y.Event.simulate(el.ancestor('td'), 'click')
+        Y.Event.simulate(node.ancestor('td .level').getDOMNode(), 'click')
       }
     })
   }
 }
+
 M.gradingform_rubric_ranges.onlynumbers = function(e) {
   // Handle paste
   if (e.type === 'paste') {
@@ -61,8 +59,6 @@ M.gradingform_rubric_ranges.onlynumbers = function(e) {
 }
 M.gradingform_rubric_ranges.levelclick = function(e) {
     var el = e.target
-console.log('levelclick');
-console.log(el);
     while (el && !el.hasClass('level')) el = el.get('parentNode')
     if (!el) return
     e.preventDefault();
