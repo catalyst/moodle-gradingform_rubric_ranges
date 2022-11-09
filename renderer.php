@@ -229,9 +229,6 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
             }
         }
         if ($criterion['isranged']) {
-            echo '<pre>';
-            print_r($criterion);
-            echo '</pre>';
             $pointstemplate = $gradetemplate;
             $pointstemplate .= html_writer::start_tag('div', array('id' => '{NAME}-criteria-{CRITERION-id}-points'));
             if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EVAL) {
@@ -554,7 +551,6 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
     }
 
     public function display_range_score($mode, $levels, $sortlevels, $isranged = false){
-        echo '<br> Mode = '.$mode.'<br>';
         if ($isranged) {
             $rangedisplaymodes = array(
                 gradingform_rubric_ranges_controller::DISPLAY_REVIEW ,
@@ -562,7 +558,7 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
                 gradingform_rubric_ranges_controller::DISPLAY_PREVIEW,
                 gradingform_rubric_ranges_controller::DISPLAY_EVAL,
                 gradingform_rubric_ranges_controller::DISPLAY_PREVIEW_GRADED,
-                gradingform_rubric_ranges_controller::DISPLAY_EDIT_FROZEN,
+                //gradingform_rubric_ranges_controller::DISPLAY_EDIT_FROZEN,
             );
 
             $onlydata = array (
@@ -616,9 +612,6 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
      * @return string
      */
     public function display_rubric($criteria, $options, $mode, $elementname = null, $values = null) {
-        echo '<pre>display_rubric';
-        print_r($criteria);
-        echo '</pre>';
         $criteriastr = '';
         $cnt = 0;
         foreach ($criteria as $id => $criterion) {
@@ -723,9 +716,6 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
         if ($showdescription) {
             $output .= $this->box($instance->get_controller()->get_formatted_description(), 'gradingform_rubric_ranges-description');
         }
-        echo '<pre>display_instance';
-        print_r($criteria);
-        echo '</pre>';
         $output .= $this->display_rubric($criteria, $options, $mode, 'rubric'.$idx, $values);
         return $output;
     }

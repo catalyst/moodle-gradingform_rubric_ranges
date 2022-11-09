@@ -160,7 +160,7 @@ class gradingform_rubric_ranges_editrubric extends moodleform {
      */
     public function need_confirm_regrading($controller) {
         $data = $this->get_data();
-        if (isset($data->rubric['regrade'])) {
+        if (isset($data->rubricranges['regrade'])) {
             // we have already displayed the confirmation on the previous step
             return false;
         }

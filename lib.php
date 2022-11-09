@@ -146,7 +146,6 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
 
         // reload the definition from the database
         $currentdefinition = $this->get_definition(true);
-
         $haschanges = array();
 
         // Check if 'lockzeropoints' option has changed.
@@ -344,7 +343,6 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
                 foreach (array('id', 'score', 'definition', 'definitionformat') as $fieldname) {
                     $value = $record->{'rl'.$fieldname};
                     if ($fieldname == 'score') {
-                        echo '<br> score = '.$value;
                         $value = (float)$value; // To prevent display like 1.00000
                         if ($value > $maxpoint) {
                             $maxpoint = $value;
@@ -451,9 +449,6 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         $new = parent::get_definition_copy($target);
         $old = $this->get_definition_for_editing();
         $new->description_editor = $old->description_editor;
-        echo '<pre>';
-        print_r($old);
-        echo '</pre>';
         $new->rubricranges = array('criteria' => array(), 'options' => $old->rubricranges['options']);
         $newcritid = 1;
         $newlevid = 1;
