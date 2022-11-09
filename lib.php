@@ -924,7 +924,7 @@ class gradingform_rubric_ranges_instance extends gradingform_instance {
 
         $curscore = 0;
         foreach ($grade['criteria'] as $id => $record) {
-            $curscore += $this->get_controller()->get_definition()->rubric_criteria[$id]['levels'][$record['levelid']]['score'];
+            $curscore += $record['grade'];
         }
 
         $allowdecimals = $this->get_controller()->get_allow_grade_decimals();
