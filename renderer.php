@@ -558,34 +558,22 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
                 gradingform_rubric_ranges_controller::DISPLAY_PREVIEW,
                 gradingform_rubric_ranges_controller::DISPLAY_EVAL,
                 gradingform_rubric_ranges_controller::DISPLAY_PREVIEW_GRADED,
-                //gradingform_rubric_ranges_controller::DISPLAY_EDIT_FROZEN,
-            );
-
-            $onlydata = array (
-                gradingform_rubric_ranges_controller::DISPLAY_EDIT_FROZEN,
             );
 
             if (in_array($mode, $rangedisplaymodes)) {
                     $levelsonly = array_values($levels);
                     $rangecheck = count($levelsonly)-1;
-                    $offset = 0;
                     if ($sortlevels) {
                         $rangecheck = 0;
-                        $offset = min(array_keys($levels));
                     }
 
                     foreach ($levelsonly as $levelkey => $level) {
-                        if (in_array($mode, $onlydata)) {
-                            $mainlevelkey = ($levelkey+$offset);
-                        } else {
-                            $mainlevelkey = $level['id'];
-                        }
                         if ($rangecheck == $levelkey) {
-                            $levels[$mainlevelkey]['score'] = ($sortlevels) ?
+                            $levels[$level['id']]['score'] = ($sortlevels) ?
                             '0 to '. $level['score'] :
                             $level['score'].' to 0';
                         } else {
-                            $levels[$mainlevelkey]['score'] = ($sortlevels) ?
+                            $levels[$level['id']]['score'] = ($sortlevels) ?
                             ($levelsonly[$levelkey-1]['score'] + 1).' to '. $level['score']:
                             $level['score'].' to '. ($levelsonly[$levelkey+1]['score'] + 1);
                         }
