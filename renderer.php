@@ -188,7 +188,7 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
             if (isset($value['remark'])) {
                 $currentremark = $value['remark'];
             }
-
+            $currentgrade = (isset($value['grade']) ? $value['grade'] : 0);
             // Label for criterion remark.
             $remarkinfo = new stdClass();
             $remarkinfo->description = s($criterion['description']);
@@ -216,8 +216,14 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
                 $input = html_writer::tag('textarea', s($currentremark), $remarkparams);
                 $remarktemplate .= html_writer::tag('div', $input, array('class' => 'remark'));
             } else if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EVAL_FROZEN) {
+                $gradetemplate .= html_writer::empty_tag('input', array('type' => 'hidden', 'name' => '{NAME}[criteria][{CRITERION-id}][grade]', 'value' => $currentgrade));
                 $remarktemplate .= html_writer::empty_tag('input', array('type' => 'hidden', 'name' => '{NAME}[criteria][{CRITERION-id}][remark]', 'value' => $currentremark));
             } else if ($mode == gradingform_rubric_ranges_controller::DISPLAY_REVIEW || $mode == gradingform_rubric_ranges_controller::DISPLAY_VIEW) {
+                $gradeparams = array(
+                    'id' => '{NAME}-criteria-{CRITERION-id}-grade',
+                    'class' => 'inline',
+                );
+                $gradetemplate .= html_writer::tag('div', $currentgrade, $gradeparams);
                 // HTML parameters for remarks cell.
                 $remarkparams = array(
                     'class' => 'remark',
@@ -230,8 +236,8 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
         }
         if ($criterion['isranged']) {
             $pointstemplate = $gradetemplate;
-            $pointstemplate .= html_writer::start_tag('div', array('id' => '{NAME}-criteria-{CRITERION-id}-points'));
-            if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EVAL) {
+            $pointstemplate .= html_writer::start_tag('div', array('class' => 'inline', 'id' => '{NAME}-criteria-{CRITERION-id}-points'));
+            if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EVAL || $mode == gradingform_rubric_ranges_controller::DISPLAY_REVIEW || $mode == gradingform_rubric_ranges_controller::DISPLAY_VIEW) {
                 $pointstemplate .= ' / ';
             }
             $pointstemplate .=  isset($criterion['points']) ? $criterion['points'] : 0;
@@ -550,7 +556,7 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
         return $html;
     }
 
-    public function display_range_score($mode, $levels, $sortlevels, $isranged = false){
+    public function display_range_score($mode, $levels, $sortlevels, $isranged = false) {
         if ($isranged) {
             $rangedisplaymodes = array(
                 gradingform_rubric_ranges_controller::DISPLAY_REVIEW ,

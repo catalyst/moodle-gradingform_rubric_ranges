@@ -107,8 +107,8 @@
     font-weight: bold;
 }
 .gradingform_rubric_ranges .criterion .levels table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
+    /* border: 1px solid black;
+    border-collapse: collapse; */
   }
 .gradingform_rubric_ranges .criterion .levels table {
     width: 100%;
@@ -323,5 +323,5 @@
 }
 
 .gradingpanel-gradingform_rubric_ranges [aria-checked="true"] {
-    border: 1px solid black;
+    /* border: 1px solid black; */
 }
