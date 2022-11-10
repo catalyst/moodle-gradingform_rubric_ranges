@@ -261,8 +261,10 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         foreach (array_keys($currentcriteria) as $id) {
             if (!array_key_exists($id, $newcriteria)) {
                 if ($doupdate) {
-                    $DB->delete_records('gform_rubric_ranges_criteria', array('id' => $id));
-                    $DB->delete_records('gform_rubric_ranges_levels', array('criterionid' => $id));
+                    if ($id > 0) {
+                        $DB->delete_records('gform_rubric_ranges_criteria', array('id' => $id));
+                        $DB->delete_records('gform_rubric_ranges_levels', array('criterionid' => $id));
+                    }
                 }
                 $haschanges[3] = true;
             }
