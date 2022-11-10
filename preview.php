@@ -35,7 +35,7 @@ list($context, $course, $cm) = get_context_info_array($manager->get_context()->i
 
 require_login($course, true, $cm);
 
-$controller = $manager->get_controller('rubric');
+$controller = $manager->get_controller('rubric_ranges');
 $options = $controller->get_options();
 
 if (!$controller->is_form_defined() || empty($options['alwaysshowdefinition'])) {

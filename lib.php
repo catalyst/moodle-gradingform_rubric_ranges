@@ -351,8 +351,9 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
                     $this->definition->rubric_criteria[$record->rcid]['levels'][$record->rlid][$fieldname] = $value;
                 }
             }
+            $this->definition->rubric_criteria[$record->rcid]['points'] = $maxpoint;
         }
-        $this->definition->rubric_criteria[$record->rcid]['points'] = $maxpoint;
+
         $rs->close();
         $options = $this->get_options();
         if (!$options['sortlevelsasc']) {
