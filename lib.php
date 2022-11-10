@@ -532,6 +532,47 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
     }
 
     /**
+     * print PDF version
+     *
+     * @param moodle_page $page the target page
+     */
+    public function print(moodle_page $page) {
+        global $CFG;
+        $criteria = $this->definition->rubric_criteria;
+        $options = $this->get_options();
+        $rubric = '';
+
+        if (has_capability('moodle/grade:managegradingforms', $page->context)) {
+            $showdescription = true;
+        } else {
+            if (empty($options['alwaysshowdefinition']))  {
+                // ensure we don't display unless show rubric option enabled
+                return '';
+            }
+            $showdescription = $options['showdescriptionstudent'];
+        }
+        $output = $this->get_renderer($page);
+        if ($showdescription) {
+            $rubric .= $output->box($this->get_formatted_description(), 'gradingform_rubric_ranges-description');
+        }
+        if (has_capability('moodle/grade:managegradingforms', $page->context)) {
+            if (!$options['lockzeropoints']) {
+                // Warn about using grade calculation method where minimum number of points is flexible.
+                $rubric .= $output->display_rubric_mapping_explained($this->get_min_max_score());
+            }
+            $rubric .= $output->display_rubric($criteria, $options, self::DISPLAY_PREVIEW, 'rubricranges');
+        } else {
+            $rubric .= $output->display_rubric($criteria, $options, self::DISPLAY_PREVIEW_GRADED, 'rubricranges');
+        }
+        echo $rubric;
+        // require_once($CFG->libdir.'/pdflib.php');
+        // $pdf = new pdf();
+        // $pdf->AddPage('L');
+        // $pdf->WriteHTML($rubric);
+        // $pdf->Output('example.pdf', 'D');
+    }
+
+    /**
      * Returns the HTML code displaying the preview of the grading form
      *
      * @param moodle_page $page the target page
@@ -546,6 +587,12 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         $criteria = $this->definition->rubric_criteria;
         $options = $this->get_options();
         $rubric = '';
+
+        $printicon = html_writer::tag('i','',array('class' =>'icon fa fa-print fa-fw  iconsize-small'));
+        $url = new moodle_url('/grade/grading/form/rubric_ranges/print.php', array('areaid' => $this->get_areaid()));
+        $printlink = html_writer::start_tag('a', array('href' => $url, 'target' => '_blank')).$printicon.html_writer::end_tag('a');
+        $rubric .= html_writer::tag('div', $printlink, array('class' => 'btn floatright'));
+
         if (has_capability('moodle/grade:managegradingforms', $page->context)) {
             $showdescription = true;
         } else {

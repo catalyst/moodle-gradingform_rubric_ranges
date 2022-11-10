@@ -335,3 +335,6 @@
 #rubric-rubricranges.gradingform_rubric_ranges #rubricranges-criteria {
     margin-bottom: 1em;
 }
+.floatright {
+    float: right;
+}
