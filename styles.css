@@ -227,13 +227,11 @@
     margin-bottom: 1em;
 }
 .gradingform_rubric_ranges.editor .addcriterion input {
-      margin: 0;
-      color: inherit;
-      text-shadow: inherit;
-      border: 0 none;
-      line-height: inherit;
-      background: transparent url([[pix:t/add]]) no-repeat 7px 8px;
-      padding-left: 26px;
+    height: 30px;
+    line-height: 29px;
+    margin-bottom: 14px;
+    padding-left: 20px;
+    padding-right: 10px;
 }
 .gradingform_rubric_ranges.editor .addcriterion input,
 .gradingform_rubric_ranges.editor .addlevel input {
@@ -243,15 +241,15 @@
     font-weight: bold;
     text-decoration: none;
 }
-
 .gradingform_rubric_ranges.editor .addcriterion input {
-    height: 30px;
-    line-height: 29px;
-    margin-bottom: 14px;
-    padding-left: 20px;
-    padding-right: 10px;
+    margin: 0;
+    color: inherit;
+    text-shadow: inherit;
+    border: 0 none;
+    line-height: inherit;
+    background: transparent url([[pix:t/add]]) no-repeat 7px 8px;
+    padding-left: 26px;
 }
-
 .gradingform_rubric_ranges.editor .addlevel input {
     padding-left: 24px;
     padding-right: 8px;
@@ -324,4 +322,8 @@
 
 .gradingpanel-gradingform_rubric_ranges [aria-checked="true"] {
     /* border: 1px solid black; */
+}
+
+#rubric-rubricranges.gradingform_rubric_ranges #rubricranges-criteria {
+    margin-bottom: 1em;
 }
