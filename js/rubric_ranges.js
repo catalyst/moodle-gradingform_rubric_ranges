@@ -36,13 +36,27 @@ M.gradingform_rubric_ranges.selectrange = function(e) {
     el.get('parentNode').get('previousSibling').all('.scorevalue').each(function (node) {
       range = node.get('innerHTML').split(' to ');
       if (gradepoints >= range[0] && gradepoints <= range[1]) {
-        Y.Event.simulate(node.ancestor('td .level').getDOMNode(), 'click')
+        if (!node.ancestor('td .level').hasClass('checked')) {
+          Y.Event.simulate(node.ancestor('td .level').getDOMNode(), 'click')
+        }
       }
     })
   }
 }
 
+M.gradingform_rubric_ranges.getmaxpoints = function(el) {
+  // Get max value point.
+  var maxpointsparts = el.get("nextSibling").get('innerHTML').split(' ');
+  var maxpoints = 0;
+  maxpointsparts.forEach(function (item, index) {
+    if (!isNaN(item)) {
+      maxpoints = parseInt(item);
+    }
+  });
+  return maxpoints;
+}
 M.gradingform_rubric_ranges.onlynumbers = function(e) {
+  var el = e.target
   // Handle paste
   if (e.type === 'paste') {
       key = e.clipboardData.getData('text/plain');
@@ -55,6 +69,13 @@ M.gradingform_rubric_ranges.onlynumbers = function(e) {
   if( !regex.test(key) ) {
       e.returnValue = false;
       if(e.preventDefault) e.preventDefault();
+  } else {
+    var maxpoints = M.gradingform_rubric_ranges.getmaxpoints(el);
+    var gradeval = el.get('value') + key;
+    if(parseInt(gradeval) > maxpoints) {
+      e.returnValue = false;
+      if(e.preventDefault) e.preventDefault();
+    }
   }
 }
 M.gradingform_rubric_ranges.levelclick = function(e) {
