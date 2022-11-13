@@ -462,12 +462,7 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
             'id' => '{NAME}-criteria',
             'aria-label' => get_string('rubric', 'gradingform_rubric_ranges'));
 
-        $tableheader = html_writer::tag('tr',
-                html_writer::tag('th', get_string('criteria', 'gradingform_rubric_ranges'), array('class' => 'cell', 'scope' => 'row')).
-                html_writer::tag('th', get_string('ratings', 'gradingform_rubric_ranges'), array('class' => 'cell', 'scope' => 'row')).
-                html_writer::tag('th', get_string('points', 'gradingform_rubric_ranges'), array('class' => 'cell', 'scope' => 'row'))
-            );
-        $rubrictable =  html_writer::tag('table', $tableheader.$criteriastr, $rubrictableparams);
+        $rubrictable =  html_writer::tag('table', $criteriastr, $rubrictableparams);
         $rubrictemplate .= $rubrictable;
         if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EDIT_FULL) {
             $value = get_string('addcriterion', 'gradingform_rubric_ranges');
