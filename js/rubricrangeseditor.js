@@ -98,7 +98,7 @@ M.gradingform_rubric_rangeseditor.clickanywhere = function(e) {
     }
 
     // if clicked on button - disablecurrenteditor, continue
-    if (el.get('tagName') == 'INPUT' && el.get('type') == 'submit') {
+    if (el.get('tagName') == 'INPUT' && (el.get('type') == 'submit' || el.get('type') == 'checkbox')) {
         return
     }
     // else if clicked on level and this level is not enabled - enable it
