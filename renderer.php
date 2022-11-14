@@ -132,7 +132,7 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
         }
 
         $description .= $controlstemplate;
-        $description .= $rangedchktemplate;
+
         $descriptionclass = 'description';
         if (isset($criterion['error_description'])) {
             $descriptionclass .= ' error';
@@ -152,7 +152,7 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
         }
 
         // Description cell.
-        $criteriontemplate .= html_writer::tag('td', $description, $descriptiontdparams);
+        $criteriontemplate .= html_writer::tag('td', $rangedchktemplate.$description, $descriptiontdparams);
 
         // Levels table.
         $levelsrowparams = array('id' => '{NAME}-criteria-{CRITERION-id}-levels');
