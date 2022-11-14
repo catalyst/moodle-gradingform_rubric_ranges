@@ -141,8 +141,12 @@
 }
 
 .gradingform_rubric_ranges.editor .criterion .levels .level .delete {
-    position: absolute;
-    right: 0;
+    position: relative;
+    width: 32px;
+    height: 32px;
+    margin-top: -32px;
+    clear: both;
+    float: right;
 }
 
 .gradingform_rubric_ranges .criterion .levels .level .score {
@@ -151,10 +155,9 @@
     font-weight: bold;
     margin-top: 5px;
     white-space: nowrap;
-}
-
-.gradingform_rubric_ranges .criterion .levels .level .score .scorevalue {
-    padding-right: 5px;
+    position: relative;
+    float: left;
+    margin-right: 28px;
 }
 
 /* Make invisible the buttons 'Move up' for the first criterion and
@@ -203,9 +206,14 @@
 }
 
 .gradingform_rubric_ranges.editor .levels .level .delete input {
-    width: 12px;
-    height: 16px;
     background: transparent url([[pix:t/delete]]) no-repeat center center;
+    display: block;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    height: 24px;
+    width: 24px;
+    margin: 0;
 }
 
 .gradingform_rubric_ranges.editor .moveup input {

@@ -170,12 +170,6 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
         if (isset($criterion['error_levels'])) {
             $levelsclass .= ' error';
         }
-        if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EDIT_FULL) {
-            $value = get_string('criterionaddlevel', 'gradingform_rubric_ranges');
-            $button = html_writer::empty_tag('input', array('type' => 'submit', 'name' => '{NAME}[criteria][{CRITERION-id}][levels][addlevel]',
-                'id' => '{NAME}-criteria-{CRITERION-id}-levels-addlevel', 'value' => $value, 'class' => 'btn btn-secondary'));
-            $levelsstrtable .= html_writer::tag('div', $button, array('class' => 'addlevel'));
-        }
 
         $criteriontemplate .= html_writer::tag('td', $levelsstrtable, array('class' => $levelsclass));
 
@@ -245,6 +239,12 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
         }
         $pointstemplate .= html_writer::end_tag('div'); // .points
         $pointstemplate .= $remarktemplate;
+        if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EDIT_FULL) {
+            $value = get_string('criterionaddlevel', 'gradingform_rubric_ranges');
+            $button = html_writer::empty_tag('input', array('type' => 'submit', 'name' => '{NAME}[criteria][{CRITERION-id}][levels][addlevel]',
+                'id' => '{NAME}-criteria-{CRITERION-id}-levels-addlevel', 'value' => $value, 'class' => 'btn btn-secondary'));
+            $pointstemplate .= html_writer::tag('div', $button, array('class' => 'addlevel'));
+        }
         $criteriontemplate .= html_writer::tag('td', $pointstemplate, array('class' => 'points'));
         $criteriontemplate .= html_writer::end_tag('tr'); // .criterion
         $criteriontemplate = str_replace('{NAME}', $elementname, $criteriontemplate);
