@@ -37,7 +37,7 @@ M.gradingform_rubric_ranges.selectrange = function(e) {
       range = node.get('innerHTML').split(' to ');
       if (gradepoints >= range[0] && gradepoints <= range[1]) {
         if (!node.ancestor('td .level').hasClass('checked')) {
-          Y.Event.simulate(node.ancestor('td .level').getDOMNode(), 'click')
+          node.ancestor('td .level').simulate('click')
         }
       }
     })
@@ -98,5 +98,20 @@ M.gradingform_rubric_ranges.levelclick = function(e) {
         // Set aria-checked attribute to false if unchecked.
         el.setAttribute('aria-checked', 'false');
         el.get('parentNode').all('input[type=radio]').set('checked', false)
+    }
+
+    var autoselectrange = 1
+    // This means it was simulated click.
+    if (e.clientX == 0 && e.clientY == 0) {
+      autoselectrange = 0
+    }
+    // if direct range is selected, grade lower value.
+    if (autoselectrange) {
+      var ranges = el.one('.scorevalue').get('innerHTML').split(' ');
+      if (el.ancestor('.levels').get("nextSibling").one('input[type=text]')) {
+        //if (!el.ancestor('.levels').get("nextSibling").one('input[type=text]').get('value')) {
+          el.ancestor('.levels').get("nextSibling").one('input[type=text]').set('value',ranges[0])
+       // }
+      }
     }
 }

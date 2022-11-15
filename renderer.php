@@ -196,7 +196,7 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
                         'id' => '{NAME}-criteria-{CRITERION-id}-grade',
                         'type' => 'text',
                         'size' => '3',
-                        'value' => (isset($value['grade']) ? $value['grade'] : 0)
+                        'value' => (isset($value['grade']) ? $value['grade'] : '')
                     );
                     $gradetemplate = html_writer::tag('input', '', $gradeparams);
                 }
