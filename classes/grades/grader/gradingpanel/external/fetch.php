@@ -25,7 +25,7 @@
 declare(strict_types = 1);
 
 namespace gradingform_rubric_ranges\grades\grader\gradingpanel\external;
-
+defined('MOODLE_INTERNAL') || die();
 global $CFG;
 
 use coding_exception;
@@ -280,7 +280,8 @@ class fetch extends external_api {
                     new external_single_structure([
                         'id' => new external_value(PARAM_INT, 'ID of the Criteria'),
                         'description' => new external_value(PARAM_RAW, 'Description of the Criteria'),
-                        'remark' => new external_value(PARAM_RAW, 'Any remarks for this criterion for the user being assessed', VALUE_OPTIONAL),
+                        'remark' => new external_value(PARAM_RAW, 'Any remarks for this criterion for the user being assessed',
+                         VALUE_OPTIONAL),
                         'levels' => new external_multiple_structure(new external_single_structure([
                             'id' => new external_value(PARAM_INT, 'ID of level'),
                             'criterionid' => new external_value(PARAM_INT, 'ID of the criterion this matches to'),
@@ -310,7 +311,8 @@ class fetch extends external_api {
      * @param int $format The input format of the string
      * @return string
      */
-    protected static function get_formatted_text(context $context, int $definitionid, string $filearea, string $text, int $format): string {
+    protected static function get_formatted_text(context $context, int $definitionid, string $filearea, string $text, int $format)
+    : string {
         $formatoptions = [
             'noclean' => false,
             'trusted' => false,

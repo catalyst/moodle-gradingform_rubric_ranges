@@ -162,7 +162,7 @@ class behat_gradingform_rubric_ranges extends behat_base {
                         } else {
                             // Only if the level exists.
                             $buttonname = $criterionroot . '[levels][NEWID' . $i . '][delete]';
-                            if ($deletelevel = $this->getSession()->getPage()->findButton($buttonname)) {
+                            if ($deletelevel = $this->getSession()->getPage()->findbutton($buttonname)) {
                                 $deletelevel->click();
                             }
                         }

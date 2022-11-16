@@ -38,7 +38,7 @@ const RUBRIC_RANGES = 'rubric_ranges';
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class gradingform_rubric_ranges_controller extends gradingform_controller {
-    // Modes of displaying the rubric (used in gradingform_rubric_ranges_renderer)
+    // Modes of displaying the rubric (used in gradingform_rubric_ranges_renderer).
     /** Rubric display mode: For editing (moderator or teacher creates a rubric) */
     const DISPLAY_EDIT_FULL     = 1;
     /** Rubric display mode: Preview the rubric design with hidden fields */
@@ -46,7 +46,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
     /** Rubric display mode: Preview the rubric design (for person with manage permission) */
     const DISPLAY_PREVIEW       = 3;
     /** Rubric display mode: Preview the rubric (for people being graded) */
-    const DISPLAY_PREVIEW_GRADED= 8;
+    const DISPLAY_PREVIEW_GRADED = 8;
     /** Rubric display mode: For evaluation, enabled (teacher grades a student) */
     const DISPLAY_EVAL          = 4;
     /** Rubric display mode: For evaluation, with hidden fields */
@@ -83,13 +83,15 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
      */
     public function extend_navigation(global_navigation $navigation, navigation_node $node=null) {
         if (has_capability('moodle/grade:managegradingforms', $this->get_context())) {
-            // no need for preview if user can manage forms, he will have link to manage.php in settings instead
+            // No need for preview if user can manage forms, he will have link to manage.php in settings instead.
             return;
         }
         if ($this->is_form_defined() && ($options = $this->get_options()) && !empty($options['alwaysshowdefinition'])) {
-            $node->add(get_string('gradingof', 'gradingform_rubric_ranges', get_grading_manager($this->get_areaid())->get_area_title()),
-                    new moodle_url('/grade/grading/form/'.$this->get_method_name().'/preview.php', array('areaid' => $this->get_areaid())),
-                    settings_navigation::TYPE_CUSTOM);
+            $node->add(get_string('gradingof', 'gradingform_rubric_ranges',
+                        get_grading_manager($this->get_areaid())->get_area_title()),
+                        new moodle_url('/grade/grading/form/'.$this->get_method_name().'/preview.php',
+                        array('areaid' => $this->get_areaid())),
+                        settings_navigation::TYPE_CUSTOM);
         }
     }
 
@@ -113,7 +115,8 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
      * 0 - no changes
      * 1 - only texts or criteria sortorders are changed, students probably do not require re-grading
      * 2 - added levels but maximum score on rubric is the same, students still may not require re-grading
-     * 3 - removed criteria or added levels or changed number of points, students require re-grading but may be re-graded automatically
+     * 3 - removed criteria or added levels or changed number of points, students require re-grading but
+     *     may be re-graded automatically
      * 4 - removed levels - students require re-grading and not all students may be re-graded automatically
      * 5 - added criteria - all students require manual re-grading
      *
@@ -125,14 +128,14 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
     public function update_or_check_rubric(stdClass $newdefinition, $usermodified = null, $doupdate = false) {
         global $DB;
 
-        // firstly update the common definition data in the {grading_definition} table
+        // Firstly update the common definition data in the {grading_definition} table.
         if ($this->definition === false) {
             if (!$doupdate) {
-                // if we create the new definition there is no such thing as re-grading anyway
+                // If we create the new definition there is no such thing as re-grading anyway.
                 return 5;
             }
-            // if definition does not exist yet, create a blank one
-            // (we need id to save files embedded in description)
+            // If definition does not exist yet, create a blank one.
+            // (We need id to save files embedded in description).
             parent::update_definition(new stdClass(), $usermodified);
             parent::load_definition();
         }
@@ -144,7 +147,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         $newdefinition = file_postupdate_standard_editor($newdefinition, 'description', $editoroptions, $this->get_context(),
             'grading', 'description', $this->definition->id);
 
-        // reload the definition from the database
+        // Reload the definition from the database.
         $currentdefinition = $this->get_definition(true);
         $haschanges = array();
 
@@ -155,37 +158,38 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
             $haschanges[3] = true;
         }
 
-        // update rubric data
+        // Update rubric data.
         if (empty($newdefinition->rubricranges['criteria'])) {
             $newcriteria = array();
         } else {
-            $newcriteria = $newdefinition->rubricranges['criteria']; // new ones to be saved
+            $newcriteria = $newdefinition->rubricranges['criteria']; // New ones to be saved.
         }
         $currentcriteria = $currentdefinition->rubric_criteria;
         $criteriafields = array('sortorder', 'description', 'descriptionformat', 'isranged');
         $levelfields = array('score', 'definition', 'definitionformat');
         foreach ($newcriteria as $id => $criterion) {
-            // get list of submitted levels
+            // Get list of submitted levels.
             $levelsdata = array();
             if (array_key_exists('levels', $criterion)) {
                 $levelsdata = $criterion['levels'];
             }
             $criterionmaxscore = null;
             if (preg_match('/^NEWID\d+$/', $id)) {
-                // insert criterion into DB
-                $data = array('definitionid' => $this->definition->id, 'descriptionformat' => FORMAT_MOODLE); // TODO MDL-31235 format is not supported yet
+                // Insert criterion into DB.
+                $data = array('definitionid' => $this->definition->id,
+                    'descriptionformat' => FORMAT_MOODLE); // TODO MDL-31235 format is not supported yet.
                 foreach ($criteriafields as $key) {
                     if (array_key_exists($key, $criterion)) {
                         $data[$key] = $criterion[$key];
                     }
                 }
-                
+
                 if ($doupdate) {
                     $id = $DB->insert_record('gform_rubric_ranges_criteria', $data);
                 }
                 $haschanges[5] = true;
             } else {
-                // update criterion in DB
+                // Update criterion in DB.
                 $data = array();
                 foreach ($criteriafields as $key) {
                     if (array_key_exists($key, $criterion) && $criterion[$key] != $currentcriteria[$id][$key]) {
@@ -193,14 +197,14 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
                     }
                 }
                 if (!empty($data)) {
-                    // update only if something is changed
+                    // Update only if something is changed.
                     $data['id'] = $id;
                     if ($doupdate) {
                         $DB->update_record('gform_rubric_ranges_criteria', $data);
                     }
                     $haschanges[1] = true;
                 }
-                // remove deleted levels from DB and calculate the maximum score for this criteria
+                // Remove deleted levels from DB and calculate the maximum score for this criteria.
                 foreach ($currentcriteria[$id]['levels'] as $levelid => $currentlevel) {
                     if ($criterionmaxscore === null || $criterionmaxscore < $currentlevel['score']) {
                         $criterionmaxscore = $currentlevel['score'];
@@ -219,8 +223,9 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
                     $level['score'] = unformat_float($level['score']);
                 }
                 if (preg_match('/^NEWID\d+$/', $levelid)) {
-                    // insert level into DB
-                    $data = array('criterionid' => $id, 'definitionformat' => FORMAT_MOODLE); // TODO MDL-31235 format is not supported yet
+                    // Insert level into DB.
+                    $data = array('criterionid' => $id,
+                        'definitionformat' => FORMAT_MOODLE); // TODO MDL-31235 format is not supported yet.
                     foreach ($levelfields as $key) {
                         if (array_key_exists($key, $level)) {
                             $data[$key] = $level[$key];
@@ -230,13 +235,14 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
                         $levelid = $DB->insert_record('gform_rubric_ranges_levels', $data);
                     }
                     if ($criterionmaxscore !== null && $criterionmaxscore >= $level['score']) {
-                        // new level is added but the maximum score for this criteria did not change, re-grading may not be necessary
+                        // New level is added but the maximum score for this criteria did not change,
+                        // Re-grading may not be necessary.
                         $haschanges[2] = true;
                     } else {
                         $haschanges[3] = true;
                     }
                 } else {
-                    // update level in DB
+                    // Update level in DB.
                     $data = array();
                     foreach ($levelfields as $key) {
                         if (array_key_exists($key, $level) && $level[$key] != $currentcriteria[$id]['levels'][$levelid][$key]) {
@@ -244,7 +250,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
                         }
                     }
                     if (!empty($data)) {
-                        // update only if something is changed
+                        // Update only if something is changed.
                         $data['id'] = $levelid;
                         if ($doupdate) {
                             $DB->update_record('gform_rubric_ranges_levels', $data);
@@ -257,7 +263,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
                 }
             }
         }
-        // remove deleted criteria from DB
+        // Remove deleted criteria from DB.
         foreach (array_keys($currentcriteria) as $id) {
             if (!array_key_exists($id, $newcriteria)) {
                 if ($doupdate) {
@@ -284,7 +290,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
             parent::update_definition($newdefinition, $usermodified);
             $this->load_definition();
         }
-        // return the maximum level of changes
+        // Return the maximum level of changes.
         $changelevels = array_keys($haschanges);
         sort($changelevels);
         return array_pop($changelevels);
@@ -310,7 +316,8 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
     protected function load_definition() {
         global $DB;
         $sql = "SELECT gd.*,
-                       rc.id AS rcid, rc.sortorder AS rcsortorder, rc.description AS rcdescription, rc.descriptionformat AS rcdescriptionformat,
+                       rc.id AS rcid, rc.sortorder AS rcsortorder, rc.description AS rcdescription,
+                       rc.descriptionformat AS rcdescriptionformat,
                        rc.isranged AS rcisranged,
                        rl.id AS rlid, rl.score AS rlscore, rl.definition AS rldefinition, rl.definitionformat AS rldefinitionformat
                   FROM {grading_definitions} gd
@@ -324,7 +331,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         $this->definition = false;
         $maxpoint = 0;
         foreach ($rs as $record) {
-            // pick the common definition data
+            // Pick the common definition data.
             if ($this->definition === false) {
                 $this->definition = new stdClass();
                 foreach (array('id', 'name', 'description', 'descriptionformat', 'status', 'copiedfromid',
@@ -333,19 +340,19 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
                 }
                 $this->definition->rubric_criteria = array();
             }
-            // pick the criterion data
-            if (!empty($record->rcid) and empty($this->definition->rubric_criteria[$record->rcid])) {
-                foreach (array('id', 'sortorder','isranged', 'description', 'descriptionformat') as $fieldname) {
+            // Pick the criterion data.
+            if (!empty($record->rcid) && empty($this->definition->rubric_criteria[$record->rcid])) {
+                foreach (array('id', 'sortorder', 'isranged', 'description', 'descriptionformat') as $fieldname) {
                     $this->definition->rubric_criteria[$record->rcid][$fieldname] = $record->{'rc'.$fieldname};
                 }
                 $this->definition->rubric_criteria[$record->rcid]['levels'] = array();
             }
-            // pick the level data
+            // Pick the level data.
             if (!empty($record->rlid)) {
                 foreach (array('id', 'score', 'definition', 'definitionformat') as $fieldname) {
                     $value = $record->{'rl'.$fieldname};
                     if ($fieldname == 'score') {
-                        $value = (float)$value; // To prevent display like 1.00000
+                        $value = (float)$value; // To prevent display like 1.00000.
                         if ($value > $maxpoint) {
                             $maxpoint = $value;
                         }
@@ -361,7 +368,8 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         if (!$options['sortlevelsasc']) {
             if ($this->definition) {
                 foreach (array_keys($this->definition->rubric_criteria) as $rcid) {
-                    $this->definition->rubric_criteria[$rcid]['levels'] = array_reverse($this->definition->rubric_criteria[$rcid]['levels'], true);
+                    $this->definition->rubric_criteria[$rcid]['levels'] =
+                    array_reverse($this->definition->rubric_criteria[$rcid]['levels'], true);
                 }
             }
         }
@@ -541,8 +549,8 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         if (has_capability('moodle/grade:managegradingforms', $page->context)) {
             $showdescription = true;
         } else {
-            if (empty($options['alwaysshowdefinition']))  {
-                // ensure we don't display unless show rubric option enabled
+            if (empty($options['alwaysshowdefinition'])) {
+                // Ensure we don't display unless show rubric option enabled.
                 return '';
             }
             $showdescription = $options['showdescriptionstudent'];
@@ -570,17 +578,18 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
     protected function delete_plugin_definition() {
         global $DB;
 
-        // get the list of instances
+        // Get the list of instances.
         $instances = array_keys($DB->get_records('grading_instances', array('definitionid' => $this->definition->id), '', 'id'));
-        // delete all fillings
+        // Delete all fillings.
         $DB->delete_records_list('gform_rubric_ranges_fillings', 'instanceid', $instances);
-        // delete instances
+        // Delete instances.
         $DB->delete_records_list('grading_instances', 'id', $instances);
-        // get the list of criteria records
-        $criteria = array_keys($DB->get_records('gform_rubric_ranges_criteria', array('definitionid' => $this->definition->id), '', 'id'));
-        // delete levels
+        // Get the list of criteria records.
+        $criteria = array_keys($DB->get_records('gform_rubric_ranges_criteria',
+            array('definitionid' => $this->definition->id), '', 'id'));
+        // Delete levels.
         $DB->delete_records_list('gform_rubric_ranges_levels', 'criterionid', $criteria);
-        // delete critera
+        // Delete critera.
         $DB->delete_records_list('gform_rubric_ranges_criteria', 'id', $criteria);
     }
 
@@ -598,8 +607,11 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
     public function get_or_create_instance($instanceid, $raterid, $itemid) {
         global $DB;
         if ($instanceid &&
-                $instance = $DB->get_record('grading_instances', array('id'  => $instanceid, 'raterid' => $raterid, 'itemid' => $itemid), '*', IGNORE_MISSING)) {
-            return $this->get_instance($instance);
+                $instance = $DB->get_record('grading_instances',
+                array('id'  => $instanceid,
+                'raterid' => $raterid,
+                'itemid' => $itemid), '*', IGNORE_MISSING)) {
+                    return $this->get_instance($instance);
         }
         if ($itemid && $raterid) {
             $params = array('definitionid' => $this->definition->id, 'raterid' => $raterid, 'itemid' => $itemid);
@@ -630,7 +642,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         return $this->get_renderer($page)->display_instances($this->get_active_instances($itemid), $defaultcontent, $cangrade);
     }
 
-    // ///// full-text search support /////////////////////////////////////////////
+    // Full-text search support.
 
     /**
      * Prepare the part of the search query to append to the FROM statement
@@ -659,11 +671,11 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         $subsql = array();
         $params = array();
 
-        // search in rubric criteria description
+        // Search in rubric criteria description.
         $subsql[] = $DB->sql_like('rc.description', '?', false, false);
         $params[] = '%'.$DB->sql_like_escape($token).'%';
 
-        // search in rubric levels definition
+        // Search in rubric levels definition.
         $subsql[] = $DB->sql_like('rl.definition', '?', false, false);
         $params[] = '%'.$DB->sql_like_escape($token).'%';
 
@@ -687,7 +699,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
             }
             sort($scores);
             $returnvalue['minscore'] += $scores[0];
-            $returnvalue['maxscore'] += $scores[sizeof($scores)-1];
+            $returnvalue['maxscore'] += $scores[count($scores) - 1];
         }
         return $returnvalue;
     }
@@ -698,7 +710,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
      * @since Moodle 2.5
      */
     public static function get_external_definition_details() {
-        $rubric_criteria = new external_multiple_structure(
+        $rubriccriteria = new external_multiple_structure(
             new external_single_structure(
                 array(
                    'id'   => new external_value(PARAM_INT, 'criterion id', VALUE_OPTIONAL),
@@ -718,7 +730,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
                    )
               ), 'definition details', VALUE_OPTIONAL
         );
-        return array('rubric_criteria' => $rubric_criteria);
+        return array('rubric_criteria' => $rubriccriteria);
     }
 
     /**
@@ -829,8 +841,10 @@ class gradingform_rubric_ranges_instance extends gradingform_instance {
      */
     public function validate_grading_element($elementvalue) {
         $criteria = $this->get_controller()->get_definition()->rubric_criteria;
-        if (!isset($elementvalue['criteria']) || !is_array($elementvalue['criteria']) || sizeof($elementvalue['criteria']) < sizeof($criteria)) {
-            return false;
+        if (!isset($elementvalue['criteria'])
+            || !is_array($elementvalue['criteria'])
+            || count($elementvalue['criteria']) < count($criteria)) {
+                return false;
         }
         foreach ($criteria as $id => $criterion) {
             if (!isset($elementvalue['criteria'][$id]['levelid'])
@@ -884,13 +898,10 @@ class gradingform_rubric_ranges_instance extends gradingform_instance {
             } else {
                 $newrecord = array('id' => $currentgrade['criteria'][$criterionid]['id']);
                 foreach (array('levelid', 'remark', 'grade' /*, 'remarkformat' */) as $key) {
-                    // TODO MDL-31235 format is not supported yet
+                    // TODO MDL-31235 format is not supported yet.
                     if (isset($record[$key]) && $currentgrade['criteria'][$criterionid][$key] != $record[$key]) {
                         $newrecord[$key] = $record[$key];
                     }
-                    // if (isset($record['grade'])) {
-                    //     $newrecord['grade'] = $record['grade'];
-                    // }
                 }
                 if (count($newrecord) > 1) {
                     $DB->update_record('gform_rubric_ranges_fillings', $newrecord);
@@ -923,7 +934,7 @@ class gradingform_rubric_ranges_instance extends gradingform_instance {
         }
         sort($graderange);
         $mingrade = $graderange[0];
-        $maxgrade = $graderange[sizeof($graderange) - 1];
+        $maxgrade = $graderange[count($graderange) - 1];
 
         $curscore = 0;
         foreach ($grade['criteria'] as $id => $record) {
@@ -941,7 +952,8 @@ class gradingform_rubric_ranges_instance extends gradingform_instance {
             return $allowdecimals ? $grade : round($grade, 0);
         } else {
             // Alternative grade calculation method.
-            $gradeoffset = ($curscore - $scores['minscore']) / ($scores['maxscore'] - $scores['minscore']) * ($maxgrade - $mingrade);
+            $gradeoffset = ($curscore - $scores['minscore']) / ($scores['maxscore'] - $scores['minscore'])
+                * ($maxgrade - $mingrade);
             return ($allowdecimals ? $gradeoffset : round($gradeoffset, 0)) + $mingrade;
         }
     }
@@ -956,8 +968,10 @@ class gradingform_rubric_ranges_instance extends gradingform_instance {
     public function render_grading_element($page, $gradingformelement) {
         global $USER;
         if (!$gradingformelement->_flagFrozen) {
-            $module = array('name'=>'gradingform_rubric_ranges', 'fullpath'=>'/grade/grading/form/rubric_ranges/js/rubric_ranges.js');
-            $page->requires->js_init_call('M.gradingform_rubric_ranges.init', array(array('name' => $gradingformelement->getName())), true, $module);
+            $module = array('name' => 'gradingform_rubric_ranges',
+                'fullpath' => '/grade/grading/form/rubric_ranges/js/rubric_ranges.js');
+            $page->requires->js_init_call('M.gradingform_rubric_ranges.init',
+                array(array('name' => $gradingformelement->getName())), true, $module);
             $mode = gradingform_rubric_ranges_controller::DISPLAY_EVAL;
         } else {
             if ($gradingformelement->_persistantFreeze) {
@@ -973,12 +987,14 @@ class gradingform_rubric_ranges_instance extends gradingform_instance {
         if ($value === null) {
             $value = $this->get_rubric_filling();
         } else if (!$this->validate_grading_element($value)) {
-            $html .= html_writer::tag('div', get_string('rubricnotcompleted', 'gradingform_rubric_ranges'), array('class' => 'gradingform_rubric_ranges-error'));
+            $html .= html_writer::tag('div', get_string('rubricnotcompleted', 'gradingform_rubric_ranges'),
+                array('class' => 'gradingform_rubric_ranges-error'));
         }
         $currentinstance = $this->get_current_instance();
         if ($currentinstance && $currentinstance->get_status() == gradingform_instance::INSTANCE_STATUS_NEEDUPDATE) {
-            $html .= html_writer::div(get_string('needregrademessage', 'gradingform_rubric_ranges'), 'gradingform_rubric_ranges-regrade',
-                                      array('role' => 'alert'));
+            $html .= html_writer::div(get_string('needregrademessage', 'gradingform_rubric_ranges'),
+                                    'gradingform_rubric_ranges-regrade',
+                                    array('role' => 'alert'));
         }
         $haschanges = false;
         if ($currentinstance) {
@@ -987,20 +1003,28 @@ class gradingform_rubric_ranges_instance extends gradingform_instance {
                 $value['criteria'][$criterionid]['savedlevelid'] = $curvalues['levelid'];
                 $newremark = null;
                 $newlevelid = null;
-                if (isset($value['criteria'][$criterionid]['remark'])) $newremark = $value['criteria'][$criterionid]['remark'];
-                if (isset($value['criteria'][$criterionid]['levelid'])) $newlevelid = $value['criteria'][$criterionid]['levelid'];
+                if (isset($value['criteria'][$criterionid]['remark'])) {
+                    $newremark = $value['criteria'][$criterionid]['remark'];
+                }
+                if (isset($value['criteria'][$criterionid]['levelid'])) {
+                    $newlevelid = $value['criteria'][$criterionid]['levelid'];
+                }
                 if ($newlevelid != $curvalues['levelid'] || $newremark != $curvalues['remark']) {
                     $haschanges = true;
                 }
             }
         }
         if ($this->get_data('isrestored') && $haschanges) {
-            $html .= html_writer::tag('div', get_string('restoredfromdraft', 'gradingform_rubric_ranges'), array('class' => 'gradingform_rubric_ranges-restored'));
+            $html .= html_writer::tag('div', get_string('restoredfromdraft', 'gradingform_rubric_ranges'),
+                array('class' => 'gradingform_rubric_ranges-restored'));
         }
         if (!empty($options['showdescriptionteacher'])) {
-            $html .= html_writer::tag('div', $this->get_controller()->get_formatted_description(), array('class' => 'gradingform_rubric_ranges-description'));
+            $html .= html_writer::tag('div', $this->get_controller()->get_formatted_description(),
+                array('class' => 'gradingform_rubric_ranges-description'));
         }
-        $html .= $this->get_controller()->get_renderer($page)->display_rubric($criteria, $options, $mode, $gradingformelement->getName(), $value);
+        $html .= $this->get_controller()->get_renderer($page)->display_rubric(
+            $criteria, $options, $mode, $gradingformelement->getName(), $value
+        );
         return $html;
     }
 }

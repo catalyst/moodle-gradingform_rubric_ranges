@@ -22,7 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+
 
 /**
  * Defines rubric backup structures
@@ -38,16 +38,16 @@ class backup_gradingform_rubric_ranges_plugin extends backup_gradingform_plugin 
      */
     protected function define_definition_plugin_structure() {
 
-        // Append data only if the grand-parent element has 'method' set to 'rubric'
+        // Append data only if the grand-parent element has 'method' set to 'rubric'.
         $plugin = $this->get_plugin_element(null, '../../method', 'rubric');
 
-        // Create a visible container for our data
+        // Create a visible container for our data.
         $pluginwrapper = new backup_nested_element($this->get_recommended_name());
 
-        // Connect our visible container to the parent
+        // Connect our visible container to the parent.
         $plugin->add_child($pluginwrapper);
 
-        // Define our elements
+        // Define our elements.
 
         $criteria = new backup_nested_element('criteria');
 
@@ -59,14 +59,14 @@ class backup_gradingform_rubric_ranges_plugin extends backup_gradingform_plugin 
         $level = new backup_nested_element('level', array('id'), array(
             'score', 'definition', 'definitionformat'));
 
-        // Build elements hierarchy
+        // Build elements hierarchy.
 
         $pluginwrapper->add_child($criteria);
         $criteria->add_child($criterion);
         $criterion->add_child($levels);
         $levels->add_child($level);
 
-        // Set sources to populate the data
+        // Set sources to populate the data.
 
         $criterion->set_source_table('gform_rubric_ranges_criteria',
                 array('definitionid' => backup::VAR_PARENTID));
@@ -74,8 +74,8 @@ class backup_gradingform_rubric_ranges_plugin extends backup_gradingform_plugin 
         $level->set_source_table('gform_rubric_ranges_levels',
                 array('criterionid' => backup::VAR_PARENTID));
 
-        // no need to annotate ids or files yet (one day when criterion definition supports
-        // embedded files, they must be annotated here)
+        // No need to annotate ids or files yet (one day when criterion definition supports
+        // Embedded files, they must be annotated here).
 
         return $plugin;
     }
@@ -85,30 +85,30 @@ class backup_gradingform_rubric_ranges_plugin extends backup_gradingform_plugin 
      */
     protected function define_instance_plugin_structure() {
 
-        // Append data only if the ancestor 'definition' element has 'method' set to 'rubric'
+        // Append data only if the ancestor 'definition' element has 'method' set to 'rubric'.
         $plugin = $this->get_plugin_element(null, '../../../../method', 'rubric');
 
-        // Create a visible container for our data
+        // Create a visible container for our data.
         $pluginwrapper = new backup_nested_element($this->get_recommended_name());
 
-        // Connect our visible container to the parent
+        // Connect our visible container to the parent.
         $plugin->add_child($pluginwrapper);
 
-        // Define our elements
+        // Define our elements.
 
         $fillings = new backup_nested_element('fillings');
 
         $filling = new backup_nested_element('filling', array('id'), array(
             'criterionid', 'levelid', 'remark', 'remarkformat'));
 
-        // Build elements hierarchy
+        // Build elements hierarchy.
 
         $pluginwrapper->add_child($fillings);
         $fillings->add_child($filling);
 
-        // Set sources to populate the data
+        // Set sources to populate the data.
 
-        // Binding criterionid to ensure it's existence
+        // Binding criterionid to ensure it's existence.
         $filling->set_source_sql('SELECT rf.*
                 FROM {gform_rubric_ranges_fillings} rf
                 JOIN {grading_instances} gi ON gi.id = rf.instanceid
@@ -116,8 +116,8 @@ class backup_gradingform_rubric_ranges_plugin extends backup_gradingform_plugin 
                 WHERE rf.instanceid = :instanceid',
                 array('instanceid' => backup::VAR_PARENTID));
 
-        // no need to annotate ids or files yet (one day when remark field supports
-        // embedded fileds, they must be annotated here)
+        // No need to annotate ids or files yet (one day when remark field supports.
+        // Embedded fileds, they must be annotated here).
 
         return $plugin;
     }

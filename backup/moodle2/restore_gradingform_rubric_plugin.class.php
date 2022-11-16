@@ -22,7 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+
 
 /**
  * Restores the rubric specific data from grading.xml file
@@ -88,7 +88,7 @@ class restore_gradingform_rubric_ranges_plugin extends restore_gradingform_plugi
     /**
      * Processes level element data
      *
-     * Sets the mapping 'gradingform_rubric_ranges_level' to be used later by
+     * Sets the mapping 'gradingform_rubric_ranges_level' to be used later by.
      * {@link self::process_gradinform_rubric_filling()}
      *
      * @param stdClass|array $data

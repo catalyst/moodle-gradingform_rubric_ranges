@@ -25,7 +25,7 @@
 declare(strict_types = 1);
 
 namespace gradingform_rubric_ranges\grades\grader\gradingpanel\external;
-
+defined('MOODLE_INTERNAL') || die();
 global $CFG;
 
 use coding_exception;
