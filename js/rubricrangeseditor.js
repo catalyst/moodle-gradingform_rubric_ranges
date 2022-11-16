@@ -217,6 +217,7 @@ M.gradingform_rubric_rangeseditor.buttonclick = function(e, confirmed) {
         if (parentel.one('>tbody')) parentel = parentel.one('>tbody')
         if (parentel.all('.criterion').size()) {
             var lastcriterion = parentel.all('.criterion').item(parentel.all('.criterion').size()-1).all('.level')
+            var lastisranged =  parentel.all('.criterion').item(parentel.all('.criterion').size()-1).one('.isranged input[type=checkbox]')
             for (levidx=0;levidx<lastcriterion.size();levidx++) levelsscores[levidx] = lastcriterion.item(levidx).one('.score input[type=text]').get('value')
         }
         for (levidx;levidx<3;levidx++) levelsscores[levidx] = parseFloat(levelsscores[levidx-1])+1
@@ -236,6 +237,10 @@ M.gradingform_rubric_rangeseditor.buttonclick = function(e, confirmed) {
         M.gradingform_rubric_rangeseditor.editmode(
             Y.one('#rubric-' + name + ' #' + name + '-criteria-NEWID' + newid + '-description-cell'), true
         );
+        // check isranged if last isranged is checked.
+        if (parseInt(lastisranged.get('value')) == 1) {
+            Y.one('#rubric-' + name + ' #' + name + '-criteria-NEWID' + newid + '-isranged').simulate('click')
+        }
     } else if (chunks.length == 5 && action == 'addlevel') {
         // ADD NEW LEVEL
         var newscore = 0;
