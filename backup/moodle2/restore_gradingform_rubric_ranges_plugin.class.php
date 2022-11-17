@@ -43,10 +43,10 @@ class restore_gradingform_rubric_ranges_plugin extends restore_gradingform_plugi
         $paths = array();
 
         $paths[] = new restore_path_element('gradingform_rubric_ranges_criterion',
-            $this->get_pathfor('/criteria/criterion'));
+            $this->get_pathfor('/rubric_ranges_criteria/rubric_ranges_criterion'));
 
         $paths[] = new restore_path_element('gradingform_rubric_ranges_level',
-            $this->get_pathfor('/criteria/criterion/levels/level'));
+            $this->get_pathfor('/rubric_ranges_criteria/rubric_ranges_criterion/rubric_ranges_levels/rubric_ranges_level'));
 
         return $paths;
     }
@@ -60,8 +60,8 @@ class restore_gradingform_rubric_ranges_plugin extends restore_gradingform_plugi
 
         $paths = array();
 
-        $paths[] = new restore_path_element('gradinform_rubric_filling',
-            $this->get_pathfor('/fillings/filling'));
+        $paths[] = new restore_path_element('gradinform_rubric_ranges_filling',
+            $this->get_pathfor('/rubric_ranges_fillings/rubric_ranges_filling'));
 
         return $paths;
     }
@@ -109,7 +109,7 @@ class restore_gradingform_rubric_ranges_plugin extends restore_gradingform_plugi
      *
      * @param stdClass|array $data
      */
-    public function process_gradinform_rubric_filling($data) {
+    public function process_gradinform_rubric_ranges_filling($data) {
         global $DB;
 
         $data = (object)$data;

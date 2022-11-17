@@ -39,7 +39,7 @@ class backup_gradingform_rubric_ranges_plugin extends backup_gradingform_plugin 
     protected function define_definition_plugin_structure() {
 
         // Append data only if the grand-parent element has 'method' set to 'rubric'.
-        $plugin = $this->get_plugin_element(null, '../../method', 'rubric');
+        $plugin = $this->get_plugin_element(null, '../../method', 'rubric_ranges');
 
         // Create a visible container for our data.
         $pluginwrapper = new backup_nested_element($this->get_recommended_name());
@@ -49,18 +49,17 @@ class backup_gradingform_rubric_ranges_plugin extends backup_gradingform_plugin 
 
         // Define our elements.
 
-        $criteria = new backup_nested_element('criteria');
+        $criteria = new backup_nested_element('rubric_ranges_criteria');
 
-        $criterion = new backup_nested_element('criterion', array('id'), array(
-            'sortorder', 'description', 'descriptionformat'));
+        $criterion = new backup_nested_element('rubric_ranges_criterion', array('id'), array(
+            'sortorder', 'isranged', 'description', 'descriptionformat'));
 
-        $levels = new backup_nested_element('levels');
+        $levels = new backup_nested_element('rubric_ranges_levels');
 
-        $level = new backup_nested_element('level', array('id'), array(
+        $level = new backup_nested_element('rubric_ranges_level', array('id'), array(
             'score', 'definition', 'definitionformat'));
 
         // Build elements hierarchy.
-
         $pluginwrapper->add_child($criteria);
         $criteria->add_child($criterion);
         $criterion->add_child($levels);
@@ -86,7 +85,7 @@ class backup_gradingform_rubric_ranges_plugin extends backup_gradingform_plugin 
     protected function define_instance_plugin_structure() {
 
         // Append data only if the ancestor 'definition' element has 'method' set to 'rubric'.
-        $plugin = $this->get_plugin_element(null, '../../../../method', 'rubric');
+        $plugin = $this->get_plugin_element(null, '../../../../method', 'rubric_ranges');
 
         // Create a visible container for our data.
         $pluginwrapper = new backup_nested_element($this->get_recommended_name());
@@ -96,10 +95,10 @@ class backup_gradingform_rubric_ranges_plugin extends backup_gradingform_plugin 
 
         // Define our elements.
 
-        $fillings = new backup_nested_element('fillings');
+        $fillings = new backup_nested_element('rubric_ranges_fillings');
 
-        $filling = new backup_nested_element('filling', array('id'), array(
-            'criterionid', 'levelid', 'remark', 'remarkformat'));
+        $filling = new backup_nested_element('rubric_ranges_filling', array('id'), array(
+            'criterionid', 'levelid', 'grade', 'remark', 'remarkformat'));
 
         // Build elements hierarchy.
 
