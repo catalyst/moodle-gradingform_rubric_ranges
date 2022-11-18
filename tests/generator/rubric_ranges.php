@@ -36,7 +36,7 @@ use stdClass;
  * @copyright  2018 Adrian Greeve <adriangreeve.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class rubric {
+class rubric_ranges {
 
     /** @var array $criteria The criteria for this rubric. */
     protected $criteria = [];
@@ -81,7 +81,7 @@ class rubric {
                 'format' => FORMAT_HTML,
                 'itemid' => 1
             ],
-            'rubric' => [
+            'rubricranges' => [
                 'criteria' => $this->get_all_criterion_values(),
                 'options' => $this->options,
             ],

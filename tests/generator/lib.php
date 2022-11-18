@@ -25,10 +25,10 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once(__DIR__ . '/rubric.php');
+require_once(__DIR__ . '/rubric_ranges.php');
 require_once(__DIR__ . '/criterion.php');
 
-use tests\gradingform_rubric_ranges\generator\rubric;
+use tests\gradingform_rubric_ranges\generator\rubric_ranges;
 use tests\gradingform_rubric_ranges\generator\criterion;
 
 /**
@@ -69,16 +69,16 @@ class gradingform_rubric_ranges_generator extends component_generator_base {
         // Fetch the controller for this context/component/area.
         $generator = \testing_util::get_data_generator();
         $gradinggenerator = $generator->get_plugin_generator('core_grading');
-        $controller = $gradinggenerator->create_instance($context, $component, $area, 'rubric');
+        $controller = $gradinggenerator->create_instance($context, $component, $area, 'rubric_ranges');
 
         // Generate a definition for the supplied rubric.
-        $rubric = $this->get_rubric($name, $description);
+        $rubric_ranges = $this->get_rubric_ranges($name, $description);
         foreach ($criteria as $name => $criterion) {
-            $rubric->add_criteria($this->get_criterion($name, $criterion));
+            $rubric_ranges->add_criteria($this->get_criterion($name, $criterion));
         }
 
         // Update the controller wih the rubric definition.
-        $controller->update_definition($rubric->get_definition());
+        $controller->update_definition($rubric_ranges->get_definition());
 
         return $controller;
     }
@@ -90,10 +90,10 @@ class gradingform_rubric_ranges_generator extends component_generator_base {
      *
      * @param string $name
      * @param string $description
-     * @return rubric
+     * @return rubric_ranges
      */
-    protected function get_rubric(string $name, string $description): rubric {
-        return new rubric($name, $description);
+    protected function get_rubric_ranges(string $name, string $description): rubric_ranges {
+        return new rubric_ranges($name, $description);
     }
 
     /**
@@ -188,7 +188,7 @@ class gradingform_rubric_ranges_generator extends component_generator_base {
      * @param string $area
      * @return gradingform_rubric_ranges_controller
      */
-    public function get_test_rubric(context $context, string $component, string $area): gradingform_rubric_ranges_controller {
+    public function get_test_rubric_ranges(context $context, string $component, string $area): gradingform_rubric_ranges_controller {
         $criteria = [
             'Spelling is important' => [
                 'Nothing but mistakes' => 0,

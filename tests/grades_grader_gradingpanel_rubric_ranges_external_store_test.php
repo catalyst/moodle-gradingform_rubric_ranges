@@ -167,7 +167,7 @@ class store_test extends advanced_testcase {
         $this->assertIsInt($result['grade']['timemodified']);
 
         $this->assertArrayHasKey('usergrade', $result['grade']);
-        $this->assertEquals('1.00 / 2.00', $result['grade']['usergrade']);
+        $this->assertEquals(1, $result['grade']['usergrade']);
 
         $this->assertArrayHasKey('maxgrade', $result['grade']);
         $this->assertIsInt($result['grade']['maxgrade']);
@@ -257,7 +257,7 @@ class store_test extends advanced_testcase {
         $student = $this->getDataGenerator()->create_and_enrol($course, 'student');
 
         $this->setUser($teacher);
-        $controller = $rubricgenerator->get_test_rubric($forum->get_context(), 'forum', 'forum');
+        $controller = $rubricgenerator->get_test_rubric_ranges($forum->get_context(), 'forum', 'forum');
         $definition = $controller->get_definition();
 
         $DB->set_field('forum', 'grade_forum', count($definition->rubric_criteria), ['id' => $forum->get_id()]);

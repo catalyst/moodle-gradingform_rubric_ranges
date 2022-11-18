@@ -43,7 +43,7 @@ class generator_testcase extends advanced_testcase {
     /**
      * Test rubric creation.
      */
-    public function test_rubric_creation(): void {
+    public function test_rubric_ranges_creation(): void {
         $this->resetAfterTest(true);
 
         // Fetch generators.
@@ -182,7 +182,7 @@ class generator_testcase extends advanced_testcase {
         ];
 
         $this->setUser($user);
-        $controller = $rubricgenerator->create_instance($context, 'mod_assign', 'submission', 'rubric', $description, $criteria);
+        $controller = $rubricgenerator->create_instance($context, 'mod_assign', 'submission', 'rubric_ranges', $description, $criteria);
 
         // Valid criterion and level.
         $result = $rubricgenerator->get_level_and_criterion_for_values($controller, 'Alphabet', 2);
@@ -203,7 +203,7 @@ class generator_testcase extends advanced_testcase {
     /**
      * Tests for the get_test_rubric function.
      */
-    public function test_get_test_rubric(): void {
+    public function test_get_test_rubric_ranges(): void {
         $this->resetAfterTest(true);
 
         // Fetch generators.
@@ -217,7 +217,7 @@ class generator_testcase extends advanced_testcase {
         $context = context_module::instance($module->cmid);
 
         $this->setUser($user);
-        $rubric = $rubricgenerator->get_test_rubric($context, 'assign', 'submissions');
+        $rubric = $rubricgenerator->get_test_rubric_ranges($context, 'assign', 'submissions');
         $definition = $rubric->get_definition();
 
         $this->assertEquals('testrubric', $definition->name);
@@ -245,7 +245,7 @@ class generator_testcase extends advanced_testcase {
         $context = context_module::instance($module->cmid);
 
         $this->setUser($user);
-        $controller = $rubricgenerator->get_test_rubric($context, 'assign', 'submissions');
+        $controller = $rubricgenerator->get_test_rubric_ranges($context, 'assign', 'submissions');
 
         $result = $rubricgenerator->get_submitted_form_data($controller, 93, [
             'Spelling is important' => [
@@ -291,7 +291,7 @@ class generator_testcase extends advanced_testcase {
         $context = context_module::instance($module->cmid);
 
         $this->setUser($user);
-        $controller = $rubricgenerator->get_test_rubric($context, 'assign', 'submissions');
+        $controller = $rubricgenerator->get_test_rubric_ranges($context, 'assign', 'submissions');
 
         // Unit under test.
         $result = $rubricgenerator->get_test_form_data(

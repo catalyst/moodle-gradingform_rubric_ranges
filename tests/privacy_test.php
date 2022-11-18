@@ -52,7 +52,7 @@ class privacy_testcase extends provider_testcase {
         $this->setUser($user);
 
         // Generate a test rubric and get its controller.
-        $controller = $this->get_test_rubric($modulecontext, 'assign', 'submissions');
+        $controller = $this->get_test_rubric_ranges($modulecontext, 'assign', 'submissions');
 
         // In the situation of mod_assign this would be the id from assign_grades.
         $itemid = 1;
@@ -92,7 +92,7 @@ class privacy_testcase extends provider_testcase {
         $this->setUser($user);
 
         // Generate a test rubric and get its controller.
-        $controller = $this->get_test_rubric($modulecontext, 'assign', 'submissions');
+        $controller = $this->get_test_rubric_ranges($modulecontext, 'assign', 'submissions');
 
         // In the situation of mod_assign this would be the id from assign_grades.
         $itemid = 1;
@@ -123,11 +123,11 @@ class privacy_testcase extends provider_testcase {
         $instance->update($data);
 
         // Check how many records we have in the fillings table.
-        $records = $DB->get_records('gradingform_rubric_ranges_fillings');
+        $records = $DB->get_records('gform_rubric_ranges_fillings');
         $this->assertCount(4, $records);
         // Let's delete one of the instances (the last one would be the easiest).
         provider::delete_gradingform_for_instances([$instance->get_id()]);
-        $records = $DB->get_records('gradingform_rubric_ranges_fillings');
+        $records = $DB->get_records('gform_rubric_ranges_fillings');
         $this->assertCount(2, $records);
         foreach ($records as $record) {
             $this->assertNotEquals($instance->get_id(), $record->instanceid);
@@ -142,11 +142,11 @@ class privacy_testcase extends provider_testcase {
      * @param string $area
      * @return gradingform_rubric_ranges_controller
      */
-    protected function get_test_rubric(context_module $context, string $component, string $area): gradingform_rubric_ranges_controller {
+    protected function get_test_rubric_ranges(context_module $context, string $component, string $area): gradingform_rubric_ranges_controller {
         $generator = \testing_util::get_data_generator();
         $rubricgenerator = $generator->get_plugin_generator('gradingform_rubric_ranges');
 
-        return $rubricgenerator->get_test_rubric($context, $component, $area);
+        return $rubricgenerator->get_test_rubric_ranges($context, $component, $area);
     }
 
     /**

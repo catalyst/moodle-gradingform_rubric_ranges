@@ -137,7 +137,7 @@ class fetch_test extends advanced_testcase {
         $this->assertIsInt($result['grade']['timemodified']);
 
         $this->assertArrayHasKey('usergrade', $result['grade']);
-        $this->assertEquals('- / 100.00', $result['grade']['usergrade']);
+        $this->assertEquals(0, $result['grade']['usergrade']);
 
         $this->assertArrayHasKey('maxgrade', $result['grade']);
         $this->assertIsInt($result['grade']['maxgrade']);
@@ -282,7 +282,7 @@ class fetch_test extends advanced_testcase {
         $this->assertIsInt($result['grade']['timemodified']);
 
         $this->assertArrayHasKey('usergrade', $result['grade']);
-        $this->assertEquals('50.00 / 100.00', $result['grade']['usergrade']);
+        $this->assertEquals(50, $result['grade']['usergrade']);
 
         $this->assertArrayHasKey('maxgrade', $result['grade']);
         $this->assertIsInt($result['grade']['maxgrade']);
@@ -373,7 +373,7 @@ class fetch_test extends advanced_testcase {
 
         $this->setUser($teacher);
 
-        $controller = $rubricgenerator->get_test_rubric($forum->get_context(), 'forum', 'forum');
+        $controller = $rubricgenerator->get_test_rubric_ranges($forum->get_context(), 'forum', 'forum');
         $definition = $controller->get_definition();
 
         // In the situation of mod_forum this would be the id from forum_grades.
