@@ -821,4 +821,10 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
             'gradingform_rubric_ranges', (object)$scores), 'info');
         return $html;
     }
+
+    public function get_css_classes_definition() {
+        $rules = [];
+        $rules['criteria'] = '';
+        return $rules;
+    }
 }

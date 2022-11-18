@@ -55,7 +55,8 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
     const DISPLAY_REVIEW        = 6;
     /** Rubric display mode: Dispaly filled rubric (i.e. students see their grades) */
     const DISPLAY_VIEW          = 7;
-
+    /** Rubric display mode: Print */
+    const DISPLAY_PRINT          = 9;
     /**
      * Extends the module settings navigation with the rubric grading settings
      *
@@ -540,36 +541,29 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         global $CFG;
         $criteria = $this->definition->rubric_criteria;
         $options = $this->get_options();
-        $rubric = '';
-
+        $rubric = html_writer::tag('div', $this->definition->name,
+            array('style' => 'font-size:20px;line-height: 1.2;font-weight:bold;'));
         if (has_capability('moodle/grade:managegradingforms', $page->context)) {
             $showdescription = true;
         } else {
             if (empty($options['alwaysshowdefinition']))  {
-                // ensure we don't display unless show rubric option enabled
+                // Ensure we don't display unless show rubric option enabled.
                 return '';
             }
             $showdescription = $options['showdescriptionstudent'];
         }
         $output = $this->get_renderer($page);
         if ($showdescription) {
-            $rubric .= $output->box($this->get_formatted_description(), 'gradingform_rubric_ranges-description');
+            $rubric .= html_writer::tag('div', $this->get_formatted_description(), 
+                array('style' => 'font-size:12px;'));
         }
-        if (has_capability('moodle/grade:managegradingforms', $page->context)) {
-            if (!$options['lockzeropoints']) {
-                // Warn about using grade calculation method where minimum number of points is flexible.
-                $rubric .= $output->display_rubric_mapping_explained($this->get_min_max_score());
-            }
-            $rubric .= $output->display_rubric($criteria, $options, self::DISPLAY_PREVIEW, 'rubricranges');
-        } else {
-            $rubric .= $output->display_rubric($criteria, $options, self::DISPLAY_PREVIEW_GRADED, 'rubricranges');
-        }
-        echo $rubric;
-        // require_once($CFG->libdir.'/pdflib.php');
-        // $pdf = new pdf();
-        // $pdf->AddPage('L');
-        // $pdf->WriteHTML($rubric);
-        // $pdf->Output('example.pdf', 'D');
+        $rubric .= $output->display_rubric($criteria, $options, self::DISPLAY_PRINT, 'rubricranges');
+        //echo $rubric;
+        require_once($CFG->libdir.'/pdflib.php');
+        $pdf = new pdf();
+        $pdf->AddPage('L');
+        $pdf->WriteHTML($rubric);
+        $pdf->Output('example.pdf', 'D');
     }
 
     /**
