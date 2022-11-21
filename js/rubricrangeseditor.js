@@ -73,6 +73,12 @@ M.gradingform_rubric_rangeseditor.clickanywhere = function(e) {
     if (el.get('tagName') == 'INPUT' && (el.get('type') == 'submit' || el.get('type') == 'checkbox')) {
         return
     }
+
+    if (el.get('parentNode').hasClass('isranged') || el.hasClass('isranged')) {
+        M.gradingform_rubric_rangeseditor.disablealleditors()
+        return
+    }
+
     // else if clicked on level and this level is not enabled - enable it
     // or if clicked on description and this description is not enabled - enable it
     var focustb = false
