@@ -259,6 +259,22 @@ class MoodleQuickForm_rubricrangeseditor extends HTML_QuickForm_input {
                         $this->nonjsbuttonpressed = true;
                     }
                 }
+                // Check if any duplicate score values.
+                $validatescore = ['unique' => [], 'duplicate' => []];
+                foreach($levels as $key => $level) {
+                    if (!in_array($level['score'], $validatescore['unique'])) {
+                        $validatescore['unique'][$key] = $level['score'];
+                    } else {
+                        $validatescore['duplicate'][$key] = $level['score'];
+                    }
+                }
+                if (count($validatescore['duplicate'])) {
+                    $errors['err_duplicatescore'] = 1;
+                    foreach ($validatescore['duplicate'] as $key => $score) {
+                        $levels[$key]['error_score'] = true;
+                    }
+                }
+
             }
             $totalscore += (float)$maxscore;
             $criterion['levels'] = $levels;
