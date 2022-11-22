@@ -545,23 +545,21 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
 
         $inlinecss = [];
         $inlinecss['rubricranges_name'] = 'font-size:20px;line-height: 1.2;font-weight:bold;';
-        $inlinecss['criteria'] = 'width: 100%;cellspacing="3" cellpadding="4"';
+        $inlinecss['criteria'] = 'border: 1px solid #ddd;';
         $inlinecss['criterion first even'] = 'background-color: #f0f0f0;border: 1px solid #ddd;';
         $inlinecss['criterion odd'] = 'border: 1px solid #ddd;';
         $inlinecss['criterion even'] = 'background-color: #f0f0f0;border: 1px solid #ddd;';
         $inlinecss['criterion last even'] = 'background-color: #f0f0f0;border: 1px solid #ddd;';
         $inlinecss['criterion last odd'] = 'border: 1px solid #ddd;';
-
-        $inlinecss['description'] = 'min-width: 150px;font-weight: bold;padding: 3px;';
-        $inlinecss['levels'] = 'padding: 0;vertical-align: top;';
-        $inlinecss['level first even'] = 'padding: 3px;vertical-align: top;max-width: 150px;border-left: 1px solid #ddd;padding: 3px;';
-        $inlinecss['level odd'] = 'padding: 3px;border-left: 1px solid #ddd;max-width: 150px;padding: 3px;  vertical-align: top;';
-        $inlinecss['level last even'] = 'padding: 3px;padding: 3px;border-right: 1px solid #ddd;border-left: 1px solid #ddd;max-width: 150px;';
-        $inlinecss['level last odd'] = 'padding: 3px;border-right: 1px solid #ddd;border-left: 1px solid #ddd;';
-        $inlinecss['score'] = 'font-style: italic;color: #575;font-weight: bold;margin-top: 5px;white-space: nowrap;
-        position: relative;
-        float: left;
-        margin-right: 28px;';
+        $inlinecss['criterion first last even'] = 'background-color: #f0f0f0; border: 1px solid #ddd;';
+        $inlinecss['description'] = 'min-width: 120px;font-weight: bold;padding: 3px;';
+        $inlinecss['level-wrapper'] = 'position: relative;';
+        $inlinecss['levels'] = 'margin-top:0px;';
+        $inlinecss['level first even'] = 'vertical-align: top;padding: 3px;max-width: 150px;border-left: 1px solid #ddd;';
+        $inlinecss['level odd'] = 'vertical-align: top;padding: 3px;border-left: 1px solid #ddd;max-width: 150px;padding: 3px;';
+        $inlinecss['level last even'] = 'vertical-align: top;padding: 3px;border-left: 1px solid #ddd;max-width: 150px;';
+        $inlinecss['level last odd'] = 'vertical-align: top;padding: 3px;border-left: 1px solid #ddd;';
+        $inlinecss['score'] = 'font-style: italic;color: #575;font-weight: bold;position: relative;';
 
         foreach($inlinecss as $classname => $css) {
             $rubricstr = str_replace('class="'.$classname.'"', 'style="'.$css.'"', $rubricstr);
