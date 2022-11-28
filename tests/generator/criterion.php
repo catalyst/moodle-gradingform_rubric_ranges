@@ -39,6 +39,9 @@ class criterion {
     /** @var integer $sortorder sort order of the criterion. */
     public $sortorder = 0;
 
+    /** @var integer $isranged sort order of the criterion. */
+    public $isranged = 0;
+
     /** @var array $levels The levels for this criterion. */
     public $levels = [];
 
@@ -46,10 +49,12 @@ class criterion {
      * Constructor for this test_criterion object
      *
      * @param string $description A description of this criterion.
+     * @param int $isranged
      * @param array $levels
      */
-    public function __construct(string $description, array $levels = []) {
+    public function __construct(string $description, int $isranged, array $levels = []) {
         $this->description = $description;
+        $this->isranged = $isranged;
         foreach ($levels as $definition => $score) {
             $this->add_level($definition, $score);
         }
@@ -99,6 +104,7 @@ class criterion {
         return [
             'sortorder' => $sortorder,
             'description' => $this->get_description(),
+            'isranged'  => $this->isranged,
             'levels' => $this->get_all_level_values(),
         ];
     }

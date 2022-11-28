@@ -73,8 +73,8 @@ class gradingform_rubric_ranges_generator extends component_generator_base {
 
         // Generate a definition for the supplied rubric.
         $rubric_ranges = $this->get_rubric_ranges($name, $description);
-        foreach ($criteria as $name => $criterion) {
-            $rubric_ranges->add_criteria($this->get_criterion($name, $criterion));
+        foreach ($criteria as $key => $criterion) {
+            $rubric_ranges->add_criteria($this->get_criterion($criterion['name'], $criterion['isranged'], $criterion['levels']));
         }
 
         // Update the controller wih the rubric definition.
@@ -102,11 +102,12 @@ class gradingform_rubric_ranges_generator extends component_generator_base {
      * Note: This is just a helper class used to build a new definition. It does not persist the data.
      *
      * @param string $description
+     * @param int $isranged
      * @param array $levels Set of levels in the form definition => score
      * @return gradingform_rubric_ranges_generator_criterion
      */
-    protected function get_criterion(string $description, array $levels = []): criterion {
-        return new criterion($description, $levels);
+    protected function get_criterion(string $description, int $isranged, array $levels = []): criterion {
+        return new criterion($description, $isranged, $levels);
     }
 
     /**
@@ -137,15 +138,34 @@ class gradingform_rubric_ranges_generator extends component_generator_base {
 
         if ($criterion) {
             $criterion = (object) $criterion;
-            $level = array_reduce($criterion->levels, function($carry, $level) use ($score) {
-                if ($level['score'] == $score) {
-                    $carry = $level;
+
+            if($criterion->isranged) {
+                $levelsonly = array_values($criterion->levels);
+                $rangecheck = 0;
+                foreach ($levelsonly as $levelkey => $olevel) {
+                    $min = $max = 0;
+                    if ($rangecheck == $levelkey) {
+                        $min = 0;
+                        $max = $olevel['score'];
+                    } else {
+                        $min = ($levelsonly[$levelkey - 1]['score'] + 1);
+                        $max = $olevel['score'];
+                    }
+                    if ($score >= $min && $score <= $max) {
+                        $level = $olevel;
+                        break;
+                    }
                 }
-                return $carry;
-            });
+            } else {
+                $level = array_reduce($criterion->levels, function ($carry, $level) use ($score) {
+                    if ($level['score'] == $score) {
+                        $carry = $level;
+                    }
+                    return $carry;
+                });
+            }
             $level = $level ? (object) $level : null;
         }
-
         return [
             'criterion' => $criterion,
             'level' => $level,
@@ -174,9 +194,9 @@ class gradingform_rubric_ranges_generator extends component_generator_base {
             $result['criteria'][$criterion->id] = [
                 'levelid' => $level->id,
                 'remark' => $remark,
+                'grade' => $score
             ];
         }
-
         return $result;
     }
 
@@ -190,16 +210,23 @@ class gradingform_rubric_ranges_generator extends component_generator_base {
      */
     public function get_test_rubric_ranges(context $context, string $component, string $area): gradingform_rubric_ranges_controller {
         $criteria = [
-            'Spelling is important' => [
-                'Nothing but mistakes' => 0,
-                'Several mistakes' => 1,
-                'No mistakes' => 2,
+            [
+                'name' => 'Spelling is important',
+                'levels' => [
+                    'Nothing but mistakes' => 0,
+                    'Several mistakes' => 5,
+                    'No mistakes' => 10,
+                ],
+                'isranged' => 1,
             ],
-            'Pictures' => [
-                'No pictures' => 0,
-                'One picture' => 1,
-                'More than one picture' => 2,
-            ],
+            [   'name' => 'Pictures',
+                'levels' => [
+                    'No pictures' => 0,
+                    'One picture' => 1,
+                    'More than one picture' => 2,
+                ],
+                'isranged' => 0,
+            ]
         ];
 
         return $this->create_instance($context, $component, $area, 'testrubric', 'Description text', $criteria);

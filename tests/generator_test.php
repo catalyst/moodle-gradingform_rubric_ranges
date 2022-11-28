@@ -60,18 +60,26 @@ class generator_testcase extends advanced_testcase {
         $name = 'myfirstrubric';
         $description = 'My first rubric';
         $criteria = [
-            'Alphabet' => [
-                'Not known' => 0,
-                'Letters known but out of order' => 1,
-                'Letters known in order ascending' => 2,
-                'Letters known and can recite forwards and backwards' => 4,
+            [
+                'name' => 'Alphabet',
+                'levels' => [
+                    'Not known' => 0,
+                    'Letters known but out of order' => 1,
+                    'Letters known in order ascending' => 2,
+                    'Letters known and can recite forwards and backwards' => 4,
+                ],
+                'isranged' => 1,
             ],
-            'Times tables' => [
-                'Not known' => 0,
-                '2 times table known' => 2,
-                '2 and 5 times table known' => 4,
-                '2, 5, and 10 times table known' => 8,
-            ],
+            [
+                'name' => 'Times tables',
+                'levels' => [
+                    'Not known' => 0,
+                    '2 times table known' => 2,
+                    '2 and 5 times table known' => 4,
+                    '2, 5, and 10 times table known' => 8,
+                ],
+                'isranged' => 1,
+            ]
         ];
 
         // Unit under test.
@@ -167,18 +175,26 @@ class generator_testcase extends advanced_testcase {
         // Data for testing.
         $description = 'My first rubric';
         $criteria = [
-            'Alphabet' => [
-                'Not known' => 0,
-                'Letters known but out of order' => 1,
-                'Letters known in order ascending' => 2,
-                'Letters known and can recite forwards and backwards' => 4,
+            [
+                'name' => 'Alphabet',
+                'levels' => [
+                    'Not known' => 0,
+                    'Letters known but out of order' => 1,
+                    'Letters known in order ascending' => 2,
+                    'Letters known and can recite forwards and backwards' => 4,
+                ],
+                'isranged' => 1,
             ],
-            'Times tables' => [
-                'Not known' => 0,
-                '2 times table known' => 2,
-                '2 and 5 times table known' => 4,
-                '2, 5, and 10 times table known' => 8,
-            ],
+            [
+                'name' => 'Times tables',
+                'levels' => [
+                    'Not known' => 0,
+                    '2 times table known' => 2,
+                    '2 and 5 times table known' => 4,
+                    '2, 5, and 10 times table known' => 8,
+                ],
+                'isranged' => 0,
+            ]
         ];
 
         $this->setUser($user);
@@ -191,7 +207,7 @@ class generator_testcase extends advanced_testcase {
         $this->assertEquals('Letters known in order ascending', $result['level']->definition);
 
         // Valid criterion. Invalid level.
-        $result = $rubricgenerator->get_level_and_criterion_for_values($controller, 'Alphabet', 3);
+        $result = $rubricgenerator->get_level_and_criterion_for_values($controller, 'Alphabet', 5);
         $this->assertEquals('Alphabet', $result['criterion']->description);
         $this->assertNull($result['level']);
 
@@ -249,7 +265,7 @@ class generator_testcase extends advanced_testcase {
 
         $result = $rubricgenerator->get_submitted_form_data($controller, 93, [
             'Spelling is important' => [
-                'score' => 1,
+                'score' => 5,
                 'remark' => 'Good speeling',
             ],
             'Pictures' => [
@@ -263,7 +279,7 @@ class generator_testcase extends advanced_testcase {
         $this->assertIsArray($result['criteria']);
         $this->assertCount(2, $result['criteria']);
 
-        $spelling = $rubricgenerator->get_level_and_criterion_for_values($controller, 'Spelling is important', 1);
+        $spelling = $rubricgenerator->get_level_and_criterion_for_values($controller, 'Spelling is important', 5);
         $this->assertIsArray($result['criteria'][$spelling['criterion']->id]);
         $this->assertEquals($spelling['level']->id, $result['criteria'][$spelling['criterion']->id]['levelid']);
         $this->assertEquals('Good speeling', $result['criteria'][$spelling['criterion']->id]['remark']);

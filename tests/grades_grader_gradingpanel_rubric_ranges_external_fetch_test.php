@@ -250,7 +250,7 @@ class fetch_test extends advanced_testcase {
         $instance = $gradeitem->get_advanced_grading_instance($grader, $grade);
 
         $submissiondata = $rubricgenerator->get_test_form_data($controller, (int) $gradeduser->id,
-            0, 'Too many mistakes. Please try again.',
+            1, 'Too many mistakes. Please try again.',
             2, 'Great number of pictures. Well done.'
         );
 
@@ -282,7 +282,7 @@ class fetch_test extends advanced_testcase {
         $this->assertIsInt($result['grade']['timemodified']);
 
         $this->assertArrayHasKey('usergrade', $result['grade']);
-        $this->assertEquals(50, $result['grade']['usergrade']);
+        $this->assertEquals(25, $result['grade']['usergrade']);
 
         $this->assertArrayHasKey('maxgrade', $result['grade']);
         $this->assertIsInt($result['grade']['maxgrade']);
@@ -328,7 +328,7 @@ class fetch_test extends advanced_testcase {
 
         }
 
-        $this->assertEquals(1, $criteria[0]['levels'][1]['checked']);
+        $this->assertEquals(1, $criteria[0]['levels'][2]['checked']);
         $this->assertEquals('Too many mistakes. Please try again.', $criteria[0]['remark']);
         $this->assertEquals(1, $criteria[1]['levels'][3]['checked']);
         $this->assertEquals('Great number of pictures. Well done.', $criteria[1]['remark']);

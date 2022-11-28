@@ -137,7 +137,7 @@ class store_test extends advanced_testcase {
         $instance = $gradeitem->get_advanced_grading_instance($teacher, $grade);
 
         $submissiondata = $rubricgenerator->get_test_form_data($controller, (int) $student->id,
-            0, 'Too many mistakes. Please try again.',
+            4, 'There are few mistakes.',
             2, 'Great number of pictures. Well done.'
         );
 
@@ -210,11 +210,10 @@ class store_test extends advanced_testcase {
                 $this->assertArrayHasKey('score', $level);
                 $this->assertEquals($sourcelevel['score'], $level['score']);
             }
-
         }
 
-        $this->assertEquals(1, $criteria[0]['levels'][1]['checked']);
-        $this->assertEquals('Too many mistakes. Please try again.', $criteria[0]['remark']);
+        $this->assertEquals(1, $criteria[0]['levels'][2]['checked']);
+        $this->assertEquals('There are few mistakes.', $criteria[0]['remark']);
         $this->assertEquals(1, $criteria[1]['levels'][3]['checked']);
         $this->assertEquals('Great number of pictures. Well done.', $criteria[1]['remark']);
     }
