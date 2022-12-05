@@ -621,6 +621,7 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
                 gradingform_rubric_ranges_controller::DISPLAY_PREVIEW,
                 gradingform_rubric_ranges_controller::DISPLAY_EVAL,
                 gradingform_rubric_ranges_controller::DISPLAY_PREVIEW_GRADED,
+                gradingform_rubric_ranges_controller::DISPLAY_PRINT,
             );
 
             if (in_array($mode, $rangedisplaymodes)) {
