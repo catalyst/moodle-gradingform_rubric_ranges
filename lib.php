@@ -544,7 +544,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         $rubricstr = preg_replace('#\s(id|aria-label|role|aria-checked|tabindex)="[^"]+"#', '', $rubricstr);
 
         $inlinecss = [];
-        $inlinecss['rubricranges_name'] = 'font-size:20px;line-height: 1.2;font-weight:bold;';
+        $inlinecss['rubricranges_name'] = 'font-size:20px;font-weight:bold;';
         $inlinecss['criteria'] = 'border: 1px solid #ddd;';
         $inlinecss['criterion first even'] = 'background-color: #f0f0f0;border: 1px solid #ddd;';
         $inlinecss['criterion odd'] = 'border: 1px solid #ddd;';
@@ -552,14 +552,16 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         $inlinecss['criterion last even'] = 'background-color: #f0f0f0;border: 1px solid #ddd;';
         $inlinecss['criterion last odd'] = 'border: 1px solid #ddd;';
         $inlinecss['criterion first last even'] = 'background-color: #f0f0f0; border: 1px solid #ddd;';
-        $inlinecss['description'] = 'min-width: 120px;font-weight: bold;padding: 3px;';
-        $inlinecss['level-wrapper'] = 'position: relative;';
-        $inlinecss['levels'] = 'margin-top:0px;';
-        $inlinecss['level first even'] = 'vertical-align: top;padding: 3px;max-width: 150px;border-left: 1px solid #ddd;';
-        $inlinecss['level odd'] = 'vertical-align: top;padding: 3px;border-left: 1px solid #ddd;max-width: 150px;padding: 3px;';
-        $inlinecss['level last even'] = 'vertical-align: top;padding: 3px;border-left: 1px solid #ddd;max-width: 150px;';
+        $inlinecss['description'] = 'width:30%;font-weight: bold;padding: 13px;';
+        $inlinecss['definition'] = 'padding: 3px;';
+        $inlinecss['scorevalue'] = 'padding: 3px;';
+        $inlinecss['levels'] = 'width:70%;vertical-align: top;';
+        $inlinecss['level first even'] = 'vertical-align: top;padding: 3px;border-left: 1px solid #ddd;';
+        $inlinecss['level odd'] = 'vertical-align: top;padding: 3px;border-left: 1px solid #ddd;';
+        $inlinecss['level even'] = 'vertical-align: top;padding: 3px;border-left: 1px solid #ddd;';
+        $inlinecss['level last even'] = 'vertical-align: top;padding: 3px;border-left: 1px solid #ddd;';
         $inlinecss['level last odd'] = 'vertical-align: top;padding: 3px;border-left: 1px solid #ddd;';
-        $inlinecss['score'] = 'font-style: italic;color: #575;font-weight: bold;position: relative;';
+        $inlinecss['score'] = 'font-style: italic;color: #575;font-weight: bold;';
 
         foreach($inlinecss as $classname => $css) {
             $rubricstr = str_replace('class="'.$classname.'"', 'style="'.$css.'"', $rubricstr);
@@ -599,7 +601,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         }
         $rubric .= $output->display_rubric($criteria, $options, self::DISPLAY_PRINT, 'rubricranges');
         $rubric = $this->replace_css($rubric);
-        //echo $rubric; die;
+
         require_once($CFG->dirroot.'/grade/grading/form/rubric_ranges/classes/printpdf.php');
         $pdf = new printpdf();
         $pdf->setheadertext($coursecontext->get_context_name());
