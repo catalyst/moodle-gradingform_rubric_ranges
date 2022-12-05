@@ -30,6 +30,7 @@ $string['ratings'] = 'Ratings';
 $string['points'] = 'Points';
 $string['pts'] = 'pts';
 $string['range'] = 'Range';
+$string['downloadpdf'] = 'Download PDF';
 
 $string['addcriterion'] = 'Add criterion';
 $string['additionalfeedback'] = 'Additional feedback';

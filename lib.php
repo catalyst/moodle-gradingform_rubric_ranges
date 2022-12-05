@@ -641,9 +641,9 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         $options = $this->get_options();
         $rubric = '';
 
-        $printicon = html_writer::tag('i','',array('class' =>'icon fa fa-print fa-fw  iconsize-small'));
+        $printicon = html_writer::tag('i','',array('class' =>'icon fa fa-file-pdf-o fa-fw  iconsize-small'));
         $url = new moodle_url('/grade/grading/form/rubric_ranges/print.php', array('areaid' => $this->get_areaid()));
-        $printlink = html_writer::start_tag('a', array('href' => $url, 'target' => '_blank')).$printicon.html_writer::end_tag('a');
+        $printlink = html_writer::start_tag('a', array('href' => $url, 'target' => '_blank', 'title' => get_string('downloadpdf', 'gradingform_rubric_ranges'))).$printicon.html_writer::end_tag('a');
         $rubric .= html_writer::tag('div', $printlink, array('class' => 'btn floatright'));
 
         if (has_capability('moodle/grade:managegradingforms', $page->context)) {
