@@ -622,7 +622,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 
         $pdf->WriteHTML($rubric);
-        $pdf->Output($cm->get_name() . '.pdf', 'D');
+        $pdf->Output($cm->get_name() . '.pdf', 'I');
     }
 
     /**
