@@ -36,11 +36,6 @@ list($context, $course, $cm) = get_context_info_array($manager->get_context()->i
 require_login($course, true, $cm);
 
 $controller = $manager->get_controller('rubric_ranges');
-$options = $controller->get_options();
-
-if (!$controller->is_form_defined() || empty($options['alwaysshowdefinition'])) {
-    throw new moodle_exception('nopermissions', 'error', '', get_string('previewrubric', 'gradingform_rubric_ranges'));
-}
 
 $PAGE->set_url(new moodle_url('/grade/grading/form/rubric_ranges/print.php', array('areaid' => $areaid)));
 $controller->print($PAGE);
