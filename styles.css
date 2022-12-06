@@ -341,3 +341,6 @@
 .gradingform_rubric_ranges .criterion .levels .level .score .scorevalue {
     padding-right: 5px;
 }
+.gradingform_rubric_ranges .criterion .description .isranged input {
+    margin-right: 5px;
+}
