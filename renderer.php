@@ -431,6 +431,10 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
                 gradingform_rubric_ranges_controller::DISPLAY_PREVIEW_GRADED))) {
             $displayscore = false;
         }
+        // CSS is not working in tcpdf so adding it here.
+        if ($mode == gradingform_rubric_ranges_controller::DISPLAY_PRINT) {
+            $score .= ' ';
+        }
         if ($displayscore) {
             $scoreclass = 'score';
             if (isset($level['error_score'])) {
