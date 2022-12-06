@@ -144,7 +144,7 @@ M.gradingform_rubric_rangeseditor.editmode = function(el, editmode, focustb) {
             if (el.hasClass('level')) height = parseFloat(el.getComputedStyle('height')) - parseFloat(el.one('.score').getComputedStyle('height'))
             else height = parseFloat(ta.get('parentNode').getComputedStyle('height'))
             ta.setStyle('width', Math.max(width-16,50)+'px')
-            ta.setStyle('height', Math.max(height,20)+'px')
+            ta.setStyle('height', Math.max(height,60)+'px')
         }
         catch (err) {
             // this browser do not support 'computedStyle', leave the default size of the textbox
