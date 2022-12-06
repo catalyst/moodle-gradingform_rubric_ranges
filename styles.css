@@ -338,3 +338,6 @@
 .floatright {
     float: right;
 }
+.gradingform_rubric_ranges .criterion .levels .level .score .scorevalue {
+    padding-right: 5px;
+}
