@@ -26,6 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/grade/grading/form/lib.php');
 require_once($CFG->dirroot.'/lib/filelib.php');
+require_once($CFG->dirroot.'/grade/grading/form/rubric_ranges/classes/printpdf.php');
 
 /** rubric: Used to compare our gradeitem_type against. */
 const RUBRIC_RANGES = 'rubric_ranges';
@@ -575,7 +576,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
      * @param moodle_page $page the target page
      */
     public function print(moodle_page $page) {
-        global $CFG,$SITE;
+        global $SITE;
 
         $modulecontext = $this->get_context();
         $coursecontext = $modulecontext->get_course_context();
@@ -588,7 +589,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         if (has_capability('moodle/grade:managegradingforms', $page->context)) {
             $showdescription = true;
         } else {
-            if (empty($options['alwaysshowdefinition']))  {
+            if (empty($options['alwaysshowdefinition'])) {
                 // Ensure we don't display unless show rubric option enabled.
                 return '';
             }
@@ -596,32 +597,27 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         }
         $output = $this->get_renderer($page);
         if ($showdescription) {
-            $rubric .= html_writer::tag('div', $this->get_formatted_description(), 
+            $rubric .= html_writer::tag('div', $this->get_formatted_description(),
                 array('style' => 'font-size:12px;'));
         }
         $rubric .= $output->display_rubric($criteria, $options, self::DISPLAY_PRINT, 'rubricranges');
         $rubric = $this->replace_css($rubric);
 
-        require_once($CFG->dirroot.'/grade/grading/form/rubric_ranges/classes/printpdf.php');
         $pdf = new printpdf();
         $pdf->setheadertext($coursecontext->get_context_name());
         $pdf->AddPage('P');
-        // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor(format_string($SITE->shortname));
         $pdf->SetTitle($coursecontext->get_context_name());
 
-        // set default header data
-        $pdf->SetHeaderData('', '', $SITE->shortname, $coursecontext->get_context_name(), array(0,64,255), array(0,64,128));
-        $pdf->setFooterData(array(0,64,0), array(0,64,128));
+        $pdf->SetHeaderData('', '', $SITE->shortname, $coursecontext->get_context_name(), array(0, 64, 255), array(0, 64, 128));
+        $pdf->setFooterData(array(0, 64, 0), array(0, 64, 128));
 
-        // set margins
         $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
         $pdf->SetHeaderMargin(PDF_MARGIN_TOP);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
-        // set auto page breaks
-        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
 
         $pdf->WriteHTML($rubric);
         $pdf->Output($cm->get_name() . '.pdf', 'I');

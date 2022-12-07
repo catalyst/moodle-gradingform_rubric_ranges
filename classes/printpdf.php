@@ -24,15 +24,14 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-global $CFG,$SITE;
+global $CFG, $SITE;
 
-// Include the main TCPDF library (search for installation path).
 require_once($CFG->libdir.'/pdflib.php');
 
-// Extend the TCPDF class to create custom Header and Footer.
 class printpdf extends pdf {
 
     public $headertext = '';
+
     public function Header() {
         $this->Write(0, ' ', '', 0, 'C', true, 0, false, false, 0);
         $this->SetFont('helvetica', 'B', 20);
@@ -44,9 +43,11 @@ class printpdf extends pdf {
         $this->SetFont('helvetica','I',8);
         $this->Cell(0,10,'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(),0,false,'C',0,'',0,false,'T','M');
     }
+
     public function setheadertext($txt) {
         $this->headertext = $txt;
     }
+
     public function getheadertext() {
         return $this->headertext;
     }
