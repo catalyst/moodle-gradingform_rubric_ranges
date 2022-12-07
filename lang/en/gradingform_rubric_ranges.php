@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'Rubric Ranges';
+$string['pluginname'] = 'Ranged rubric';
 $string['criteria'] = 'Criteria';
 $string['ratings'] = 'Ratings';
 $string['points'] = 'Points';
