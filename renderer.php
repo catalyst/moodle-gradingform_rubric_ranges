@@ -269,7 +269,7 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
         if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EDIT_FULL
             || $mode == gradingform_rubric_ranges_controller::DISPLAY_VIEW
             || $mode == gradingform_rubric_ranges_controller::DISPLAY_EVAL) {
-            $criteriontemplate .= html_writer::tag('td', $pointstemplate, array('class' => 'points'));
+            $criteriontemplate .= html_writer::tag('td', $pointstemplate, array('class' => 'addlevel'));
         }
         $criteriontemplate .= html_writer::end_tag('tr'); // Criterion.
         $criteriontemplate = str_replace('{NAME}', $elementname, $criteriontemplate);

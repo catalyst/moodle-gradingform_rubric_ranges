@@ -335,9 +335,15 @@
 #rubric-rubricranges.gradingform_rubric_ranges #rubricranges-criteria {
     margin-bottom: 1em;
 }
+
 .floatright {
     float: right;
 }
+
 .gradingform_rubric_ranges .criterion .description .isranged input {
     margin-right: 5px;
+}
+
+#rubricranges-criteria .criterion .scorevalue input {
+    width: 2em;
 }

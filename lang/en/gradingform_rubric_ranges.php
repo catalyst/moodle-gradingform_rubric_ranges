@@ -29,7 +29,7 @@ $string['criteria'] = 'Criteria';
 $string['ratings'] = 'Ratings';
 $string['points'] = 'Points';
 $string['pts'] = 'pts';
-$string['range'] = 'Range';
+$string['range'] = 'Ranged';
 $string['downloadpdf'] = 'Download PDF';
 
 $string['addcriterion'] = 'Add criterion';
