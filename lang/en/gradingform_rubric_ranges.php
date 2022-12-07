@@ -24,12 +24,13 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'Rubric Ranges';
+$string['pluginname'] = 'Ranged rubric';
 $string['criteria'] = 'Criteria';
 $string['ratings'] = 'Ratings';
 $string['points'] = 'Points';
 $string['pts'] = 'pts';
-$string['range'] = 'Range';
+$string['range'] = 'Ranged';
+$string['downloadpdf'] = 'Download PDF';
 
 $string['addcriterion'] = 'Add criterion';
 $string['additionalfeedback'] = 'Additional feedback';
@@ -95,7 +96,7 @@ $string['save'] = 'Save';
 $string['saverubric'] = 'Save rubric and make it ready';
 $string['saverubricdraft'] = 'Save as draft';
 $string['scoreinputforlevel'] = 'Score input for level {$a}';
-$string['scorepostfix'] = '{$a}points';
+$string['scorepostfix'] = '{$a} points';
 $string['showdescriptionstudent'] = 'Display rubric description to those being graded';
 $string['showdescriptionteacher'] = 'Display rubric description during evaluation';
 $string['showremarksstudent'] = 'Show remarks to those being graded';

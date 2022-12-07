@@ -26,6 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/grade/grading/form/lib.php');
 require_once($CFG->dirroot.'/lib/filelib.php');
+require_once($CFG->dirroot.'/grade/grading/form/rubric_ranges/classes/printpdf.php');
 
 /** rubric: Used to compare our gradeitem_type against. */
 const RUBRIC_RANGES = 'rubric_ranges';
@@ -55,7 +56,8 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
     const DISPLAY_REVIEW        = 6;
     /** Rubric display mode: Dispaly filled rubric (i.e. students see their grades) */
     const DISPLAY_VIEW          = 7;
-
+    /** Rubric display mode: Print */
+    const DISPLAY_PRINT          = 9;
     /**
      * Extends the module settings navigation with the rubric grading settings
      *
@@ -532,6 +534,96 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
     }
 
     /**
+     * Replaces css class with inline css
+     *
+     * @param string $rubricstr html to print with class
+     * @return string $rubricstr converted to inline css
+     */
+    public function replace_css($rubricstr) {
+        // First do some cleanup.
+        // Remove all unnecessory attributes - |aria-label|role|aria-checked|tabindex.
+        $rubricstr = preg_replace('#\s(id|aria-label|role|aria-checked|tabindex)="[^"]+"#', '', $rubricstr);
+
+        $inlinecss = [];
+        $inlinecss['rubricranges_name'] = 'font-size:20px;font-weight:bold;';
+        $inlinecss['criteria'] = 'border: 1px solid #ddd;';
+        $inlinecss['criterion first even'] = 'background-color: #f0f0f0;border: 1px solid #ddd;';
+        $inlinecss['criterion odd'] = 'border: 1px solid #ddd;';
+        $inlinecss['criterion even'] = 'background-color: #f0f0f0;border: 1px solid #ddd;';
+        $inlinecss['criterion last even'] = 'background-color: #f0f0f0;border: 1px solid #ddd;';
+        $inlinecss['criterion last odd'] = 'border: 1px solid #ddd;';
+        $inlinecss['criterion first last even'] = 'background-color: #f0f0f0; border: 1px solid #ddd;';
+        $inlinecss['description'] = 'width:30%;font-weight: bold;padding: 13px;';
+        $inlinecss['definition'] = 'padding: 3px;';
+        $inlinecss['scorevalue'] = 'padding: 3px;';
+        $inlinecss['levels'] = 'width:70%;vertical-align: top;';
+        $inlinecss['level first even'] = 'vertical-align: top;padding: 3px;border-left: 1px solid #ddd;';
+        $inlinecss['level odd'] = 'vertical-align: top;padding: 3px;border-left: 1px solid #ddd;';
+        $inlinecss['level even'] = 'vertical-align: top;padding: 3px;border-left: 1px solid #ddd;';
+        $inlinecss['level last even'] = 'vertical-align: top;padding: 3px;border-left: 1px solid #ddd;';
+        $inlinecss['level last odd'] = 'vertical-align: top;padding: 3px;border-left: 1px solid #ddd;';
+        $inlinecss['score'] = 'font-style: italic;color: #575;font-weight: bold;';
+
+        foreach($inlinecss as $classname => $css) {
+            $rubricstr = str_replace('class="'.$classname.'"', 'style="'.$css.'"', $rubricstr);
+        }
+        return $rubricstr;
+    }
+
+    /**
+     * print PDF version
+     *
+     * @param moodle_page $page the target page
+     */
+    public function print(moodle_page $page) {
+        global $SITE;
+
+        $modulecontext = $this->get_context();
+        $coursecontext = $modulecontext->get_course_context();
+        $cm = get_fast_modinfo($coursecontext->instanceid)->get_cm($modulecontext->instanceid);
+
+        $criteria = $this->definition->rubric_criteria;
+        $options = $this->get_options();
+        $rubric = html_writer::tag('div', $cm->get_name().': '.$this->definition->name,
+            array('class' => 'rubricranges_name'));
+        if (has_capability('moodle/grade:managegradingforms', $page->context)) {
+            $showdescription = true;
+        } else {
+            if (empty($options['alwaysshowdefinition'])) {
+                // Ensure we don't display unless show rubric option enabled.
+                return '';
+            }
+            $showdescription = $options['showdescriptionstudent'];
+        }
+        $output = $this->get_renderer($page);
+        if ($showdescription) {
+            $rubric .= html_writer::tag('div', $this->get_formatted_description(),
+                array('style' => 'font-size:12px;'));
+        }
+        $rubric .= $output->display_rubric($criteria, $options, self::DISPLAY_PRINT, 'rubricranges');
+        $rubric = $this->replace_css($rubric);
+
+        $pdf = new printpdf();
+        $pdf->setheadertext($coursecontext->get_context_name());
+        $pdf->AddPage('P');
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor(format_string($SITE->shortname));
+        $pdf->SetTitle($coursecontext->get_context_name());
+
+        $pdf->SetHeaderData('', '', $SITE->shortname, $coursecontext->get_context_name(), array(0, 64, 255), array(0, 64, 128));
+        $pdf->setFooterData(array(0, 64, 0), array(0, 64, 128));
+
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_TOP);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+        $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
+
+        $pdf->WriteHTML($rubric);
+        $pdf->Output($cm->get_name() . '.pdf', 'I');
+    }
+
+    /**
      * Returns the HTML code displaying the preview of the grading form
      *
      * @param moodle_page $page the target page
@@ -546,6 +638,12 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         $criteria = $this->definition->rubric_criteria;
         $options = $this->get_options();
         $rubric = '';
+
+        $printicon = html_writer::tag('i','',array('class' =>'icon fa fa-file-pdf-o fa-fw  iconsize-small'));
+        $url = new moodle_url('/grade/grading/form/rubric_ranges/print.php', array('areaid' => $this->get_areaid()));
+        $printlink = html_writer::start_tag('a', array('href' => $url, 'target' => '_blank', 'title' => get_string('downloadpdf', 'gradingform_rubric_ranges'))).$printicon.html_writer::end_tag('a');
+        $rubric .= html_writer::tag('div', $printlink, array('class' => 'btn floatright'));
+
         if (has_capability('moodle/grade:managegradingforms', $page->context)) {
             $showdescription = true;
         } else {
