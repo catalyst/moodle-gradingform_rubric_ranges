@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component  = 'gradingform_rubric_ranges';
-$plugin->version    = 2020061500;
+$plugin->version    = 2022122100;
 
 $plugin->requires   = 2020060900;
 

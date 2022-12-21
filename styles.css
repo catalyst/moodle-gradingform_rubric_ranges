@@ -347,3 +347,16 @@
 #rubricranges-criteria .criterion .scorevalue input {
     width: 2em;
 }
+
+.path-mod-assign [data-region="grade-panel"] .fitem.popout .gradingform_rubric_ranges table {
+    font-size: .8rem;
+    display: table;
+}
+
+.path-mod-assign [data-region="grade-panel"] .fitem.popout .gradingform_rubric_ranges .remark {
+    width: 200px;
+}
+
+.path-mod-assign [data-region="grade-panel"] .fitem.popout .gradingform_rubric_ranges .remark textarea {
+    width: 200px;
+}
