@@ -19,11 +19,19 @@ M.gradingform_rubric_ranges.init = function(Y, options) {
     });
 
     Y.all('#rubric-'+options.name+' .points').each( function(node) {
-      if (node.one('input[type=text]')) {
-        node.one('input[type=text]').on('keypress', M.gradingform_rubric_ranges.onlynumbers)
-        node.one('input[type=text]').on('keyup', M.gradingform_rubric_ranges.selectrange)
-      }
-  });
+        if (node.one('select')) {
+            node.one('select').on('change', function (e) {
+                var el = e.target
+                var gradepoints = parseInt(el.get('value'));
+                var maxpoints = M.gradingform_rubric_ranges.getmaxpoints(el);
+
+                if (gradepoints > maxpoints || isNaN(gradepoints)) {
+                    el.set('value', '');
+                }
+                M.gradingform_rubric_ranges.selectrange(e);
+            });
+        }
+    });
 };
 
 M.gradingform_rubric_ranges.selectrange = function(e) {
@@ -41,6 +49,12 @@ M.gradingform_rubric_ranges.selectrange = function(e) {
         }
       }
     })
+  } else {
+      el.get('parentNode').get('previousSibling').all('.scorevalue').each(function (node) {
+          if (node.ancestor('td .level').hasClass('checked')) {
+              node.ancestor('td .level').simulate('click')
+          }
+      })
   }
 }
 
@@ -55,35 +69,25 @@ M.gradingform_rubric_ranges.getmaxpoints = function(el) {
   });
   return maxpoints;
 }
-M.gradingform_rubric_ranges.onlynumbers = function(e) {
-  var el = e.target
-  // Handle paste
-  if (e.type === 'paste') {
-      key = e.clipboardData.getData('text/plain');
-  } else {
-  // Handle key press
-      var key = e.keyCode || e.which;
-      key = String.fromCharCode(key);
-  }
-  var regex = /[0-9]/;
-  if( !regex.test(key) ) {
-      e.returnValue = false;
-      if(e.preventDefault) e.preventDefault();
-  } else {
-    var maxpoints = M.gradingform_rubric_ranges.getmaxpoints(el);
-    var gradeval = el.get('value') + key;
-    if(parseInt(gradeval) > maxpoints) {
-      e.returnValue = false;
-      if(e.preventDefault) e.preventDefault();
-    }
-  }
-}
+
 M.gradingform_rubric_ranges.levelclick = function(e) {
     var el = e.target
     while (el && !el.hasClass('level')) el = el.get('parentNode')
     if (!el) return
     e.preventDefault();
     el.siblings().removeClass('checked');
+
+    var gradepoints = '';
+    if (el.ancestor('.levels').get("nextSibling").one('select')) {
+        gradepoints = el.ancestor('.levels').get("nextSibling").one('select').get('value');
+    }
+
+    var needupdategradepoints = 1
+    // This means it was simulated click or grade was reset to nothing.
+    if (e.clientX == 0 && e.clientY == 0 && gradepoints != '') {
+        needupdategradepoints = 0;
+    }
+    var ranges = el.one('.scorevalue').get('innerHTML').split(' ');
 
     // Set aria-checked attribute for siblings to false.
     el.siblings().setAttribute('aria-checked', 'false');
@@ -93,25 +97,22 @@ M.gradingform_rubric_ranges.levelclick = function(e) {
         el.addClass('checked')
         // Set aria-checked attribute to true if checked.
         el.setAttribute('aria-checked', 'true');
+        // if direct range is selected, grade lower value.
+        if (needupdategradepoints) {
+            if (el.ancestor('.levels').get("nextSibling").one('select')) {
+                el.ancestor('.levels').get("nextSibling").one('select').set('value',ranges[0])
+            }
+        }
     } else {
         el.removeClass('checked');
         // Set aria-checked attribute to false if unchecked.
         el.setAttribute('aria-checked', 'false');
         el.get('parentNode').all('input[type=radio]').set('checked', false)
-    }
-
-    var autoselectrange = 1
-    // This means it was simulated click.
-    if (e.clientX == 0 && e.clientY == 0) {
-      autoselectrange = 0
-    }
-    // if direct range is selected, grade lower value.
-    if (autoselectrange) {
-      var ranges = el.one('.scorevalue').get('innerHTML').split(' ');
-      if (el.ancestor('.levels').get("nextSibling").one('input[type=text]')) {
-        //if (!el.ancestor('.levels').get("nextSibling").one('input[type=text]').get('value')) {
-          el.ancestor('.levels').get("nextSibling").one('input[type=text]').set('value',ranges[0])
-       // }
-      }
+        // if direct range is selected, grade lower value.
+        if (needupdategradepoints) {
+            if (el.ancestor('.levels').get("nextSibling").one('select')) {
+                el.ancestor('.levels').get("nextSibling").one('select').set('value','')
+            }
+        }
     }
 }

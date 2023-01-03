@@ -199,14 +199,15 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
 
             if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EVAL) {
                 if ($criterion['isranged']) {
-                    $gradeparams = array(
-                        'name' => '{NAME}[criteria][{CRITERION-id}][grade]',
-                        'id' => '{NAME}-criteria-{CRITERION-id}-grade',
-                        'type' => 'text',
-                        'size' => '3',
-                        'value' => (isset($value['grade']) ? $value['grade'] : '')
+                    $gradepoints = $value['grade'] ?? '';
+                    $gradetemplate = html_writer::select(
+                        range(0, $criterion['points']),
+                        '{NAME}[criteria][{CRITERION-id}][grade]',
+                        $gradepoints,
+                        ['' => 'choosedots'],
+                        ['id' => '{NAME}-criteria-{CRITERION-id}-grade']
                     );
-                    $gradetemplate = html_writer::tag('input', '', $gradeparams);
+
                 }
                 // HTML parameters for remarks text area.
                 $remarkparams = array(
@@ -266,10 +267,12 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
                 'id' => '{NAME}-criteria-{CRITERION-id}-levels-addlevel', 'value' => $value, 'class' => 'btn btn-secondary'));
             $pointstemplate .= html_writer::tag('div', $button, array('class' => 'addlevel'));
         }
-        if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EDIT_FULL
-            || $mode == gradingform_rubric_ranges_controller::DISPLAY_VIEW
-            || $mode == gradingform_rubric_ranges_controller::DISPLAY_EVAL) {
+        if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EDIT_FULL) {
             $criteriontemplate .= html_writer::tag('td', $pointstemplate, array('class' => 'addlevel'));
+        }
+        if ($mode == gradingform_rubric_ranges_controller::DISPLAY_VIEW
+            || $mode == gradingform_rubric_ranges_controller::DISPLAY_EVAL) {
+            $criteriontemplate .= html_writer::tag('td', $pointstemplate, array('class' => 'points'));
         }
         $criteriontemplate .= html_writer::end_tag('tr'); // Criterion.
         $criteriontemplate = str_replace('{NAME}', $elementname, $criteriontemplate);
