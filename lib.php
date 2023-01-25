@@ -326,7 +326,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
              LEFT JOIN {gform_rubric_ranges_criteria} rc ON (rc.definitionid = gd.id)
              LEFT JOIN {gform_rubric_ranges_levels} rl ON (rl.criterionid = rc.id)
                  WHERE gd.areaid = :areaid AND gd.method = :method
-              ORDER BY rcsortorder";
+              ORDER BY rcsortorder, rl.score";
         $params = array('areaid' => $this->areaid, 'method' => $this->get_method_name());
 
         $rs = $DB->get_recordset_sql($sql, $params);
