@@ -584,7 +584,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
 
         $criteria = $this->definition->rubric_criteria;
         $options = $this->get_options();
-        $rubric = html_writer::tag('div', $cm->get_name().': '.$this->definition->name,
+        $rubric = html_writer::tag('h1', $cm->get_name().': '.$this->definition->name,
             array('class' => 'rubricranges_name'));
         if (has_capability('moodle/grade:managegradingforms', $page->context)) {
             $showdescription = true;
@@ -604,20 +604,16 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         $rubric = $this->replace_css($rubric);
 
         $pdf = new printpdf();
-        $pdf->setheadertext($coursecontext->get_context_name());
-        $pdf->AddPage('P');
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        $pdf->setPrintHeader(true);
+        $pdf->setPrintFooter(true);
+        $pdf->setHeaderData('', 0, "{$coursecontext->get_context_name()} | " . date('d F Y', time()));
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor(format_string($SITE->shortname));
-        $pdf->SetTitle($coursecontext->get_context_name());
-
-        $pdf->SetHeaderData('', '', $SITE->shortname, $coursecontext->get_context_name(), array(0, 64, 255), array(0, 64, 128));
-        $pdf->setFooterData(array(0, 64, 0), array(0, 64, 128));
-
-        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-        $pdf->SetHeaderMargin(PDF_MARGIN_TOP);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-        $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
+        $pdf->AddPage('P');
 
         $pdf->WriteHTML($rubric);
         $pdf->Output($cm->get_name() . '.pdf', 'I');

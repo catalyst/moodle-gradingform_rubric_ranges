@@ -30,25 +30,16 @@ require_once($CFG->libdir.'/pdflib.php');
 
 class printpdf extends pdf {
 
-    public $headertext = '';
-
     public function Header() {
-        $this->Write(0, ' ', '', 0, 'C', true, 0, false, false, 0);
-        $this->SetFont('helvetica', 'B', 20);
-        $this->Cell(0,15,$this->getheadertext(),0,false,'C',0,'',0,false,'M','M');
+        $this->SetY(15);
+        $this->SetFont('helvetica', 'I', 8);
+        $text = $this->getHeaderData()['title'];
+        $this->Cell(0, 15, $text, 0, false, 'C', 0, '', 0, false, 'M', 'M');
     }
 
     public function Footer() {
         $this->SetY(-15);
         $this->SetFont('helvetica','I',8);
         $this->Cell(0,10,'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(),0,false,'C',0,'',0,false,'T','M');
-    }
-
-    public function setheadertext($txt) {
-        $this->headertext = $txt;
-    }
-
-    public function getheadertext() {
-        return $this->headertext;
     }
 }
