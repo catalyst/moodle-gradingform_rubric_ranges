@@ -426,12 +426,14 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
             && in_array($mode, array(
                 gradingform_rubric_ranges_controller::DISPLAY_EVAL,
                 gradingform_rubric_ranges_controller::DISPLAY_EVAL_FROZEN,
-                gradingform_rubric_ranges_controller::DISPLAY_REVIEW))) {
+                gradingform_rubric_ranges_controller::DISPLAY_REVIEW,
+                gradingform_rubric_ranges_controller::DISPLAY_PRINT))) {
             $displayscore = false;
         }
         if (!$options['showscorestudent']
             && in_array($mode, array(gradingform_rubric_ranges_controller::DISPLAY_VIEW,
-                gradingform_rubric_ranges_controller::DISPLAY_PREVIEW_GRADED))) {
+                gradingform_rubric_ranges_controller::DISPLAY_PREVIEW_GRADED,
+                gradingform_rubric_ranges_controller::DISPLAY_PRINT))) {
             $displayscore = false;
         }
 
