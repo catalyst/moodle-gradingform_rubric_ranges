@@ -4,7 +4,8 @@ M.gradingform_rubric_ranges = { 'name' : null, 'Y' : null};
  * This function is called for each rubric on page.
  */
 M.gradingform_rubric_ranges.init = function(Y, options) {
-    M.gradingform_rubric_ranges.name = options.name
+    M.gradingform_rubric_ranges.name = options.name;
+    M.gradingform_rubric_ranges.sortlevelsasc = options.sortlevelsasc;
     M.gradingform_rubric_ranges.Y = Y
     Y.on('click', M.gradingform_rubric_ranges.levelclick, '#rubric-'+options.name+' .level', null, Y, options.name);
     // Capture also space and enter keypress.
@@ -43,7 +44,7 @@ M.gradingform_rubric_ranges.selectrange = function(e) {
     var range = [];
     el.get('parentNode').get('previousSibling').all('.scorevalue').each(function (node) {
       range = node.get('innerHTML').split(' to ');
-      if (gradepoints >= range[0] && gradepoints <= range[1]) {
+      if (gradepoints >= M.gradingform_rubric_ranges.bottom_range(range) && gradepoints <= M.gradingform_rubric_ranges.top_range(range)) {
         if (!node.ancestor('td .level').hasClass('checked')) {
           node.ancestor('td .level').simulate('click')
         }
@@ -56,6 +57,26 @@ M.gradingform_rubric_ranges.selectrange = function(e) {
           }
       })
   }
+}
+
+M.gradingform_rubric_ranges.bottom_range = function(range) {
+    // If levels sorted ascending by number of points, then bottom rage is first value (range is 6 to 10 points).
+    // Otherwise it's the second value (range is  10 to 6 points).
+    if (M.gradingform_rubric_ranges.sortlevelsasc) {
+        return range[0];
+    } else {
+        return range[1]
+    }
+}
+
+M.gradingform_rubric_ranges.top_range = function(range) {
+    // If levels sorted ascending by number of points, then top rage is the second value (range is 6 to 10 points).
+    // Otherwise it's the first value (range is 10 to 6 points).
+    if (M.gradingform_rubric_ranges.sortlevelsasc) {
+        return range[1];
+    } else {
+        return range[0]
+    }
 }
 
 M.gradingform_rubric_ranges.getmaxpoints = function(el) {
