@@ -108,8 +108,7 @@ M.gradingform_rubric_ranges.levelclick = function(e) {
     if (e.clientX == 0 && e.clientY == 0 && gradepoints != '') {
         needupdategradepoints = 0;
     }
-    var ranges = el.one('.scorevalue').get('innerHTML').split(' ');
-
+    var ranges = el.one('.scorevalue').get('innerHTML').split(' to ');
     // Set aria-checked attribute for siblings to false.
     el.siblings().setAttribute('aria-checked', 'false');
     chb = el.one('input[type=radio]')
@@ -121,7 +120,7 @@ M.gradingform_rubric_ranges.levelclick = function(e) {
         // if direct range is selected, grade lower value.
         if (needupdategradepoints) {
             if (el.ancestor('.levels').get("nextSibling").one('select')) {
-                el.ancestor('.levels').get("nextSibling").one('select').set('value',ranges[0])
+                el.ancestor('.levels').get("nextSibling").one('select').set('value', M.gradingform_rubric_ranges.bottom_range(ranges))
             }
         }
     } else {
