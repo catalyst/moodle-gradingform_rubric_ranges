@@ -18,7 +18,7 @@
  * The form used at the rubric editor page is defined here
  *
  * @package    gradingform_rubric_ranges
- * @copyright  2011 Marina Glancy <marina@moodle.com>
+ * @copyright  2022 Heena Agheda <heenaagheda@catalyst-au.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -64,9 +64,9 @@ class gradingform_rubric_ranges_editrubric extends moodleform {
 
         // Rubric completion status.
         $choices = array();
-        $choices[gradingform_controller::DEFINITION_STATUS_DRAFT]    = html_writer::tag('span',
+        $choices[gradingform_controller::DEFINITION_STATUS_DRAFT] = html_writer::tag('span',
             get_string('statusdraft', 'core_grading'), array('class' => 'status draft'));
-        $choices[gradingform_controller::DEFINITION_STATUS_READY]    = html_writer::tag('span',
+        $choices[gradingform_controller::DEFINITION_STATUS_READY] = html_writer::tag('span',
             get_string('statusready', 'core_grading'), array('class' => 'status ready'));
         $form->addElement('select', 'status', get_string('rubricstatus', 'gradingform_rubric_ranges'), $choices)->freeze();
 

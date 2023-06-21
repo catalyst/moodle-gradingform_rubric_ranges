@@ -18,7 +18,7 @@
  * Web services relating to fetching of a rubric for the grading panel.
  *
  * @package    gradingform_rubric_ranges
- * @copyright  2019 Mathew May <mathew.solutions>
+ * @copyright  2022 Heena Agheda <heenaagheda@catalyst-au.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

@@ -19,7 +19,7 @@
  *
  * @package    gradingform_rubric_ranges
  * @category   test
- * @copyright  2018 Adrian Greeve <adriangreeve.com>
+ * @copyright  2022 Heena Agheda <heenaagheda@catalyst-au.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -104,7 +104,7 @@ class criterion {
         return [
             'sortorder' => $sortorder,
             'description' => $this->get_description(),
-            'isranged'  => $this->isranged,
+            'isranged' => $this->isranged,
             'levels' => $this->get_all_level_values(),
         ];
     }

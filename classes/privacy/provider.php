@@ -18,7 +18,7 @@
  * Privacy class for requesting user data.
  *
  * @package    gradingform_rubric_ranges
- * @copyright  2018 Sara Arjona <sara@moodle.com>
+ * @copyright  2022 Heena Agheda <heenaagheda@catalyst-au.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

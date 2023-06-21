@@ -18,17 +18,15 @@
  * Support for restore API
  *
  * @package    gradingform_rubric_ranges
- * @copyright  2011 David Mudrak <david@moodle.com>
+ * @copyright  2022 Heena Agheda <heenaagheda@catalyst-au.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-
 
 /**
  * Restores the rubric specific data from grading.xml file
  *
  * @package    gradingform_rubric_ranges
- * @copyright  2011 David Mudrak <david@moodle.com>
+ * @copyright  2022 Heena Agheda <heenaagheda@catalyst-au.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class restore_gradingform_rubric_ranges_plugin extends restore_gradingform_plugin {

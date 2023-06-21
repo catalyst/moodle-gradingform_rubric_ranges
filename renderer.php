@@ -56,7 +56,7 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
                 'id' => '{CRITERION-id}',
                 'description' => '{CRITERION-description}',
                 'sortorder' => '{CRITERION-sortorder}',
-                'isranged'    => '{CRITERION-isranged}',
+                'isranged' => '{CRITERION-isranged}',
                 'class' => '{CRITERION-class}'
             );
         } else {

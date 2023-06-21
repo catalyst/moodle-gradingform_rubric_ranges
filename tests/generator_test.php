@@ -19,11 +19,11 @@
  *
  * @package    gradingform_rubric_ranges
  * @category   test
- * @copyright  2019 Andrew Nicols <andrew@nicols.co.uk>
+ * @copyright  2022 Heena Agheda <heenaagheda@catalyst-au.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tests\gradingform_rubric_ranges;
+namespace gradingform_rubric_ranges;
 
 use advanced_testcase;
 use context_module;
@@ -38,7 +38,7 @@ use gradingform_controller;
  * @copyright  2019 Andrew Nicols <andrew@nicols.co.uk>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class generator_testcase extends advanced_testcase {
+class generator_test extends advanced_testcase {
 
     /**
      * Test rubric creation.
@@ -198,7 +198,14 @@ class generator_testcase extends advanced_testcase {
         ];
 
         $this->setUser($user);
-        $controller = $rubricgenerator->create_instance($context, 'mod_assign', 'submission', 'rubric_ranges', $description, $criteria);
+        $controller = $rubricgenerator->create_instance(
+            $context,
+            'mod_assign',
+            'submission',
+            'rubric_ranges',
+            $description,
+            $criteria
+        );
 
         // Valid criterion and level.
         $result = $rubricgenerator->get_level_and_criterion_for_values($controller, 'Alphabet', 2);

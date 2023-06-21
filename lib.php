@@ -18,7 +18,7 @@
  * Grading method controller for the Rubric plugin
  *
  * @package    gradingform_rubric_ranges
- * @copyright  2011 David Mudrak <david@moodle.com>
+ * @copyright  2022 Heena Agheda <heenaagheda@catalyst-au.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -41,23 +41,23 @@ const RUBRIC_RANGES = 'rubric_ranges';
 class gradingform_rubric_ranges_controller extends gradingform_controller {
     // Modes of displaying the rubric (used in gradingform_rubric_ranges_renderer).
     /** Rubric display mode: For editing (moderator or teacher creates a rubric) */
-    const DISPLAY_EDIT_FULL     = 1;
+    const DISPLAY_EDIT_FULL = 1;
     /** Rubric display mode: Preview the rubric design with hidden fields */
-    const DISPLAY_EDIT_FROZEN   = 2;
+    const DISPLAY_EDIT_FROZEN = 2;
     /** Rubric display mode: Preview the rubric design (for person with manage permission) */
-    const DISPLAY_PREVIEW       = 3;
+    const DISPLAY_PREVIEW = 3;
     /** Rubric display mode: Preview the rubric (for people being graded) */
     const DISPLAY_PREVIEW_GRADED = 8;
     /** Rubric display mode: For evaluation, enabled (teacher grades a student) */
-    const DISPLAY_EVAL          = 4;
+    const DISPLAY_EVAL = 4;
     /** Rubric display mode: For evaluation, with hidden fields */
-    const DISPLAY_EVAL_FROZEN   = 5;
+    const DISPLAY_EVAL_FROZEN = 5;
     /** Rubric display mode: Teacher reviews filled rubric */
-    const DISPLAY_REVIEW        = 6;
+    const DISPLAY_REVIEW = 6;
     /** Rubric display mode: Dispaly filled rubric (i.e. students see their grades) */
-    const DISPLAY_VIEW          = 7;
+    const DISPLAY_VIEW = 7;
     /** Rubric display mode: Print */
-    const DISPLAY_PRINT          = 9;
+    const DISPLAY_PRINT = 9;
     /**
      * Extends the module settings navigation with the rubric grading settings
      *
@@ -304,8 +304,10 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
     public function mark_for_regrade() {
         global $DB;
         if ($this->has_active_instances()) {
-            $conditions = array('definitionid'  => $this->definition->id,
-                        'status'  => gradingform_instance::INSTANCE_STATUS_ACTIVE);
+            $conditions = array(
+                'definitionid' => $this->definition->id,
+                'status' => gradingform_instance::INSTANCE_STATUS_ACTIVE
+            );
             $DB->set_field('grading_instances', 'status', gradingform_instance::INSTANCE_STATUS_NEEDUPDATE, $conditions);
         }
     }
@@ -495,7 +497,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         return array(
             'maxfiles' => -1,
             'maxbytes' => get_user_max_upload_file_size($context, $CFG->maxbytes),
-            'context'  => $context,
+            'context' => $context,
         );
     }
 
@@ -564,7 +566,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         $inlinecss['level last odd'] = 'vertical-align: top;padding: 3px;border-left: 1px solid #ddd;';
         $inlinecss['score'] = 'font-style: italic;color: #575;font-weight: bold;';
 
-        foreach($inlinecss as $classname => $css) {
+        foreach ($inlinecss as $classname => $css) {
             $rubricstr = str_replace('class="'.$classname.'"', 'style="'.$css.'"', $rubricstr);
         }
         return $rubricstr;
@@ -603,7 +605,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         $rubric .= $output->display_rubric($criteria, $options, self::DISPLAY_PRINT, 'rubricranges');
         $rubric = $this->replace_css($rubric);
 
-        $pdf = new printpdf();
+        $pdf = new \gradingform_rubric_ranges\printpdf();
         $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
         $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
@@ -635,9 +637,13 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         $options = $this->get_options();
         $rubric = '';
 
-        $printicon = html_writer::tag('i','',array('class' =>'icon fa fa-file-pdf-o fa-fw  iconsize-small'));
+        $printicon = html_writer::tag('i', '', array('class' => 'icon fa fa-file-pdf-o fa-fw  iconsize-small'));
         $url = new moodle_url('/grade/grading/form/rubric_ranges/print.php', array('areaid' => $this->get_areaid()));
-        $printlink = html_writer::start_tag('a', array('href' => $url, 'target' => '_blank', 'title' => get_string('downloadpdf', 'gradingform_rubric_ranges'))).$printicon.html_writer::end_tag('a');
+        $printlink = html_writer::start_tag('a', array(
+                'href' => $url,
+                'target' => '_blank',
+                'title' => get_string('downloadpdf', 'gradingform_rubric_ranges')
+            )) . $printicon . html_writer::end_tag('a');
         $rubric .= html_writer::tag('div', $printlink, array('class' => 'btn floatright'));
 
         if (has_capability('moodle/grade:managegradingforms', $page->context)) {
@@ -702,7 +708,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         global $DB;
         if ($instanceid &&
                 $instance = $DB->get_record('grading_instances',
-                array('id'  => $instanceid,
+                array('id' => $instanceid,
                 'raterid' => $raterid,
                 'itemid' => $itemid), '*', IGNORE_MISSING)) {
                     return $this->get_instance($instance);
@@ -807,7 +813,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         $rubriccriteria = new external_multiple_structure(
             new external_single_structure(
                 array(
-                   'id'   => new external_value(PARAM_INT, 'criterion id', VALUE_OPTIONAL),
+                   'id' => new external_value(PARAM_INT, 'criterion id', VALUE_OPTIONAL),
                    'sortorder' => new external_value(PARAM_INT, 'sortorder', VALUE_OPTIONAL),
                    'description' => new external_value(PARAM_RAW, 'description', VALUE_OPTIONAL),
                    'descriptionformat' => new external_format_value('description', VALUE_OPTIONAL),

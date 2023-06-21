@@ -19,7 +19,7 @@
  *
  * @package    gradingform_rubric_ranges
  * @category   test
- * @copyright  2018 Adrian Greeve <adriangreeve.com>
+ * @copyright  2022 Heena Agheda <heenaagheda@catalyst-au.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
