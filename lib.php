@@ -65,8 +65,8 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
      * FEATURE_ADVANCED_GRADING, the user has the permission moodle/grade:managegradingforms
      * and there is an area with the active grading method set to 'rubric'.
      *
-     * @param settings_navigation $settingsnav {@link settings_navigation}
-     * @param navigation_node $node {@link navigation_node}
+     * @param settings_navigation $settingsnav
+     * @param navigation_node $node
      */
     public function extend_settings_navigation(settings_navigation $settingsnav, navigation_node $node=null) {
         $node->add(get_string('definerubric', 'gradingform_rubric_ranges'),
@@ -80,8 +80,8 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
      * This function is called when the context for the page is an activity module with the
      * FEATURE_ADVANCED_GRADING and there is an area with the active grading method set to the given plugin.
      *
-     * @param global_navigation $navigation {@link global_navigation}
-     * @param navigation_node $node {@link navigation_node}
+     * @param global_navigation $navigation
+     * @param navigation_node $node
      */
     public function extend_navigation(global_navigation $navigation, navigation_node $node=null) {
         if (has_capability('moodle/grade:managegradingforms', $this->get_context())) {
@@ -457,7 +457,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
      *
      * @see parent::get_definition_copy()
      * @param gradingform_controller $target the controller of the new copy
-     * @return stdClass definition structure to pass to the target's {@link update_definition()}
+     * @return stdClass definition structure to pass to the target's
      */
     public function get_definition_copy(gradingform_controller $target) {
 
@@ -805,6 +805,8 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
     }
 
     /**
+     * External definition details.
+     *
      * @return array An array containing a single key/value pair with the 'rubric_criteria' external_multiple_structure.
      * @see gradingform_controller::get_external_definition_details()
      * @since Moodle 2.5

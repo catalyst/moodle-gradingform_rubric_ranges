@@ -21,7 +21,6 @@
  * @copyright  2011 Marina Glancy
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
 
     /**
@@ -39,9 +38,8 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
      * Also JavaScript relies on the class names of elements and when developer changes them
      * script might stop working.
      *
-     * @param int $mode rubric display mode, see {@link gradingform_rubric_ranges_controller}
+     * @param int $mode rubric display mode.
      * @param array $options display options for this rubric, defaults are:
-     * {@link gradingform_rubric_ranges_controller::get_default_options()}
      * @param string $elementname the name of the form element (in editor mode) or the prefix for div ids (in view mode)
      * @param array|null $criterion criterion data
      * @param string $levelsstr evaluated templates for this criterion levels
@@ -295,9 +293,8 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
      * Also JavaScript relies on the class names of elements and when developer changes them
      * script might stop working.
      *
-     * @param int $mode rubric display mode see {@link gradingform_rubric_ranges_controller}
-     * @param array $options display options for this rubric, defaults are:
-     * {@link gradingform_rubric_ranges_controller::get_default_options()}
+     * @param int $mode rubric display mode.
+     * @param array $options display options for this rubric.
      * @param string $elementname the name of the form element (in editor mode) or the prefix for div ids (in view mode)
      * @param string|int $criterionid either id of the nesting criterion or a macro for template
      * @param array|null $level level data,
@@ -480,9 +477,8 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
      * Also JavaScript relies on the class names of elements and when developer changes them
      * script might stop working.
      *
-     * @param int $mode rubric display mode see {@link gradingform_rubric_ranges_controller}
-     * @param array $options display options for this rubric, defaults are:
-     * {@link gradingform_rubric_ranges_controller::get_default_options()}
+     * @param int $mode rubric display mode.
+     * @param array $options display options for this rubric.
      * @param string $elementname the name of the form element (in editor mode) or the prefix for div ids (in view mode)
      * @param string $criteriastr evaluated templates for this rubric's criteria
      * @return string
@@ -547,9 +543,8 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
      * Generates html template to view/edit the rubric options. Expression {NAME} is used in
      * template for the form element name
      *
-     * @param int $mode rubric display mode see {@link gradingform_rubric_ranges_controller}
-     * @param array $options display options for this rubric, defaults are:
-     * {@link gradingform_rubric_ranges_controller::get_default_options()}
+     * @param int $mode rubric display mode.
+     * @param array $options display options for this rubric.
      * @return string
      */
     protected function rubric_edit_options($mode, $options) {
@@ -619,6 +614,16 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
         return $html;
     }
 
+    /**
+     * Displays ranged core.
+     *
+     * @param string $mode
+     * @param array $levels
+     * @param string $sortlevels
+     * @param bool $isranged
+     *
+     * @return mixed
+     */
     public function display_range_score($mode, $levels, $sortlevels, $isranged = false) {
         if ($isranged) {
             $rangedisplaymodes = array(
@@ -664,8 +669,7 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
      *
      * @param array $criteria data about the rubric design
      * @param array $options display options for this rubric, defaults are:
-     * {@link gradingform_rubric_ranges_controller::get_default_options()}
-     * @param int $mode rubric display mode, see {@link gradingform_rubric_ranges_controller}
+     * @param int $mode rubric display mode.
      * @param string $elementname the name of the form element (in editor mode) or the prefix for div ids (in view mode)
      * @param array $values evaluation result
      * @return string

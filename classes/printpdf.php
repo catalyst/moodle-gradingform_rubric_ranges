@@ -36,6 +36,9 @@ require_once($CFG->libdir.'/pdflib.php');
 class printpdf extends \pdf {
     // @codingStandardsIgnoreStart
 
+    /**
+     * @inheritdoc
+     */
     public function Header() {
         $this->SetY(15);
         $this->SetFont('helvetica', 'I', 8);
@@ -43,6 +46,9 @@ class printpdf extends \pdf {
         $this->Cell(0, 15, $text, 0, false, 'C', 0, '', 0, false, 'M', 'M');
     }
 
+    /**
+     * @inheritdoc
+     */
     public function Footer() {
         $this->SetY(-15);
         $this->SetFont('helvetica', 'I', 8);

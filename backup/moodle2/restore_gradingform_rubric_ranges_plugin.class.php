@@ -34,7 +34,7 @@ class restore_gradingform_rubric_ranges_plugin extends restore_gradingform_plugi
     /**
      * Declares the rubric XML paths attached to the form definition element
      *
-     * @return array of {@link restore_path_element}
+     * @return restore_path_element[]
      */
     protected function define_definition_plugin_structure() {
 
@@ -52,7 +52,7 @@ class restore_gradingform_rubric_ranges_plugin extends restore_gradingform_plugi
     /**
      * Declares the rubric XML paths attached to the form instance element
      *
-     * @return array of {@link restore_path_element}
+     * @return restore_path_element[]
      */
     protected function define_instance_plugin_structure() {
 
@@ -68,7 +68,6 @@ class restore_gradingform_rubric_ranges_plugin extends restore_gradingform_plugi
      * Processes criterion element data
      *
      * Sets the mapping 'gradingform_rubric_ranges_criterion' to be used later by
-     * {@link self::process_gradinform_rubric_filling()}
      *
      * @param stdClass|array $data
      */
@@ -87,7 +86,6 @@ class restore_gradingform_rubric_ranges_plugin extends restore_gradingform_plugi
      * Processes level element data
      *
      * Sets the mapping 'gradingform_rubric_ranges_level' to be used later by.
-     * {@link self::process_gradinform_rubric_filling()}
      *
      * @param stdClass|array $data
      */

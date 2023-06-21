@@ -97,12 +97,10 @@ class store extends external_api {
      * @param int $contextid
      * @param string $itemname
      * @param int $gradeduserid
-     * @param string $formdata
      * @param bool $notifyuser
+     * @param string $formdata
+     *
      * @return array
-     * @throws coding_exception
-     * @throws moodle_exception
-     * @since Moodle 3.8
      */
     public static function execute(string $component, int $contextid, string $itemname, int $gradeduserid, bool $notifyuser,
             string $formdata): array {

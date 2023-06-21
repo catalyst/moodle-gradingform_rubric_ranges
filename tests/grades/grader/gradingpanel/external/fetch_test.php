@@ -237,6 +237,15 @@ class fetch_test extends advanced_testcase {
 
     /**
      * Executes and performs all the assertions of the fetch method with the given parameters.
+     *
+     * @param $forum
+     * @param $controller
+     * @param $definition
+     * @param $fetcheruser
+     * @param $grader
+     * @param $gradeduser
+     *
+     * @return void
      */
     private function execute_and_assert_fetch ($forum, $controller, $definition, $fetcheruser, $grader, $gradeduser) {
         $generator = \testing_util::get_data_generator();

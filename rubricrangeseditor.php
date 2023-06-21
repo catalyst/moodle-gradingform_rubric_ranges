@@ -402,13 +402,12 @@ class MoodleQuickForm_rubricrangeseditor extends HTML_QuickForm_input {
     /**
      * Prepares the data for saving
      *
-     * @see prepare_data()
      * @param array $submitValues
-     * @param boolean $assoc
+     * @param bool $assoc
      * @return array
      */
-    public function exportValue(&$submitvalues, $assoc = false) {
-        $value = $this->prepare_data($this->_findValue($submitvalues));
+    public function exportValue(&$submitValues, $assoc = false) {
+        $value = $this->prepare_data($this->_findValue($submitValues));
         return $this->_prepareValue($value, $assoc);
     }
     // @codingStandardsIgnoreEnd
