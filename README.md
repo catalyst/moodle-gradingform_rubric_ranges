@@ -1,5 +1,8 @@
 # Ranged Rubrics
 
+![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/catalyst/moodle-gradingform_rubric_ranges/ci/MOODLE_39_STABLE)
+
+
 The ranged rubrics advanced grading method is based on the Moodle core Rubrics grading method but 
 adding support for ranged values.
 
