@@ -118,22 +118,7 @@ class fetch_test extends advanced_testcase {
         $result = fetch::execute('mod_forum', (int) $forum->get_context()->id, 'forum', (int) $student->id);
         $result = external_api::clean_returnvalue(fetch::execute_returns(), $result);
 
-        $this->assertIsArray($result);
-        $this->assertArrayHasKey('templatename', $result);
-
-        $this->assertEquals('gradingform_rubric_ranges/grades/grader/gradingpanel', $result['templatename']);
-
-        $this->assertArrayHasKey('warnings', $result);
-        $this->assertIsArray($result['warnings']);
-        $this->assertEmpty($result['warnings']);
-
-        // Test the grade array items.
-        $this->assertArrayHasKey('grade', $result);
-        $this->assertIsArray($result['grade']);
-        $this->assertIsInt($result['grade']['timecreated']);
-
-        $this->assertArrayHasKey('timemodified', $result['grade']);
-        $this->assertIsInt($result['grade']['timemodified']);
+        $this->validate_result($result);
 
         $this->assertArrayHasKey('usergrade', $result['grade']);
         $this->assertEquals(0, $result['grade']['usergrade']);
@@ -272,22 +257,7 @@ class fetch_test extends advanced_testcase {
         $result = fetch::execute('mod_forum', (int) $forum->get_context()->id, 'forum', (int) $gradeduser->id);
         $result = external_api::clean_returnvalue(fetch::execute_returns(), $result);
 
-        $this->assertIsArray($result);
-        $this->assertArrayHasKey('templatename', $result);
-
-        $this->assertEquals('gradingform_rubric_ranges/grades/grader/gradingpanel', $result['templatename']);
-
-        $this->assertArrayHasKey('warnings', $result);
-        $this->assertIsArray($result['warnings']);
-        $this->assertEmpty($result['warnings']);
-
-        // Test the grade array items.
-        $this->assertArrayHasKey('grade', $result);
-        $this->assertIsArray($result['grade']);
-        $this->assertIsInt($result['grade']['timecreated']);
-
-        $this->assertArrayHasKey('timemodified', $result['grade']);
-        $this->assertIsInt($result['grade']['timemodified']);
+        $this->validate_result($result);
 
         $this->assertArrayHasKey('usergrade', $result['grade']);
         $this->assertEquals(25, $result['grade']['usergrade']);
@@ -437,5 +407,29 @@ class fetch_test extends advanced_testcase {
             $picturescore,
             $pictureremark
         );
+    }
+
+    /**
+     * A helper function to validate result.
+     *
+     * @param $result
+     */
+    protected function validate_result($result): void {
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('templatename', $result);
+
+        $this->assertEquals('gradingform_rubric_ranges/grades/grader/gradingpanel', $result['templatename']);
+
+        $this->assertArrayHasKey('warnings', $result);
+        $this->assertIsArray($result['warnings']);
+        $this->assertEmpty($result['warnings']);
+
+        // Test the grade array items.
+        $this->assertArrayHasKey('grade', $result);
+        $this->assertIsArray($result['grade']);
+        $this->assertIsInt($result['grade']['timecreated']);
+
+        $this->assertArrayHasKey('timemodified', $result['grade']);
+        $this->assertIsInt($result['grade']['timemodified']);
     }
 }
