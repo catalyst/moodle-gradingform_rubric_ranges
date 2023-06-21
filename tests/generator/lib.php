@@ -19,7 +19,7 @@
  *
  * @package    gradingform_rubric_ranges
  * @category   test
- * @copyright  2019 Andrew Nicols <andrew@nicols.co.uk>
+ * @copyright  2022 Heena Agheda <heenaagheda@catalyst-au.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -72,13 +72,13 @@ class gradingform_rubric_ranges_generator extends component_generator_base {
         $controller = $gradinggenerator->create_instance($context, $component, $area, 'rubric_ranges');
 
         // Generate a definition for the supplied rubric.
-        $rubric_ranges = $this->get_rubric_ranges($name, $description);
+        $rubricranges = $this->get_rubric_ranges($name, $description);
         foreach ($criteria as $key => $criterion) {
-            $rubric_ranges->add_criteria($this->get_criterion($criterion['name'], $criterion['isranged'], $criterion['levels']));
+            $rubricranges->add_criteria($this->get_criterion($criterion['name'], $criterion['isranged'], $criterion['levels']));
         }
 
         // Update the controller wih the rubric definition.
-        $controller->update_definition($rubric_ranges->get_definition());
+        $controller->update_definition($rubricranges->get_definition());
 
         return $controller;
     }
@@ -139,7 +139,7 @@ class gradingform_rubric_ranges_generator extends component_generator_base {
         if ($criterion) {
             $criterion = (object) $criterion;
 
-            if($criterion->isranged) {
+            if ($criterion->isranged) {
                 $levelsonly = array_values($criterion->levels);
                 $rangecheck = 0;
                 foreach ($levelsonly as $levelkey => $olevel) {
@@ -208,7 +208,8 @@ class gradingform_rubric_ranges_generator extends component_generator_base {
      * @param string $area
      * @return gradingform_rubric_ranges_controller
      */
-    public function get_test_rubric_ranges(context $context, string $component, string $area): gradingform_rubric_ranges_controller {
+    public function get_test_rubric_ranges(context $context, string $component,
+                                           string $area): gradingform_rubric_ranges_controller {
         $criteria = [
             [
                 'name' => 'Spelling is important',

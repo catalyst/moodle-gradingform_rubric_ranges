@@ -38,7 +38,7 @@ require_once("HTML/QuickForm/input.php");
  * element is not validated and, instead of submitting the form, we process button presses.
  *
  * @package    gradingform_rubric_ranges
- * @copyright  2011 Marina Glancy
+ * @copyright  2022 Heena Agheda <heenaagheda@catalyst-au.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class MoodleQuickForm_rubricrangeseditor extends HTML_QuickForm_input {
@@ -52,6 +52,8 @@ class MoodleQuickForm_rubricrangeseditor extends HTML_QuickForm_input {
     protected $nonjsbuttonpressed = false;
     /** @var bool Message to display in front of the editor (that there exist grades on this rubric being edited) */
     protected $regradeconfirmation = false;
+
+    // @codingStandardsIgnoreStart
 
     /**
      * Constructor for rubric editor
@@ -409,4 +411,5 @@ class MoodleQuickForm_rubricrangeseditor extends HTML_QuickForm_input {
         $value = $this->prepare_data($this->_findValue($submitvalues));
         return $this->_prepareValue($value, $assoc);
     }
+    // @codingStandardsIgnoreEnd
 }

@@ -22,13 +22,19 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace gradingform_rubric_ranges;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG, $SITE;
 
 require_once($CFG->libdir.'/pdflib.php');
 
-class printpdf extends pdf {
+/**
+ * Extending pdf class to customise it.
+ */
+class printpdf extends \pdf {
+    // @codingStandardsIgnoreStart
 
     public function Header() {
         $this->SetY(15);
@@ -39,7 +45,10 @@ class printpdf extends pdf {
 
     public function Footer() {
         $this->SetY(-15);
-        $this->SetFont('helvetica','I',8);
-        $this->Cell(0,10,'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(),0,false,'C',0,'',0,false,'T','M');
+        $this->SetFont('helvetica', 'I', 8);
+        $this->Cell(0, 10, 'Page ' . $this->getAliasNumPage() . '/'
+            . $this->getAliasNbPages(), 0, false, 'C', 0, '' , 0, false, 'T', 'M');
     }
+
+    // @codingStandardsIgnoreEnd
 }

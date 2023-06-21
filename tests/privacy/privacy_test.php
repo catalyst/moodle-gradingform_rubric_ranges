@@ -19,15 +19,14 @@
  *
  * @package    gradingform_rubric_ranges
  * @category   test
- * @copyright  2018 Adrian Greeve <adriangreeve.com>
+ * @copyright  2022 Heena Agheda <heenaagheda@catalyst-au.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tests\gradingform_rubric_ranges;
+namespace gradingform_rubric_ranges\privacy;
 
 use core_privacy\tests\provider_testcase;
 use core_privacy\local\request\writer;
-use gradingform_rubric_ranges\privacy\provider;
 use gradingform_rubric_ranges_controller;
 use context_module;
 
@@ -37,7 +36,7 @@ use context_module;
  * @copyright  2018 Adrian Greeve <adriangreeve.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class privacy_testcase extends provider_testcase {
+class privacy_test extends provider_testcase {
 
     /**
      * Test the export of rubric data.
@@ -142,7 +141,8 @@ class privacy_testcase extends provider_testcase {
      * @param string $area
      * @return gradingform_rubric_ranges_controller
      */
-    protected function get_test_rubric_ranges(context_module $context, string $component, string $area): gradingform_rubric_ranges_controller {
+    protected function get_test_rubric_ranges(context_module $context,
+                                              string $component, string $area): gradingform_rubric_ranges_controller {
         $generator = \testing_util::get_data_generator();
         $rubricgenerator = $generator->get_plugin_generator('gradingform_rubric_ranges');
 

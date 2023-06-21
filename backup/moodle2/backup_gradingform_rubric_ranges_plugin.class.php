@@ -18,17 +18,15 @@
  * Support for backup API
  *
  * @package    gradingform_rubric_ranges
- * @copyright  2011 David Mudrak <david@moodle.com>
+ * @copyright  2022 Heena Agheda <heenaagheda@catalyst-au.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-
 
 /**
  * Defines rubric backup structures
  *
  * @package    gradingform_rubric_ranges
- * @copyright  2011 David Mudrak <david@moodle.com>
+ * @copyright  2022 Heena Agheda <heenaagheda@catalyst-au.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class backup_gradingform_rubric_ranges_plugin extends backup_gradingform_plugin {
