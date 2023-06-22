@@ -225,12 +225,12 @@ class fetch_test extends advanced_testcase {
     /**
      * Executes and performs all the assertions of the fetch method with the given parameters.
      *
-     * @param $forum
-     * @param $controller
-     * @param $definition
-     * @param $fetcheruser
-     * @param $grader
-     * @param $gradeduser
+     * @param forum_entity $forum
+     * @param \gradingform_rubric_controller $controller
+     * @param \stdClass $definition
+     * @param \stdClass $fetcheruser
+     * @param \stdClass $grader
+     * @param \stdClass $gradeduser
      *
      * @return void
      */
@@ -414,9 +414,9 @@ class fetch_test extends advanced_testcase {
     /**
      * A helper function to validate result.
      *
-     * @param $result
+     * @param  array $result Result to check.
      */
-    protected function validate_result($result): void {
+    protected function validate_result(array $result): void {
         $this->assertIsArray($result);
         $this->assertArrayHasKey('templatename', $result);
 

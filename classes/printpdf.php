@@ -37,7 +37,7 @@ class printpdf extends \pdf {
     // @codingStandardsIgnoreStart
 
     /**
-     * @inheritdoc
+     * Define header.
      */
     public function Header() {
         $this->SetY(15);
@@ -47,7 +47,7 @@ class printpdf extends \pdf {
     }
 
     /**
-     * @inheritdoc
+     * Define footer.
      */
     public function Footer() {
         $this->SetY(-15);
