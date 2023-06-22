@@ -1,50 +1,3 @@
-/*
-.gradingform_rubric_ranges.editor[.frozen|.editable]
-  .criteria
-    .criterion[.first][.last][.odd|.even]
-        .controls
-            .moveup
-                [input type=submit]
-            .delete
-                [input type=submit]
-            .movedown
-                [input type=submit]
-        .description
-        .levels
-            td.level[.first][.last][.odd|.even]
-                div.level-wrapper
-                    .definition
-                        [textarea]
-                    .score
-                        span
-                            [input type=text]
-                    .delete
-                        [input type=submit]
-        .addlevel
-            [input type=submit]
-        .remark
-            textarea
-    .addcriterion
-        [input type=submit]
-  .options
-    .optionsheading
-    .option.OPTIONNAME
-
-.gradingform_rubric_ranges[.review][.evaluate[.editable|.frozen]]
-  .criteria
-    .criterion[.first][.last][.odd|.even]
-        .description
-        .levels
-            td.level[.first][.last][.odd|.even]
-                div.level-wrapper
-                    div.radio
-                        input
-                    .definition
-                    .score
-                        span
-
-*/
-
 .gradingform_rubric_ranges_editform .status {
     font-weight: normal;
     text-transform: uppercase;
@@ -106,10 +59,7 @@
     min-width: 150px;
     font-weight: bold;
 }
-.gradingform_rubric_ranges .criterion .levels table, th, td {
-    /* border: 1px solid black;
-    border-collapse: collapse; */
-  }
+
 .gradingform_rubric_ranges .criterion .levels table {
     width: 100%;
     height: 100%;
