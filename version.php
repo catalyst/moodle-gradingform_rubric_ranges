@@ -28,3 +28,4 @@ $plugin->component = 'gradingform_rubric_ranges';
 $plugin->version = 2023022001;
 $plugin->requires = 2020060900;
 $plugin->maturity = MATURITY_STABLE;
+$plugin->supported = [39, 401];  // Available as of Moodle 3.9.0 or later.

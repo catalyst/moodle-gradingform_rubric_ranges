@@ -35,6 +35,8 @@ use context_module;
  *
  * @copyright  2018 Adrian Greeve <adriangreeve.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * @covers \gradingform_rubric_ranges\privacy\provider
  */
 class privacy_test extends provider_testcase {
 

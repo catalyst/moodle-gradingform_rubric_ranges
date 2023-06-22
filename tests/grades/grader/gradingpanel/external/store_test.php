@@ -41,6 +41,8 @@ use moodle_exception;
  * @category  test
  * @copyright 2019 Mathew May <mathew.solutions>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * @covers \gradingform_rubric_ranges\grades\grader\gradingpanel\external\store
  */
 class store_test extends advanced_testcase {
 
