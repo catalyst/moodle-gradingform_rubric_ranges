@@ -37,6 +37,8 @@ use gradingform_controller;
  * @category   test
  * @copyright  2019 Andrew Nicols <andrew@nicols.co.uk>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * @covers \gradingform_rubric_ranges_generator
  */
 class generator_test extends advanced_testcase {
 
