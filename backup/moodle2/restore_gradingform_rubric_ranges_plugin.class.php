@@ -78,7 +78,7 @@ class restore_gradingform_rubric_ranges_plugin extends restore_gradingform_plugi
         $oldid = $data->id;
         $data->definitionid = $this->get_new_parentid('grading_definition');
 
-        $newid = $DB->insert_record('gform_rubric_ranges_criteria', $data);
+        $newid = $DB->insert_record('gradingform_rubric_ranges_c', $data);
         $this->set_mapping('gradingform_rubric_ranges_criterion', $oldid, $newid);
     }
 
@@ -96,7 +96,7 @@ class restore_gradingform_rubric_ranges_plugin extends restore_gradingform_plugi
         $oldid = $data->id;
         $data->criterionid = $this->get_new_parentid('gradingform_rubric_ranges_criterion');
 
-        $newid = $DB->insert_record('gform_rubric_ranges_levels', $data);
+        $newid = $DB->insert_record('gradingform_rubric_ranges_l', $data);
         $this->set_mapping('gradingform_rubric_ranges_level', $oldid, $newid);
     }
 
@@ -114,7 +114,7 @@ class restore_gradingform_rubric_ranges_plugin extends restore_gradingform_plugi
         $data->levelid = $this->get_mappingid('gradingform_rubric_ranges_level', $data->levelid);
 
         if (!empty($data->criterionid)) {
-            $DB->insert_record('gform_rubric_ranges_fillings', $data);
+            $DB->insert_record('gradingform_rubric_ranges_f', $data);
         }
 
     }

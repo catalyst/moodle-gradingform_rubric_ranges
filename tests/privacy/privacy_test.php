@@ -124,11 +124,11 @@ class privacy_test extends provider_testcase {
         $instance->update($data);
 
         // Check how many records we have in the fillings table.
-        $records = $DB->get_records('gform_rubric_ranges_fillings');
+        $records = $DB->get_records('gradingform_rubric_ranges_f');
         $this->assertCount(4, $records);
         // Let's delete one of the instances (the last one would be the easiest).
         provider::delete_gradingform_for_instances([$instance->get_id()]);
-        $records = $DB->get_records('gform_rubric_ranges_fillings');
+        $records = $DB->get_records('gradingform_rubric_ranges_f');
         $this->assertCount(2, $records);
         foreach ($records as $record) {
             $this->assertNotEquals($instance->get_id(), $record->instanceid);

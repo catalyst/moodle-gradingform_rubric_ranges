@@ -4,7 +4,7 @@
     xsi:noNamespaceSchemaLocation="../../../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-    <TABLE NAME="gform_rubric_ranges_criteria" COMMENT="Stores the rows of the rubric grid.">
+    <TABLE NAME="gradingform_rubric_ranges_c" COMMENT="Stores the rows of the rubric grid.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="definitionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The ID of the form definition this criterion is part of"/>
@@ -18,7 +18,7 @@
         <KEY NAME="fk_definitionid" TYPE="foreign" FIELDS="definitionid" REFTABLE="grading_definitions" REFFIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="gform_rubric_ranges_levels" COMMENT="Stores the columns of the rubric grid.">
+    <TABLE NAME="gradingform_rubric_ranges_l" COMMENT="Stores the columns of the rubric grid.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="criterionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The rubric criterion we are level of"/>
@@ -28,10 +28,10 @@
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-        <KEY NAME="fk_criterionid" TYPE="foreign" FIELDS="criterionid" REFTABLE="gform_rubric_ranges_criteria" REFFIELDS="id"/>
+        <KEY NAME="fk_criterionid" TYPE="foreign" FIELDS="criterionid" REFTABLE="gradingform_rubric_ranges_c" REFFIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="gform_rubric_ranges_fillings" COMMENT="Stores the data of how the rubric is filled by a particular rater">
+    <TABLE NAME="gradingform_rubric_ranges_f" COMMENT="Stores the data of how the rubric is filled by a particular rater">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="instanceid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The ID of the grading form instance"/>
@@ -44,7 +44,7 @@
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         <KEY NAME="fk_instanceid" TYPE="foreign" FIELDS="instanceid" REFTABLE="grading_instances" REFFIELDS="id"/>
-        <KEY NAME="fk_criterionid" TYPE="foreign" FIELDS="criterionid" REFTABLE="gform_rubric_ranges_criteria" REFFIELDS="id"/>
+        <KEY NAME="fk_criterionid" TYPE="foreign" FIELDS="criterionid" REFTABLE="gradingform_rubric_ranges_c" REFFIELDS="id"/>
         <KEY NAME="uq_instance_criterion" TYPE="unique" FIELDS="instanceid, criterionid"/>
       </KEYS>
       <INDEXES>
