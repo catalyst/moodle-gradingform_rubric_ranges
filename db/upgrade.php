@@ -22,6 +22,13 @@
  * @copyright  2023 Catalyst IT
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+/**
+ * Upgrade the plugin.
+ *
+ * @param int $oldversion
+ * @return bool always true
+ */
 function xmldb_gradingform_rubric_ranges_upgrade($oldversion) {
     global $DB;
 
