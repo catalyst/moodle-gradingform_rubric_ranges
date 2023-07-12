@@ -65,10 +65,10 @@ class backup_gradingform_rubric_ranges_plugin extends backup_gradingform_plugin 
 
         // Set sources to populate the data.
 
-        $criterion->set_source_table('gform_rubric_ranges_criteria',
+        $criterion->set_source_table('gradingform_rubric_ranges_c',
                 array('definitionid' => backup::VAR_PARENTID));
 
-        $level->set_source_table('gform_rubric_ranges_levels',
+        $level->set_source_table('gradingform_rubric_ranges_l',
                 array('criterionid' => backup::VAR_PARENTID));
 
         // No need to annotate ids or files yet (one day when criterion definition supports
@@ -107,9 +107,9 @@ class backup_gradingform_rubric_ranges_plugin extends backup_gradingform_plugin 
 
         // Binding criterionid to ensure it's existence.
         $filling->set_source_sql('SELECT rf.*
-                FROM {gform_rubric_ranges_fillings} rf
+                FROM {gradingform_rubric_ranges_f} rf
                 JOIN {grading_instances} gi ON gi.id = rf.instanceid
-                JOIN {gform_rubric_ranges_criteria} rc ON rc.id = rf.criterionid AND gi.definitionid = rc.definitionid
+                JOIN {gradingform_rubric_ranges_c} rc ON rc.id = rf.criterionid AND gi.definitionid = rc.definitionid
                 WHERE rf.instanceid = :instanceid',
                 array('instanceid' => backup::VAR_PARENTID));
 

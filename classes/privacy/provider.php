@@ -43,7 +43,7 @@ class provider implements
      * @return collection A listing of user data stored through this system.
      */
     public static function get_metadata(collection $collection) : collection {
-        $collection->add_database_table('gform_rubric_ranges_fillings', [
+        $collection->add_database_table('gradingform_rubric_ranges_f', [
             'instanceid' => 'privacy:metadata:instanceid',
             'criterionid' => 'privacy:metadata:criterionid',
             'levelid' => 'privacy:metadata:levelid',
@@ -64,9 +64,9 @@ class provider implements
         // Get records from the provided params.
         $params = ['instanceid' => $instanceid];
         $sql = "SELECT rc.description, rl.definition, rl.score, rf.remark
-                  FROM {gform_rubric_ranges_fillings} rf
-                  JOIN {gform_rubric_ranges_criteria} rc ON rc.id = rf.criterionid
-                  JOIN {gform_rubric_ranges_levels} rl ON rf.levelid = rl.id
+                  FROM {gradingform_rubric_ranges_f} rf
+                  JOIN {gradingform_rubric_ranges_c} rc ON rc.id = rf.criterionid
+                  JOIN {gradingform_rubric_ranges_l} rl ON rf.levelid = rl.id
                  WHERE rf.instanceid = :instanceid";
         $records = $DB->get_records_sql($sql, $params);
         if ($records) {
@@ -82,6 +82,6 @@ class provider implements
      */
     public static function delete_gradingform_for_instances(array $instanceids) {
         global $DB;
-        $DB->delete_records_list('gform_rubric_ranges_fillings', 'instanceid', $instanceids);
+        $DB->delete_records_list('gradingform_rubric_ranges_f', 'instanceid', $instanceids);
     }
 }

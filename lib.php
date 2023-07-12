@@ -187,7 +187,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
                 }
 
                 if ($doupdate) {
-                    $id = $DB->insert_record('gform_rubric_ranges_criteria', $data);
+                    $id = $DB->insert_record('gradingform_rubric_ranges_c', $data);
                 }
                 $haschanges[5] = true;
             } else {
@@ -202,7 +202,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
                     // Update only if something is changed.
                     $data['id'] = $id;
                     if ($doupdate) {
-                        $DB->update_record('gform_rubric_ranges_criteria', $data);
+                        $DB->update_record('gradingform_rubric_ranges_c', $data);
                     }
                     $haschanges[1] = true;
                 }
@@ -213,7 +213,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
                     }
                     if (!array_key_exists($levelid, $levelsdata)) {
                         if ($doupdate) {
-                            $DB->delete_records('gform_rubric_ranges_levels', array('id' => $levelid));
+                            $DB->delete_records('gradingform_rubric_ranges_l', array('id' => $levelid));
                         }
                         $haschanges[4] = true;
                     }
@@ -234,7 +234,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
                         }
                     }
                     if ($doupdate) {
-                        $levelid = $DB->insert_record('gform_rubric_ranges_levels', $data);
+                        $levelid = $DB->insert_record('gradingform_rubric_ranges_l', $data);
                     }
                     if ($criterionmaxscore !== null && $criterionmaxscore >= $level['score']) {
                         // New level is added but the maximum score for this criteria did not change,
@@ -255,7 +255,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
                         // Update only if something is changed.
                         $data['id'] = $levelid;
                         if ($doupdate) {
-                            $DB->update_record('gform_rubric_ranges_levels', $data);
+                            $DB->update_record('gradingform_rubric_ranges_l', $data);
                         }
                         if (isset($data['score'])) {
                             $haschanges[3] = true;
@@ -270,8 +270,8 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
             if (!array_key_exists($id, $newcriteria)) {
                 if ($doupdate) {
                     if ($id > 0) {
-                        $DB->delete_records('gform_rubric_ranges_criteria', array('id' => $id));
-                        $DB->delete_records('gform_rubric_ranges_levels', array('criterionid' => $id));
+                        $DB->delete_records('gradingform_rubric_ranges_c', array('id' => $id));
+                        $DB->delete_records('gradingform_rubric_ranges_l', array('criterionid' => $id));
                     }
                 }
                 $haschanges[3] = true;
@@ -325,8 +325,8 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
                        rc.isranged AS rcisranged,
                        rl.id AS rlid, rl.score AS rlscore, rl.definition AS rldefinition, rl.definitionformat AS rldefinitionformat
                   FROM {grading_definitions} gd
-             LEFT JOIN {gform_rubric_ranges_criteria} rc ON (rc.definitionid = gd.id)
-             LEFT JOIN {gform_rubric_ranges_levels} rl ON (rl.criterionid = rc.id)
+             LEFT JOIN {gradingform_rubric_ranges_c} rc ON (rc.definitionid = gd.id)
+             LEFT JOIN {gradingform_rubric_ranges_l} rl ON (rl.criterionid = rc.id)
                  WHERE gd.areaid = :areaid AND gd.method = :method
               ORDER BY rcsortorder, rlscore";
         $params = array('areaid' => $this->areaid, 'method' => $this->get_method_name());
@@ -681,16 +681,16 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         // Get the list of instances.
         $instances = array_keys($DB->get_records('grading_instances', array('definitionid' => $this->definition->id), '', 'id'));
         // Delete all fillings.
-        $DB->delete_records_list('gform_rubric_ranges_fillings', 'instanceid', $instances);
+        $DB->delete_records_list('gradingform_rubric_ranges_f', 'instanceid', $instances);
         // Delete instances.
         $DB->delete_records_list('grading_instances', 'id', $instances);
         // Get the list of criteria records.
-        $criteria = array_keys($DB->get_records('gform_rubric_ranges_criteria',
+        $criteria = array_keys($DB->get_records('gradingform_rubric_ranges_c',
             array('definitionid' => $this->definition->id), '', 'id'));
         // Delete levels.
-        $DB->delete_records_list('gform_rubric_ranges_levels', 'criterionid', $criteria);
+        $DB->delete_records_list('gradingform_rubric_ranges_l', 'criterionid', $criteria);
         // Delete critera.
-        $DB->delete_records_list('gform_rubric_ranges_criteria', 'id', $criteria);
+        $DB->delete_records_list('gradingform_rubric_ranges_c', 'id', $criteria);
     }
 
     /**
@@ -751,8 +751,8 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
      * @return string
      */
     public static function sql_search_from_tables($gdid) {
-        return " LEFT JOIN {gform_rubric_ranges_criteria} rc ON (rc.definitionid = $gdid)
-                 LEFT JOIN {gform_rubric_ranges_levels} rl ON (rl.criterionid = rc.id)";
+        return " LEFT JOIN {gradingform_rubric_ranges_c} rc ON (rc.definitionid = $gdid)
+                 LEFT JOIN {gradingform_rubric_ranges_l} rl ON (rl.criterionid = rc.id)";
     }
 
     /**
@@ -880,7 +880,7 @@ class gradingform_rubric_ranges_instance extends gradingform_instance {
     public function cancel() {
         global $DB;
         parent::cancel();
-        $DB->delete_records('gform_rubric_ranges_fillings', array('instanceid' => $this->get_id()));
+        $DB->delete_records('gradingform_rubric_ranges_f', array('instanceid' => $this->get_id()));
     }
 
     /**
@@ -899,7 +899,7 @@ class gradingform_rubric_ranges_instance extends gradingform_instance {
             $params = array('instanceid' => $instanceid, 'criterionid' => $criterionid,
                 'levelid' => $record['levelid'], 'remark' => $record['remark'],
                 'remarkformat' => $record['remarkformat'], 'grade' => $record['grade']);
-            $DB->insert_record('gform_rubric_ranges_fillings', $params);
+            $DB->insert_record('gradingform_rubric_ranges_f', $params);
         }
         return $instanceid;
     }
@@ -930,7 +930,7 @@ class gradingform_rubric_ranges_instance extends gradingform_instance {
         global $DB;
 
         foreach ($data['criteria'] as $criterionid => $record) {
-            $DB->delete_records('gform_rubric_ranges_fillings',
+            $DB->delete_records('gradingform_rubric_ranges_f',
                 array('criterionid' => $criterionid, 'instanceid' => $this->get_id()));
         }
     }
@@ -966,7 +966,7 @@ class gradingform_rubric_ranges_instance extends gradingform_instance {
     public function get_rubric_filling($force = false) {
         global $DB;
         if ($this->rubric === null || $force) {
-            $records = $DB->get_records('gform_rubric_ranges_fillings', array('instanceid' => $this->get_id()));
+            $records = $DB->get_records('gradingform_rubric_ranges_f', array('instanceid' => $this->get_id()));
             $this->rubric = array('criteria' => array());
             foreach ($records as $record) {
                 $this->rubric['criteria'][$record->criterionid] = (array)$record;
@@ -996,7 +996,7 @@ class gradingform_rubric_ranges_instance extends gradingform_instance {
                 if (isset($record['grade'])) {
                     $newrecord['grade'] = $record['grade'];
                 }
-                $DB->insert_record('gform_rubric_ranges_fillings', $newrecord);
+                $DB->insert_record('gradingform_rubric_ranges_f', $newrecord);
             } else {
                 $newrecord = array('id' => $currentgrade['criteria'][$criterionid]['id']);
                 foreach (array('levelid', 'remark', 'grade' /*, 'remarkformat' */) as $key) {
@@ -1006,13 +1006,13 @@ class gradingform_rubric_ranges_instance extends gradingform_instance {
                     }
                 }
                 if (count($newrecord) > 1) {
-                    $DB->update_record('gform_rubric_ranges_fillings', $newrecord);
+                    $DB->update_record('gradingform_rubric_ranges_f', $newrecord);
                 }
             }
         }
         foreach ($currentgrade['criteria'] as $criterionid => $record) {
             if (!array_key_exists($criterionid, $data['criteria'])) {
-                $DB->delete_records('gform_rubric_ranges_fillings', array('id' => $record['id']));
+                $DB->delete_records('gradingform_rubric_ranges_f', array('id' => $record['id']));
             }
         }
         $this->get_rubric_filling(true);
