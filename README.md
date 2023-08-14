@@ -34,6 +34,8 @@ to complete the installation from the command line.
 
 Thanks to Monash University (https://www.monash.edu) for funding the development of this plugin.
 
+![Monash University](pix/monash-logo-mono.svg?raw=true)
+
 # License #
 
 2023 Catalyst IT
