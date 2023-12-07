@@ -246,6 +246,29 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
                 $remarktemplate .= html_writer::tag('div', s($currentremark), $remarkparams);
             }
         }
+
+        $displaygradeinput = !$options['enableremarks'] && $mode != gradingform_rubric_ranges_controller::DISPLAY_VIEW;
+        if ($displaygradeinput) {
+            if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EVAL) {
+                if ($criterion['isranged']) {
+                    $gradepoints = $value['grade'] ?? '';
+                    $gradetemplate = html_writer::select(
+                        range(0, $criterion['points']),
+                        '{NAME}[criteria][{CRITERION-id}][grade]',
+                        $gradepoints,
+                        ['' => 'choosedots'],
+                        ['id' => '{NAME}-criteria-{CRITERION-id}-grade']
+                    );
+                }
+            } else if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EVAL_FROZEN) {
+
+                $gradetemplate .= html_writer::empty_tag('input', array(
+                    'type' => 'hidden',
+                    'name' => '{NAME}[criteria][{CRITERION-id}][grade]',
+                    'value' => $currentgrade));
+            }
+        }
+
         $pointstemplate = $gradetemplate;
         $pointstemplate .= html_writer::start_tag('div',
             array('class' => 'inline', 'id' => '{NAME}-criteria-{CRITERION-id}-points'));
