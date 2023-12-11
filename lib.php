@@ -1076,8 +1076,11 @@ class gradingform_rubric_ranges_instance extends gradingform_instance {
         $value = $gradingformelement->getValue();
 
         if (!$gradingformelement->_flagFrozen) {
-            $module = array('name' => 'gradingform_rubric_ranges',
-                'fullpath' => '/grade/grading/form/rubric_ranges/js/rubric_ranges.js');
+            $module = array(
+                  'name' => 'gradingform_rubric_ranges',
+                  'fullpath' => '/grade/grading/form/rubric_ranges/js/rubric_ranges.js',
+                  'requires' => array('node-event-simulate'),
+            );
             $page->requires->js_init_call('M.gradingform_rubric_ranges.init',
                 array(array(
                     'name' => $gradingformelement->getName(),
