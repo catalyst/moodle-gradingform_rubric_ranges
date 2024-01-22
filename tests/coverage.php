@@ -29,12 +29,12 @@ defined('MOODLE_INTERNAL') || die();
  * Coverage information for the gradingform_rubric_ranges plugin.
  *
  * @package    gradingform_rubric_ranges
- * @copyright  2019 Andrew Nicols <andrew@nicols.co.uk>
+ * @copyright  2022 Heena Agheda <heenaagheda@catalyst-au.net>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 return new class extends phpunit_coverage_info {
-    // Array The list of folders relative to the plugin root to whitelist in coverage generation.
-    protected $whitelistfolders = [
+    // Array The list of folders relative to the plugin root to include in coverage generation.
+    protected $includelistfolders = [
         'classes',
         'tests/generator',
     ];
