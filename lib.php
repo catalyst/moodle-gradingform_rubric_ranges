@@ -28,11 +28,6 @@ require_once($CFG->dirroot.'/grade/grading/form/lib.php');
 require_once($CFG->dirroot.'/lib/filelib.php');
 require_once($CFG->dirroot.'/grade/grading/form/rubric_ranges/classes/printpdf.php');
 
-use core_external\external_value;
-use core_external\external_single_structure;
-use core_external\external_multiple_structure;
-use core_external\external_format_value;
-
 /** rubric: Used to compare our gradeitem_type against. */
 const RUBRIC_RANGES = 'rubric_ranges';
 

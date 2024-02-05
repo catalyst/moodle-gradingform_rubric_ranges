@@ -42,7 +42,6 @@ use moodle_exception;
  * @copyright 2019 Mathew May <mathew.solutions>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
- * @runTestsInSeparateProcesses
  * @covers \gradingform_rubric_ranges\grades\grader\gradingpanel\external\fetch
  */
 class fetch_test extends advanced_testcase {
