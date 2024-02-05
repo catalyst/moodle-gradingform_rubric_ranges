@@ -7,6 +7,13 @@
 The ranged rubrics advanced grading method is based on the Moodle core Rubrics grading method but 
 adding support for ranged values.
 
+## Branches
+
+| Moodle version   | Branch                                                                                                   |
+|------------------|----------------------------------------------------------------------------------------------------------|
+| Moodle 4.2+      | [MOODLE_402_STABLE](https://github.com/catalyst/moodle-gradingform_rubric_ranges/tree/MOODLE_402_STABLE) |
+| Moodle 3.9 - 4.1 | [MOODLE_39_STABLE](https://github.com/catalyst/moodle-gradingform_rubric_ranges/tree/MOODLE_39_STABLE)   |
+
 # Installation
 
 ## Installing via uploaded ZIP file ##
