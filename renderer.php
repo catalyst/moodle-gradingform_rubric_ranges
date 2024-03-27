@@ -668,12 +668,12 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
                 foreach ($levelsonly as $levelkey => $level) {
                     if ($rangecheck == $levelkey) {
                         $levels[$level['id']]['score'] = ($sortlevels)
-                        ? '0 to '. $level['score']
-                        : $level['score'].' to 0';
+                        ? '0 - '. $level['score']
+                        : $level['score'].' - 0';
                     } else {
                         $levels[$level['id']]['score'] = ($sortlevels)
-                        ? ($levelsonly[$levelkey - 1]['score'] + 1).' to '. $level['score']
-                        : $level['score'].' to '. ($levelsonly[$levelkey + 1]['score'] + 1);
+                        ? ($levelsonly[$levelkey - 1]['score'] + 1).' - '. $level['score']
+                        : $level['score'].' - '. ($levelsonly[$levelkey + 1]['score'] + 1);
                     }
                 }
                 return $levels;
