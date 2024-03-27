@@ -62,6 +62,7 @@ $string['level'] = 'Level {$a->definition}, {$a->score} points.';
 $string['leveldelete'] = 'Delete level {$a}';
 $string['leveldefinition'] = 'Level {$a} definition';
 $string['levelempty'] = 'Click to edit level';
+$string['levelrange'] = '{$a->rangestart} to {$a->rangeend}';
 $string['levelsgroup'] = 'Levels group';
 $string['lockzeropoints'] = 'Calculate grade having a minimum score of the minimum achievable grade for the rubric';
 $string['lockzeropoints_help'] = 'This setting only applies if the sum of the minimum number of points for each criterion is greater than 0. If ticked, the minimum score of the activity will be the minimum achievable grade for the rubric. If unticked, the minimum possible score for the rubric will be mapped to the minimum grade available for the activity (which is 0 unless a scale is used).';
