@@ -666,14 +666,29 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
                 }
 
                 foreach ($levelsonly as $levelkey => $level) {
+                    $a = new stdClass();
                     if ($rangecheck == $levelkey) {
-                        $levels[$level['id']]['score'] = ($sortlevels)
-                        ? '0 to '. $level['score']
-                        : $level['score'].' to 0';
+                        if ($sortlevels) {
+                            $a->rangestart = '0';
+                            $a->rangeend = $level['score'];
+                            $levels[$level['id']]['score'] = get_string('levelrange', 'gradingform_rubric_ranges', $a);
+                        } else {
+                            $a->rangestart = $level['score'];
+                            $a->rangeend = '0';
+                            $levels[$level['id']]['score'] = get_string('levelrange', 'gradingform_rubric_ranges', $a);
+                        }
                     } else {
-                        $levels[$level['id']]['score'] = ($sortlevels)
-                        ? ($levelsonly[$levelkey - 1]['score'] + 1).' to '. $level['score']
-                        : $level['score'].' to '. ($levelsonly[$levelkey + 1]['score'] + 1);
+                        if ($sortlevels) {
+                            $previousScore = $levelsonly[$levelkey - 1]['score'] + 1;
+                            $a->rangestart = $previousScore;
+                            $a->rangeend = $level['score'];
+                            $levels[$level['id']]['score'] = get_string('levelrange', 'gradingform_rubric_ranges', $a);
+                        } else {
+                            $nextScore = $levelsonly[$levelkey + 1]['score'] + 1;
+                            $a->rangestart = $level['score'];
+                            $a->rangeend = $nextScore;
+                            $levels[$level['id']]['score'] = get_string('levelrange', 'gradingform_rubric_ranges', $a);
+                        }
                     }
                 }
                 return $levels;
