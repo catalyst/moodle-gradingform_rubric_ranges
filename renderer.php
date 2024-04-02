@@ -679,14 +679,14 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
                         }
                     } else {
                         if ($sortlevels) {
-                            $previousScore = $levelsonly[$levelkey - 1]['score'] + 1;
-                            $a->rangestart = $previousScore;
+                            $previousscore = $levelsonly[$levelkey - 1]['score'] + 1;
+                            $a->rangestart = $previousscore;
                             $a->rangeend = $level['score'];
                             $levels[$level['id']]['score'] = get_string('levelrange', 'gradingform_rubric_ranges', $a);
                         } else {
-                            $nextScore = $levelsonly[$levelkey + 1]['score'] + 1;
+                            $nextscore = $levelsonly[$levelkey + 1]['score'] + 1;
                             $a->rangestart = $level['score'];
-                            $a->rangeend = $nextScore;
+                            $a->rangeend = $nextscore;
                             $levels[$level['id']]['score'] = get_string('levelrange', 'gradingform_rubric_ranges', $a);
                         }
                     }
