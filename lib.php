@@ -371,9 +371,10 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
         $options = $this->get_options();
         if (!$options['sortlevelsasc']) {
             if ($this->definition) {
-                foreach (array_keys($this->definition->rubric_criteria) as $rcid) {
-                    $this->definition->rubric_criteria[$rcid]['levels'] =
-                    array_reverse($this->definition->rubric_criteria[$rcid]['levels'], true);
+                foreach ($this->definition->rubric_criteria as $rcid => $criteria) {
+                    if (!empty($criteria['levels']) && is_array($criteria['levels'])) {
+                        $this->definition->rubric_criteria[$rcid]['levels'] = array_reverse($criteria['levels'], true);
+                    }
                 }
             }
         }
