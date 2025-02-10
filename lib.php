@@ -352,7 +352,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
                 $this->definition->rubric_criteria[$record->rcid]['levels'] = array();
             }
             // Pick the level data.
-            if (!empty($record->rlid)) {
+            if (!empty($record->rlid) && !empty($record->rcid)) {
                 foreach (array('id', 'score', 'definition', 'definitionformat') as $fieldname) {
                     $value = $record->{'rl'.$fieldname};
                     if ($fieldname == 'score') {
@@ -364,7 +364,9 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
                     $this->definition->rubric_criteria[$record->rcid]['levels'][$record->rlid][$fieldname] = $value;
                 }
             }
-            $this->definition->rubric_criteria[$record->rcid]['points'] = $maxpoint;
+            if (!empty($record->rcid)) {
+                $this->definition->rubric_criteria[$record->rcid]['points'] = $maxpoint;
+            }
         }
 
         $rs->close();
