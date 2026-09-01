@@ -71,9 +71,9 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
      * and there is an area with the active grading method set to 'rubric'.
      *
      * @param settings_navigation $settingsnav
-     * @param navigation_node $node
+     * @param navigation_node|null $node
      */
-    public function extend_settings_navigation(settings_navigation $settingsnav, navigation_node $node=null) {
+    public function extend_settings_navigation(settings_navigation $settingsnav, ?navigation_node $node=null) {
         $node->add(get_string('definerubric', 'gradingform_rubric_ranges'),
             $this->get_editor_url(), settings_navigation::TYPE_CUSTOM,
             null, null, new pix_icon('icon', '', 'gradingform_rubric_ranges'));
@@ -86,9 +86,9 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
      * FEATURE_ADVANCED_GRADING and there is an area with the active grading method set to the given plugin.
      *
      * @param global_navigation $navigation
-     * @param navigation_node $node
+     * @param navigation_node|null $node
      */
-    public function extend_navigation(global_navigation $navigation, navigation_node $node=null) {
+    public function extend_navigation(global_navigation $navigation, ?navigation_node $node=null) {
         if (has_capability('moodle/grade:managegradingforms', $this->get_context())) {
             // No need for preview if user can manage forms, he will have link to manage.php in settings instead.
             return;
