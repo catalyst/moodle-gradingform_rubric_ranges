@@ -24,7 +24,7 @@
 
 namespace gradingform_rubric_ranges\privacy;
 
-use \core_privacy\local\metadata\collection;
+use core_privacy\local\metadata\collection;
 
 /**
  * Privacy class for requesting user data.
@@ -32,22 +32,19 @@ use \core_privacy\local\metadata\collection;
  * @copyright  2018 Sara Arjona <sara@moodle.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class provider implements
-        \core_privacy\local\metadata\provider,
-        \core_grading\privacy\gradingform_provider_v2 {
-
+class provider implements \core_grading\privacy\gradingform_provider_v2, \core_privacy\local\metadata\provider {
     /**
      * Returns meta data about this system.
      *
      * @param  collection $collection The initialised collection to add items to.
      * @return collection A listing of user data stored through this system.
      */
-    public static function get_metadata(collection $collection) : collection {
+    public static function get_metadata(collection $collection): collection {
         $collection->add_database_table('gradingform_rubric_ranges_f', [
             'instanceid' => 'privacy:metadata:instanceid',
             'criterionid' => 'privacy:metadata:criterionid',
             'levelid' => 'privacy:metadata:levelid',
-            'remark' => 'privacy:metadata:remark'
+            'remark' => 'privacy:metadata:remark',
         ], 'privacy:metadata:fillingssummary');
         return $collection;
     }

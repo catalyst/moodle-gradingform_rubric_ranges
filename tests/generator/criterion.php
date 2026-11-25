@@ -36,10 +36,10 @@ class criterion {
     /** @var string $description A description of the criterion. */
     public $description;
 
-    /** @var integer $sortorder sort order of the criterion. */
+    /** @var int $sortorder sort order of the criterion. */
     public $sortorder = 0;
 
-    /** @var integer $isranged sort order of the criterion. */
+    /** @var int $isranged sort order of the criterion. */
     public $isranged = 0;
 
     /** @var array $levels The levels for this criterion. */
@@ -70,7 +70,7 @@ class criterion {
     public function add_level(string $definition, int $score): self {
         $this->levels[] = [
             'definition' => $definition,
-            'score' => $score
+            'score' => $score,
         ];
 
         return $this;

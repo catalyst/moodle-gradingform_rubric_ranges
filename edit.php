@@ -22,33 +22,35 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once(__DIR__.'/../../../../config.php');
-require_once(__DIR__.'/lib.php');
-require_once(__DIR__.'/edit_form.php');
-require_once($CFG->dirroot.'/grade/grading/lib.php');
+require_once(__DIR__ . '/../../../../config.php');
+require_once(__DIR__ . '/lib.php');
+require_once(__DIR__ . '/edit_form.php');
+require_once($CFG->dirroot . '/grade/grading/lib.php');
 
 $areaid = required_param('areaid', PARAM_INT);
 
 $manager = get_grading_manager($areaid);
 
-list($context, $course, $cm) = get_context_info_array($manager->get_context()->id);
+[$context, $course, $cm] = get_context_info_array($manager->get_context()->id);
 
 require_login($course, true, $cm);
 require_capability('moodle/grade:managegradingforms', $context);
 
 $controller = $manager->get_controller('rubric_ranges');
 
-$PAGE->set_url(new moodle_url('/grade/grading/form/rubric_ranges/edit.php', array('areaid' => $areaid)));
+$PAGE->set_url(new moodle_url('/grade/grading/form/rubric_ranges/edit.php', ['areaid' => $areaid]));
 $PAGE->set_title(get_string('definerubric', 'gradingform_rubric_ranges'));
 $PAGE->set_heading(get_string('definerubric', 'gradingform_rubric_ranges'));
 
-$mform = new gradingform_rubric_ranges_editrubric(null, array(
+$mform = new gradingform_rubric_ranges_editrubric(
+    null,
+    [
     'areaid' => $areaid,
     'context' => $context,
-    'allowdraft' => !$controller->has_active_instances()),
+    'allowdraft' => !$controller->has_active_instances()],
     'post',
     '',
-    array('class' => 'gradingform_rubric_ranges_editform')
+    ['class' => 'gradingform_rubric_ranges_editform']
 );
 $data = $controller->get_definition_for_editing(true);
 
@@ -67,10 +69,12 @@ if ($mform->is_cancelled()) {
     // If we do not go back to management url and the minscore warning needs to be displayed, display it during redirection.
     $warning = null;
     if (!empty($data->returnurl) && $data->returnurl !== $manager->get_management_url()->out(false)) {
-        if (empty($data->rubric['options']['lockzeropoints']) &&
+        if (
+            empty($data->rubric['options']['lockzeropoints']) &&
             ($scores = $controller->get_min_max_score()) &&
-            $scores['minscore'] <> 0) {
-            $warning = get_string('zerolevelsabsent', 'gradingform_rubric_ranges').'<br>'.
+            $scores['minscore'] <> 0
+        ) {
+            $warning = get_string('zerolevelsabsent', 'gradingform_rubric_ranges') . '<br>' .
                 html_writer::link($manager->get_management_url(), get_string('back'));
         }
     }

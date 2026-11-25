@@ -22,7 +22,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
-
     /**
      * This function returns html code for displaying criterion. Depending on $mode it may be the
      * code to edit rubric, to preview the rubric, to evaluate somebody or to review the evaluation.
@@ -46,19 +45,25 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
      * @param array|null $value (only in view mode) teacher's feedback on this criterion
      * @return string
      */
-    public function criterion_template($mode, $options, $elementname = '{NAME}',
-        $criterion = null, $levelsstr = '{LEVELS}', $value = null) {
+    public function criterion_template(
+        $mode,
+        $options,
+        $elementname = '{NAME}',
+        $criterion = null,
+        $levelsstr = '{LEVELS}',
+        $value = null
+    ) {
         // TODO MDL-31235 description format, remark format.
         if ($criterion === null || !is_array($criterion) || !array_key_exists('id', $criterion)) {
-            $criterion = array(
+            $criterion = [
                 'id' => '{CRITERION-id}',
                 'description' => '{CRITERION-description}',
                 'sortorder' => '{CRITERION-sortorder}',
                 'isranged' => '{CRITERION-isranged}',
-                'class' => '{CRITERION-class}'
-            );
+                'class' => '{CRITERION-class}',
+            ];
         } else {
-            foreach (array('sortorder', 'description', 'isranged', 'class') as $key) {
+            foreach (['sortorder', 'description', 'isranged', 'class'] as $key) {
                 // Set missing array elements to empty strings to avoid warnings.
                 if (!array_key_exists($key, $criterion)) {
                     $criterion[$key] = '';
@@ -66,35 +71,35 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
             }
         }
 
-        $criteriontemplate = html_writer::start_tag('tr', array(
-                    'class' => 'criterion'. $criterion['class'],
-                    'id' => '{NAME}-criteria-{CRITERION-id}'));
+        $criteriontemplate = html_writer::start_tag('tr', [
+                    'class' => 'criterion' . $criterion['class'],
+                    'id' => '{NAME}-criteria-{CRITERION-id}']);
         $controlstemplate = '';
         $rangedchktemplate = '';
         if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EDIT_FULL) {
-            $controlstemplate .= html_writer::start_tag('div', array('class' => 'controls'));
-            foreach (array('moveup', 'delete', 'movedown', 'duplicate') as $key) {
-                $value = get_string('criterion'.$key, 'gradingform_rubric_ranges');
-                $button = html_writer::empty_tag('input', array(
-                    'type' => 'submit', 'name' => '{NAME}[criteria][{CRITERION-id}]['.$key.']',
-                    'id' => '{NAME}-criteria-{CRITERION-id}-'.$key, 'value' => $value));
-                $controlstemplate .= html_writer::tag('div', $button, array('class' => $key));
+            $controlstemplate .= html_writer::start_tag('div', ['class' => 'controls']);
+            foreach (['moveup', 'delete', 'movedown', 'duplicate'] as $key) {
+                $value = get_string('criterion' . $key, 'gradingform_rubric_ranges');
+                $button = html_writer::empty_tag('input', [
+                    'type' => 'submit', 'name' => '{NAME}[criteria][{CRITERION-id}][' . $key . ']',
+                    'id' => '{NAME}-criteria-{CRITERION-id}-' . $key, 'value' => $value]);
+                $controlstemplate .= html_writer::tag('div', $button, ['class' => $key]);
             }
-            $controlstemplate .= html_writer::empty_tag('input', array('type' => 'hidden',
+            $controlstemplate .= html_writer::empty_tag('input', ['type' => 'hidden',
                                                                         'name' => '{NAME}[criteria][{CRITERION-id}][sortorder]',
-                                                                        'value' => $criterion['sortorder']));
+                                                                        'value' => $criterion['sortorder']]);
             $controlstemplate .= html_writer::end_tag('div'); // Controls.
 
             // Criterion description text area.
-            $descriptiontextareaparams = array(
+            $descriptiontextareaparams = [
                 'name' => '{NAME}[criteria][{CRITERION-id}][description]',
                 'id' => '{NAME}-criteria-{CRITERION-id}-description',
                 'aria-label' => get_string('criterion', 'gradingform_rubric_ranges', ''),
-                'cols' => '10', 'rows' => '5'
-            );
+                'cols' => '10', 'rows' => '5',
+            ];
             $description = html_writer::tag('textarea', s($criterion['description']), $descriptiontextareaparams);
 
-            $rangedchktemplate = html_writer::start_tag('div', array('class' => 'isranged'));
+            $rangedchktemplate = html_writer::start_tag('div', ['class' => 'isranged']);
             $israngedattrs['name'] = '{NAME}[criteria][{CRITERION-id}][isranged]';
             $israngedattrs['id'] = '{NAME}-criteria-{CRITERION-id}-isranged';
             $israngedattrs['type'] = 'checkbox';
@@ -104,34 +109,37 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
                 $israngedattrs['value'] = '1';
             }
 
-            if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EDIT_FROZEN
-                    || $mode == gradingform_rubric_ranges_controller::DISPLAY_PREVIEW) {
+            if (
+                $mode == gradingform_rubric_ranges_controller::DISPLAY_EDIT_FROZEN
+                    || $mode == gradingform_rubric_ranges_controller::DISPLAY_PREVIEW
+            ) {
                 $israngedattrs['disabled'] = 'disabled';
                 unset($israngedattrs['name']);
                 // Id should be different then the actual input added later.
                 $israngedattrs['id'] .= '_disabled';
             }
             $rangedchktemplate .= html_writer::empty_tag('input', $israngedattrs);
-            $rangedchktemplate .= html_writer::tag('label',
+            $rangedchktemplate .= html_writer::tag(
+                'label',
                 get_string('range', 'gradingform_rubric_ranges'),
-                array('for' => $israngedattrs['id']));
+                ['for' => $israngedattrs['id']]
+            );
 
             $rangedchktemplate .= html_writer::end_tag('div'); // Range checkbox.
-
         } else {
             if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EDIT_FROZEN) {
-                $criteriontemplate .= html_writer::empty_tag('input', array(
+                $criteriontemplate .= html_writer::empty_tag('input', [
                     'type' => 'hidden',
                     'name' => '{NAME}[criteria][{CRITERION-id}][sortorder]',
-                    'value' => $criterion['sortorder']));
-                $criteriontemplate .= html_writer::empty_tag('input', array(
+                    'value' => $criterion['sortorder']]);
+                $criteriontemplate .= html_writer::empty_tag('input', [
                     'type' => 'hidden',
                     'name' => '{NAME}[criteria][{CRITERION-id}][description]',
-                    'value' => $criterion['description']));
-                $criteriontemplate .= html_writer::empty_tag('input', array(
+                    'value' => $criterion['description']]);
+                $criteriontemplate .= html_writer::empty_tag('input', [
                     'type' => 'hidden',
                     'name' => '{NAME}[criteria][{CRITERION-id}][isranged]',
-                    'value' => $criterion['isranged']));
+                    'value' => $criterion['isranged']]);
             }
             $description = s($criterion['description']);
         }
@@ -144,12 +152,14 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
         }
 
         // Description cell params.
-        $descriptiontdparams = array(
+        $descriptiontdparams = [
             'class' => $descriptionclass,
-            'id' => '{NAME}-criteria-{CRITERION-id}-description-cell'
-        );
-        if ($mode != gradingform_rubric_ranges_controller::DISPLAY_EDIT_FULL &&
-            $mode != gradingform_rubric_ranges_controller::DISPLAY_EDIT_FROZEN) {
+            'id' => '{NAME}-criteria-{CRITERION-id}-description-cell',
+        ];
+        if (
+            $mode != gradingform_rubric_ranges_controller::DISPLAY_EDIT_FULL &&
+            $mode != gradingform_rubric_ranges_controller::DISPLAY_EDIT_FROZEN
+        ) {
             // Set description's cell as tab-focusable.
             $descriptiontdparams['tabindex'] = '0';
             // Set label for the criterion cell.
@@ -157,26 +167,26 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
         }
 
         // Description cell.
-        $criteriontemplate .= html_writer::tag('td', $rangedchktemplate.$description, $descriptiontdparams);
+        $criteriontemplate .= html_writer::tag('td', $rangedchktemplate . $description, $descriptiontdparams);
 
         // Levels table.
-        $levelsrowparams = array('id' => '{NAME}-criteria-{CRITERION-id}-levels');
+        $levelsrowparams = ['id' => '{NAME}-criteria-{CRITERION-id}-levels'];
         if ($mode != gradingform_rubric_ranges_controller::DISPLAY_EDIT_FULL) {
             $levelsrowparams['role'] = 'radiogroup';
         }
         $levelsrow = html_writer::tag('tr', $levelsstr, $levelsrowparams);
 
-        $levelstableparams = array(
+        $levelstableparams = [
             'id' => '{NAME}-criteria-{CRITERION-id}-levels-table',
-            'aria-label' => get_string('levelsgroup', 'gradingform_rubric_ranges')
-        );
+            'aria-label' => get_string('levelsgroup', 'gradingform_rubric_ranges'),
+        ];
         $levelsstrtable = html_writer::tag('table', $levelsrow, $levelstableparams);
         $levelsclass = 'levels';
         if (isset($criterion['error_levels'])) {
             $levelsclass .= ' error';
         }
 
-        $criteriontemplate .= html_writer::tag('td', $levelsstrtable, array('class' => $levelsclass));
+        $criteriontemplate .= html_writer::tag('td', $levelsstrtable, ['class' => $levelsclass]);
 
         $remarktemplate = '';
         $gradetemplate = '';
@@ -205,44 +215,47 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
                         ['' => 'choosedots'],
                         ['id' => '{NAME}-criteria-{CRITERION-id}-grade']
                     );
-
                 }
                 // HTML parameters for remarks text area.
-                $remarkparams = array(
+                $remarkparams = [
                     'name' => '{NAME}[criteria][{CRITERION-id}][remark]',
                     'id' => '{NAME}-criteria-{CRITERION-id}-remark',
                     'cols' => '10', 'rows' => '5',
-                    'aria-label' => $remarklabeltext
-                );
+                    'aria-label' => $remarklabeltext,
+                ];
                 $input = html_writer::tag('textarea', s($currentremark), $remarkparams);
-                $remarktemplate .= html_writer::tag('div', $input, array('class' => 'remark'));
+                $remarktemplate .= html_writer::tag('div', $input, ['class' => 'remark']);
             } else if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EVAL_FROZEN) {
-                $gradetemplate .= html_writer::empty_tag('input', array(
+                $gradetemplate .= html_writer::empty_tag('input', [
                     'type' => 'hidden',
                     'name' => '{NAME}[criteria][{CRITERION-id}][grade]',
-                    'value' => $currentgrade));
-                $remarktemplate .= html_writer::empty_tag('input', array(
+                    'value' => $currentgrade]);
+                $remarktemplate .= html_writer::empty_tag('input', [
                     'type' => 'hidden',
                     'name' => '{NAME}[criteria][{CRITERION-id}][remark]',
-                    'value' => $currentremark));
-            } else if ($mode == gradingform_rubric_ranges_controller::DISPLAY_REVIEW
-                || $mode == gradingform_rubric_ranges_controller::DISPLAY_VIEW) {
+                    'value' => $currentremark]);
+            } else if (
+                $mode == gradingform_rubric_ranges_controller::DISPLAY_REVIEW
+                || $mode == gradingform_rubric_ranges_controller::DISPLAY_VIEW
+            ) {
                 if ($criterion['isranged']) {
-                    $gradeparams = array(
+                    $gradeparams = [
                         'id' => '{NAME}-criteria-{CRITERION-id}-grade',
                         'class' => 'inline',
+                    ];
+                    $gradetemplate .= html_writer::tag(
+                        'div',
+                        $currentgrade . ' ' . get_string('pts', 'gradingform_rubric_ranges'),
+                        $gradeparams
                     );
-                    $gradetemplate .= html_writer::tag('div',
-                        $currentgrade. ' '.get_string('pts', 'gradingform_rubric_ranges'),
-                        $gradeparams);
                 }
                 // HTML parameters for remarks cell.
-                $remarkparams = array(
+                $remarkparams = [
                     'class' => 'remark',
                     'tabindex' => '0',
                     'id' => '{NAME}-criteria-{CRITERION-id}-remark',
-                    'aria-label' => $remarklabeltext
-                );
+                    'aria-label' => $remarklabeltext,
+                ];
                 $remarktemplate .= html_writer::tag('div', s($currentremark), $remarkparams);
             }
         }
@@ -261,39 +274,46 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
                     );
                 }
             } else if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EVAL_FROZEN) {
-
-                $gradetemplate .= html_writer::empty_tag('input', array(
+                $gradetemplate .= html_writer::empty_tag('input', [
                     'type' => 'hidden',
                     'name' => '{NAME}[criteria][{CRITERION-id}][grade]',
-                    'value' => $currentgrade));
+                    'value' => $currentgrade]);
             }
         }
 
         $pointstemplate = $gradetemplate;
-        $pointstemplate .= html_writer::start_tag('div',
-            array('class' => 'inline', 'id' => '{NAME}-criteria-{CRITERION-id}-points'));
+        $pointstemplate .= html_writer::start_tag(
+            'div',
+            ['class' => 'inline', 'id' => '{NAME}-criteria-{CRITERION-id}-points']
+        );
         if ($criterion['isranged']) {
             if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EVAL) {
                 $pointstemplate .= ' / ';
                 $pointstemplate .= isset($criterion['points']) ? $criterion['points'] : 0;
-                $pointstemplate .= ' '.get_string('pts', 'gradingform_rubric_ranges');
+                $pointstemplate .= ' ' . get_string('pts', 'gradingform_rubric_ranges');
             }
         }
         $pointstemplate .= html_writer::end_tag('div'); // Points.
         $pointstemplate .= $remarktemplate;
         if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EDIT_FULL) {
             $value = get_string('criterionaddlevel', 'gradingform_rubric_ranges');
-            $button = html_writer::empty_tag('input',
-                array('type' => 'submit', 'name' => '{NAME}[criteria][{CRITERION-id}][levels][addlevel]',
-                'id' => '{NAME}-criteria-{CRITERION-id}-levels-addlevel', 'value' => $value, 'class' => 'btn btn-secondary'));
-            $pointstemplate .= html_writer::tag('div', $button, array('class' => 'addlevel'));
+            $button = html_writer::empty_tag(
+                'input',
+                ['type' => 'submit', 'name' => '{NAME}[criteria][{CRITERION-id}][levels][addlevel]',
+                'id' => '{NAME}-criteria-{CRITERION-id}-levels-addlevel',
+                'value' => $value,
+                'class' => 'btn btn-secondary']
+            );
+            $pointstemplate .= html_writer::tag('div', $button, ['class' => 'addlevel']);
         }
         if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EDIT_FULL) {
-            $criteriontemplate .= html_writer::tag('td', $pointstemplate, array('class' => 'addlevel'));
+            $criteriontemplate .= html_writer::tag('td', $pointstemplate, ['class' => 'addlevel']);
         }
-        if ($mode == gradingform_rubric_ranges_controller::DISPLAY_VIEW
-            || $mode == gradingform_rubric_ranges_controller::DISPLAY_EVAL) {
-            $criteriontemplate .= html_writer::tag('td', $pointstemplate, array('class' => 'points'));
+        if (
+            $mode == gradingform_rubric_ranges_controller::DISPLAY_VIEW
+            || $mode == gradingform_rubric_ranges_controller::DISPLAY_EVAL
+        ) {
+            $criteriontemplate .= html_writer::tag('td', $pointstemplate, ['class' => 'points']);
         }
         $criteriontemplate .= html_writer::end_tag('tr'); // Criterion.
         $criteriontemplate = str_replace('{NAME}', $elementname, $criteriontemplate);
@@ -327,13 +347,13 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
     public function level_template($mode, $options, $elementname = '{NAME}', $criterionid = '{CRITERION-id}', $level = null) {
         // TODO MDL-31235 definition format.
         if (!isset($level['id'])) {
-            $level = array('id' => '{LEVEL-id}',
+            $level = ['id' => '{LEVEL-id}',
                 'definition' => '{LEVEL-definition}',
                 'score' => '{LEVEL-score}',
                 'class' => '{LEVEL-class}',
-                'checked' => false);
+                'checked' => false];
         } else {
-            foreach (array('score', 'definition', 'class', 'checked', 'index') as $key) {
+            foreach (['score', 'definition', 'class', 'checked', 'index'] as $key) {
                 // Set missing array elements to empty strings to avoid warnings.
                 if (!array_key_exists($key, $level)) {
                     $level[$key] = '';
@@ -345,54 +365,54 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
         $levelindex = isset($level['index']) ? $level['index'] : '{LEVEL-index}';
 
         // Template for one level within one criterion.
-        $tdattributes = array(
+        $tdattributes = [
             'id' => '{NAME}-criteria-{CRITERION-id}-levels-{LEVEL-id}',
-            'class' => 'text-break level' . $level['class']
-        );
+            'class' => 'text-break level' . $level['class'],
+        ];
         if (isset($level['tdwidth'])) {
-            $tdattributes['width'] = round($level['tdwidth']).'%';
+            $tdattributes['width'] = round($level['tdwidth']) . '%';
         }
 
-        $leveltemplate = html_writer::start_tag('div', array('class' => 'level-wrapper'));
+        $leveltemplate = html_writer::start_tag('div', ['class' => 'level-wrapper']);
         if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EDIT_FULL) {
-            $definitionparams = array(
+            $definitionparams = [
                 'id' => '{NAME}-criteria-{CRITERION-id}-levels-{LEVEL-id}-definition',
                 'name' => '{NAME}[criteria][{CRITERION-id}][levels][{LEVEL-id}][definition]',
                 'aria-label' => get_string('leveldefinition', 'gradingform_rubric_ranges', $levelindex),
-                'cols' => '10', 'rows' => '4'
-            );
+                'cols' => '10', 'rows' => '4',
+            ];
             $definition = html_writer::tag('textarea', s($level['definition']), $definitionparams);
 
-            $scoreparams = array(
+            $scoreparams = [
                 'type' => 'text',
                 'id' => '{NAME}[criteria][{CRITERION-id}][levels][{LEVEL-id}][score]',
                 'name' => '{NAME}[criteria][{CRITERION-id}][levels][{LEVEL-id}][score]',
                 'aria-label' => get_string('scoreinputforlevel', 'gradingform_rubric_ranges', $levelindex),
                 'size' => '3',
-                'value' => $level['score']
-            );
+                'value' => $level['score'],
+            ];
             $score = html_writer::empty_tag('input', $scoreparams);
         } else {
             if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EDIT_FROZEN) {
-                $leveltemplate .= html_writer::empty_tag('input', array(
+                $leveltemplate .= html_writer::empty_tag('input', [
                     'type' => 'hidden',
                     'name' => '{NAME}[criteria][{CRITERION-id}][levels][{LEVEL-id}][definition]',
-                    'value' => $level['definition']));
-                $leveltemplate .= html_writer::empty_tag('input', array(
+                    'value' => $level['definition']]);
+                $leveltemplate .= html_writer::empty_tag('input', [
                     'type' => 'hidden',
                     'name' => '{NAME}[criteria][{CRITERION-id}][levels][{LEVEL-id}][score]',
-                    'value' => $level['score']));
+                    'value' => $level['score']]);
             }
             $definition = s($level['definition']);
             $score = $level['score'];
         }
         if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EVAL) {
-            $levelradioparams = array(
+            $levelradioparams = [
                 'type' => 'radio',
                 'id' => '{NAME}-criteria-{CRITERION-id}-levels-{LEVEL-id}-definition',
                 'name' => '{NAME}[criteria][{CRITERION-id}][levelid]',
-                'value' => $level['id']
-            );
+                'value' => $level['id'],
+            ];
             if ($level['checked']) {
                 $levelradioparams['checked'] = 'checked';
             }
@@ -400,33 +420,37 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
             $leveltemplate .= html_writer::div($input, 'radio');
         }
         if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EVAL_FROZEN && $level['checked']) {
-            $leveltemplate .= html_writer::empty_tag('input',
-                array(
+            $leveltemplate .= html_writer::empty_tag(
+                'input',
+                [
                     'type' => 'hidden',
                     'name' => '{NAME}[criteria][{CRITERION-id}][levelid]',
-                    'value' => $level['id']
-                )
+                    'value' => $level['id'],
+                ]
             );
         }
-        $score = html_writer::tag('span', $score, array(
+        $score = html_writer::tag('span', $score, [
             'id' => '{NAME}-criteria-{CRITERION-id}-levels-{LEVEL-id}-score',
-            'class' => 'scorevalue'));
+            'class' => 'scorevalue']);
         $definitionclass = 'definition';
         if (isset($level['error_definition'])) {
             $definitionclass .= ' error';
         }
 
-        if ($mode != gradingform_rubric_ranges_controller::DISPLAY_EDIT_FULL &&
-            $mode != gradingform_rubric_ranges_controller::DISPLAY_EDIT_FROZEN) {
-
+        if (
+            $mode != gradingform_rubric_ranges_controller::DISPLAY_EDIT_FULL &&
+            $mode != gradingform_rubric_ranges_controller::DISPLAY_EDIT_FROZEN
+        ) {
             $tdattributes['tabindex'] = '0';
             $levelinfo = new stdClass();
             $levelinfo->definition = s($level['definition']);
             $levelinfo->score = $level['score'];
             $tdattributes['aria-label'] = get_string('level', 'gradingform_rubric_ranges', $levelinfo);
 
-            if ($mode != gradingform_rubric_ranges_controller::DISPLAY_PREVIEW &&
-                $mode != gradingform_rubric_ranges_controller::DISPLAY_PREVIEW_GRADED) {
+            if (
+                $mode != gradingform_rubric_ranges_controller::DISPLAY_PREVIEW &&
+                $mode != gradingform_rubric_ranges_controller::DISPLAY_PREVIEW_GRADED
+            ) {
                 // Add role of radio button to level cell if not in edit and preview mode.
                 $tdattributes['role'] = 'radio';
                 if ($level['checked']) {
@@ -437,23 +461,27 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
             }
         }
 
-        $leveltemplateparams = array(
-            'id' => '{NAME}-criteria-{CRITERION-id}-levels-{LEVEL-id}-definition-container'
-        );
+        $leveltemplateparams = [
+            'id' => '{NAME}-criteria-{CRITERION-id}-levels-{LEVEL-id}-definition-container',
+        ];
         $leveltemplate .= html_writer::div($definition, $definitionclass, $leveltemplateparams);
         $displayscore = true;
-        if (!$options['showscoreteacher']
-            && in_array($mode, array(
+        if (
+            !$options['showscoreteacher']
+            && in_array($mode, [
                 gradingform_rubric_ranges_controller::DISPLAY_EVAL,
                 gradingform_rubric_ranges_controller::DISPLAY_EVAL_FROZEN,
                 gradingform_rubric_ranges_controller::DISPLAY_REVIEW,
-                gradingform_rubric_ranges_controller::DISPLAY_PRINT))) {
+                gradingform_rubric_ranges_controller::DISPLAY_PRINT])
+        ) {
             $displayscore = false;
         }
-        if (!$options['showscorestudent']
-            && in_array($mode, array(gradingform_rubric_ranges_controller::DISPLAY_VIEW,
+        if (
+            !$options['showscorestudent']
+            && in_array($mode, [gradingform_rubric_ranges_controller::DISPLAY_VIEW,
                 gradingform_rubric_ranges_controller::DISPLAY_PREVIEW_GRADED,
-                gradingform_rubric_ranges_controller::DISPLAY_PRINT))) {
+                gradingform_rubric_ranges_controller::DISPLAY_PRINT])
+        ) {
             $displayscore = false;
         }
 
@@ -462,20 +490,22 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
             if (isset($level['error_score'])) {
                 $scoreclass .= ' error';
             }
-            $leveltemplate .= html_writer::tag('div',
+            $leveltemplate .= html_writer::tag(
+                'div',
                 get_string('scorepostfix', 'gradingform_rubric_ranges', $score),
-                array('class' => $scoreclass));
+                ['class' => $scoreclass]
+            );
         }
         if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EDIT_FULL) {
             $value = get_string('leveldelete', 'gradingform_rubric_ranges', $levelindex);
-            $buttonparams = array(
+            $buttonparams = [
                 'type' => 'submit',
                 'name' => '{NAME}[criteria][{CRITERION-id}][levels][{LEVEL-id}][delete]',
                 'id' => '{NAME}-criteria-{CRITERION-id}-levels-{LEVEL-id}-delete',
-                'value' => $value
-            );
+                'value' => $value,
+            ];
             $button = html_writer::empty_tag('input', $buttonparams);
-            $leveltemplate .= html_writer::tag('div', $button, array('class' => 'delete'));
+            $leveltemplate .= html_writer::tag('div', $button, ['class' => 'delete']);
         }
         $leveltemplate .= html_writer::end_tag('div'); // Level-wrapper.
 
@@ -533,28 +563,30 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
                 break;
         }
 
-        $rubrictemplate = html_writer::start_tag('div',
-            array('id' => 'rubric-{NAME}',
-                'class' => 'clearfix gradingform_rubric_ranges'.$classsuffix));
+        $rubrictemplate = html_writer::start_tag(
+            'div',
+            ['id' => 'rubric-{NAME}',
+            'class' => 'clearfix gradingform_rubric_ranges' . $classsuffix]
+        );
 
         // Rubric table.
-        $rubrictableparams = array(
+        $rubrictableparams = [
             'class' => 'criteria',
             'id' => '{NAME}-criteria',
-            'aria-label' => get_string('rubric', 'gradingform_rubric_ranges'));
+            'aria-label' => get_string('rubric', 'gradingform_rubric_ranges')];
 
         $rubrictable = html_writer::tag('table', $criteriastr, $rubrictableparams);
         $rubrictemplate .= $rubrictable;
         if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EDIT_FULL) {
             $value = get_string('addcriterion', 'gradingform_rubric_ranges');
-            $criteriainputparams = array(
+            $criteriainputparams = [
                 'type' => 'submit',
                 'name' => '{NAME}[criteria][addcriterion]',
                 'id' => '{NAME}-criteria-addcriterion',
-                'value' => $value
-            );
+                'value' => $value,
+            ];
             $input = html_writer::empty_tag('input', $criteriainputparams);
-            $rubrictemplate .= html_writer::tag('div', $input, array('class' => 'addcriterion btn btn-secondary'));
+            $rubrictemplate .= html_writer::tag('div', $input, ['class' => 'addcriterion btn btn-secondary']);
         }
         $rubrictemplate .= $this->rubric_edit_options($mode, $options);
         $rubrictemplate .= html_writer::end_tag('div');
@@ -572,35 +604,43 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
      */
     protected function rubric_edit_options($mode, $options) {
 
-        if ($mode != gradingform_rubric_ranges_controller::DISPLAY_EDIT_FULL
+        if (
+            $mode != gradingform_rubric_ranges_controller::DISPLAY_EDIT_FULL
                 && $mode != gradingform_rubric_ranges_controller::DISPLAY_EDIT_FROZEN
-                && $mode != gradingform_rubric_ranges_controller::DISPLAY_PREVIEW) {
+                && $mode != gradingform_rubric_ranges_controller::DISPLAY_PREVIEW
+        ) {
             // Options are displayed only for people who can manage.
             return;
         }
 
-        $html = html_writer::start_tag('div', array('class' => 'options'));
-        $html .= html_writer::tag('div',
-            get_string('rubricoptions', 'gradingform_rubric_ranges'), array('class' => 'optionsheading'));
-        $attrs = array('type' => 'hidden', 'name' => '{NAME}[options][optionsset]', 'value' => 1);
+        $html = html_writer::start_tag('div', ['class' => 'options']);
+        $html .= html_writer::tag(
+            'div',
+            get_string('rubricoptions', 'gradingform_rubric_ranges'),
+            ['class' => 'optionsheading']
+        );
+        $attrs = ['type' => 'hidden', 'name' => '{NAME}[options][optionsset]', 'value' => 1];
         foreach ($options as $option => $value) {
-            $html .= html_writer::start_tag('div', array('class' => 'option '.$option));
-            $attrs = array('name' => '{NAME}[options]['.$option.']', 'id' => '{NAME}-options-'.$option);
+            $html .= html_writer::start_tag('div', ['class' => 'option ' . $option]);
+            $attrs = ['name' => '{NAME}[options][' . $option . ']', 'id' => '{NAME}-options-' . $option];
             switch ($option) {
                 case 'sortlevelsasc':
                     // Display option as dropdown.
                     $html .= html_writer::label(get_string($option, 'gradingform_rubric_ranges'), $attrs['id'], false);
                     $value = (int)(!!$value); // Make sure $value is either 0 or 1.
                     if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EDIT_FULL) {
-                        $selectoptions = array(0 => get_string($option.'0', 'gradingform_rubric_ranges'),
-                        1 => get_string($option.'1', 'gradingform_rubric_ranges'));
-                        $valuestr = html_writer::select($selectoptions, $attrs['name'], $value, false, array('id' => $attrs['id']));
-                        $html .= html_writer::tag('span', $valuestr, array('class' => 'value'));
+                        $selectoptions = [0 => get_string($option . '0', 'gradingform_rubric_ranges'),
+                        1 => get_string($option . '1', 'gradingform_rubric_ranges')];
+                        $valuestr = html_writer::select($selectoptions, $attrs['name'], $value, false, ['id' => $attrs['id']]);
+                        $html .= html_writer::tag('span', $valuestr, ['class' => 'value']);
                     } else {
-                        $html .= html_writer::tag('span', get_string($option.$value, 'gradingform_rubric_ranges'),
-                            array('class' => 'value'));
+                        $html .= html_writer::tag(
+                            'span',
+                            get_string($option . $value, 'gradingform_rubric_ranges'),
+                            ['class' => 'value']
+                        );
                         if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EDIT_FROZEN) {
-                            $html .= html_writer::empty_tag('input', $attrs + array('type' => 'hidden', 'value' => $value));
+                            $html .= html_writer::empty_tag('input', $attrs + ['type' => 'hidden', 'value' => $value]);
                         }
                     }
                     break;
@@ -608,7 +648,7 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
                     if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EDIT_FROZEN && $value) {
                         // Id should be different then the actual input added later.
                         $attrs['id'] .= '_hidden';
-                        $html .= html_writer::empty_tag('input', $attrs + array('type' => 'hidden', 'value' => $value));
+                        $html .= html_writer::empty_tag('input', $attrs + ['type' => 'hidden', 'value' => $value]);
                     }
                     // Display option as checkbox.
                     $attrs['type'] = 'checkbox';
@@ -616,19 +656,24 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
                     if ($value) {
                         $attrs['checked'] = 'checked';
                     }
-                    if ($mode == gradingform_rubric_ranges_controller::DISPLAY_EDIT_FROZEN
-                        || $mode == gradingform_rubric_ranges_controller::DISPLAY_PREVIEW) {
+                    if (
+                        $mode == gradingform_rubric_ranges_controller::DISPLAY_EDIT_FROZEN
+                        || $mode == gradingform_rubric_ranges_controller::DISPLAY_PREVIEW
+                    ) {
                         $attrs['disabled'] = 'disabled';
                         unset($attrs['name']);
                         // Id should be different then the actual input added later.
                         $attrs['id'] .= '_disabled';
                     }
                     $html .= html_writer::empty_tag('input', $attrs);
-                    $html .= html_writer::tag('label', get_string($option, 'gradingform_rubric_ranges'),
-                        array('for' => $attrs['id']));
+                    $html .= html_writer::tag(
+                        'label',
+                        get_string($option, 'gradingform_rubric_ranges'),
+                        ['for' => $attrs['id']]
+                    );
                     break;
             }
-            if (get_string_manager()->string_exists($option.'_help', 'gradingform_rubric_ranges')) {
+            if (get_string_manager()->string_exists($option . '_help', 'gradingform_rubric_ranges')) {
                 $html .= $this->help_icon($option, 'gradingform_rubric_ranges');
             }
             $html .= html_writer::end_tag('div'); // Option.
@@ -649,14 +694,14 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
      */
     public function display_range_score($mode, $levels, $sortlevels, $isranged = false) {
         if ($isranged) {
-            $rangedisplaymodes = array(
+            $rangedisplaymodes = [
                 gradingform_rubric_ranges_controller::DISPLAY_REVIEW,
                 gradingform_rubric_ranges_controller::DISPLAY_VIEW,
                 gradingform_rubric_ranges_controller::DISPLAY_PREVIEW,
                 gradingform_rubric_ranges_controller::DISPLAY_EVAL,
                 gradingform_rubric_ranges_controller::DISPLAY_PREVIEW_GRADED,
                 gradingform_rubric_ranges_controller::DISPLAY_PRINT,
-            );
+            ];
 
             if (in_array($mode, $rangedisplaymodes)) {
                 $levelsonly = array_values($levels);
@@ -728,15 +773,21 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
             }
             $index = 1;
 
-            $criterion['levels'] = $this->display_range_score($mode,
-                $criterion['levels'], $options['sortlevelsasc'], $criterion['isranged']);
+            $criterion['levels'] = $this->display_range_score(
+                $mode,
+                $criterion['levels'],
+                $options['sortlevelsasc'],
+                $criterion['isranged']
+            );
             foreach ($criterion['levels'] as $levelid => $level) {
                 $level['id'] = $levelid;
                 $level['class'] = $this->get_css_class_suffix($levelcnt++, count($criterion['levels']) - 1);
                 $level['checked'] = (isset($criterionvalue['levelid']) && ((int)$criterionvalue['levelid'] === $levelid));
-                if ($level['checked'] && ($mode == gradingform_rubric_ranges_controller::DISPLAY_EVAL_FROZEN
+                if (
+                    $level['checked'] && ($mode == gradingform_rubric_ranges_controller::DISPLAY_EVAL_FROZEN
                     || $mode == gradingform_rubric_ranges_controller::DISPLAY_REVIEW
-                    || $mode == gradingform_rubric_ranges_controller::DISPLAY_VIEW)) {
+                    || $mode == gradingform_rubric_ranges_controller::DISPLAY_VIEW)
+                ) {
                     $level['class'] .= ' checked';
                     // In mode DISPLAY_EVAL the class 'checked' will be added by JS if it is enabled.
                     // If JS is not enabled, the 'checked' class will only confuse.
@@ -789,14 +840,14 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
     public function display_instances($instances, $defaultcontent, $cangrade) {
         $return = '';
         if (count($instances)) {
-            $return .= html_writer::start_tag('div', array('class' => 'advancedgrade'));
+            $return .= html_writer::start_tag('div', ['class' => 'advancedgrade']);
             $idx = 0;
             foreach ($instances as $instance) {
                 $return .= $this->display_instance($instance, $idx++, $cangrade);
             }
             $return .= html_writer::end_tag('div');
         }
-        return $return. $defaultcontent;
+        return $return . $defaultcontent;
     }
 
     /**
@@ -819,10 +870,12 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
         }
         $output = '';
         if ($showdescription) {
-            $output .= $this->box($instance->get_controller()->get_formatted_description(),
-                'gradingform_rubric_ranges-description');
+            $output .= $this->box(
+                $instance->get_controller()->get_formatted_description(),
+                'gradingform_rubric_ranges-description'
+            );
         }
-        $output .= $this->display_rubric($criteria, $options, $mode, 'rubric'.$idx, $values);
+        $output .= $this->display_rubric($criteria, $options, $mode, 'rubric' . $idx, $values);
         return $output;
     }
 
@@ -835,18 +888,20 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
      * @return string
      */
     public function display_regrade_confirmation($elementname, $changelevel, $value) {
-        $html = html_writer::start_tag('div', array('class' => 'gradingform_rubric_ranges-regrade', 'role' => 'alert'));
+        $html = html_writer::start_tag('div', ['class' => 'gradingform_rubric_ranges-regrade', 'role' => 'alert']);
         if ($changelevel <= 2) {
-            $html .= html_writer::label(get_string('regrademessage1', 'gradingform_rubric_ranges'),
-                'menu' . $elementname . 'regrade');
-            $selectoptions = array(
-                0 => get_string('regradeoption0', 'gradingform_rubric_ranges'),
-                1 => get_string('regradeoption1', 'gradingform_rubric_ranges')
+            $html .= html_writer::label(
+                get_string('regrademessage1', 'gradingform_rubric_ranges'),
+                'menu' . $elementname . 'regrade'
             );
-            $html .= html_writer::select($selectoptions, $elementname.'[regrade]', $value, false);
+            $selectoptions = [
+                0 => get_string('regradeoption0', 'gradingform_rubric_ranges'),
+                1 => get_string('regradeoption1', 'gradingform_rubric_ranges'),
+            ];
+            $html .= html_writer::select($selectoptions, $elementname . '[regrade]', $value, false);
         } else {
             $html .= get_string('regrademessage5', 'gradingform_rubric_ranges');
-            $html .= html_writer::empty_tag('input', array('name' => $elementname.'[regrade]', 'value' => 1, 'type' => 'hidden'));
+            $html .= html_writer::empty_tag('input', ['name' => $elementname . '[regrade]', 'value' => 1, 'type' => 'hidden']);
         }
         $html .= html_writer::end_tag('div');
         return $html;
@@ -866,8 +921,11 @@ class gradingform_rubric_ranges_renderer extends plugin_renderer_base {
         if ($scores['minscore'] <> 0) {
             $html .= $this->output->notification(get_string('zerolevelsabsent', 'gradingform_rubric_ranges'), 'error');
         }
-        $html .= $this->output->notification(get_string('rubricmappingexplained',
-            'gradingform_rubric_ranges', (object)$scores), 'info');
+        $html .= $this->output->notification(get_string(
+            'rubricmappingexplained',
+            'gradingform_rubric_ranges',
+            (object)$scores
+        ), 'info');
         return $html;
     }
 }

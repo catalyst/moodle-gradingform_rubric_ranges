@@ -38,12 +38,11 @@ use context_module;
  *
  * @covers \gradingform_rubric_ranges\privacy\provider
  */
-class privacy_test extends provider_testcase {
-
+final class privacy_test extends provider_testcase {
     /**
      * Test the export of rubric data.
      */
-    public function test_get_gradingform_export_data() {
+    public function test_get_gradingform_export_data(): void {
         global $DB;
         $this->resetAfterTest();
         $course = $this->getDataGenerator()->create_course();
@@ -62,8 +61,10 @@ class privacy_test extends provider_testcase {
         $data = $this->get_test_form_data(
             $controller,
             $itemid,
-            1, 'This user made several mistakes.',
-            0, 'Please add more pictures.'
+            1,
+            'This user made several mistakes.',
+            0,
+            'Please add more pictures.'
         );
 
         // Update this instance with data.
@@ -83,7 +84,7 @@ class privacy_test extends provider_testcase {
     /**
      * Test the deletion of rubric user information via the instance ID.
      */
-    public function test_delete_gradingform_for_instances() {
+    public function test_delete_gradingform_for_instances(): void {
         global $DB;
         $this->resetAfterTest();
         $course = $this->getDataGenerator()->create_course();
@@ -102,8 +103,10 @@ class privacy_test extends provider_testcase {
         $data = $this->get_test_form_data(
             $controller,
             $itemid,
-            1, 'This user made several mistakes.',
-            0, 'Please add more pictures.'
+            1,
+            'This user made several mistakes.',
+            0,
+            'Please add more pictures.'
         );
 
         // Update this instance with data.
@@ -116,8 +119,10 @@ class privacy_test extends provider_testcase {
         $data = $this->get_test_form_data(
             $controller,
             $itemid,
-            0, 'Too many mistakes. Please try again.',
-            2, 'Great number of pictures. Well done.'
+            0,
+            'Too many mistakes. Please try again.',
+            2,
+            'Great number of pictures. Well done.'
         );
 
         // Update this instance with data.
@@ -143,8 +148,11 @@ class privacy_test extends provider_testcase {
      * @param string $area
      * @return gradingform_rubric_ranges_controller
      */
-    protected function get_test_rubric_ranges(context_module $context,
-                                              string $component, string $area): gradingform_rubric_ranges_controller {
+    protected function get_test_rubric_ranges(
+        context_module $context,
+        string $component,
+        string $area
+    ): gradingform_rubric_ranges_controller {
         $generator = \testing_util::get_data_generator();
         $rubricgenerator = $generator->get_plugin_generator('gradingform_rubric_ranges');
 

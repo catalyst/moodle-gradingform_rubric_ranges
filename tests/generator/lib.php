@@ -40,7 +40,6 @@ use tests\gradingform_rubric_ranges\generator\criterion;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class gradingform_rubric_ranges_generator extends component_generator_base {
-
     /**
      * Create an instance of a rubric.
      *
@@ -128,7 +127,7 @@ class gradingform_rubric_ranges_generator extends component_generator_base {
 
         $criterion = $level = null;
 
-        $criterion = array_reduce($criteria, function($carry, $criterion) use ($description) {
+        $criterion = array_reduce($criteria, function ($carry, $criterion) use ($description) {
             if ($criterion['description'] === $description) {
                 $carry = $criterion;
             }
@@ -194,7 +193,7 @@ class gradingform_rubric_ranges_generator extends component_generator_base {
             $result['criteria'][$criterion->id] = [
                 'levelid' => $level->id,
                 'remark' => $remark,
-                'grade' => $score
+                'grade' => $score,
             ];
         }
         return $result;
@@ -208,8 +207,11 @@ class gradingform_rubric_ranges_generator extends component_generator_base {
      * @param string $area
      * @return gradingform_rubric_ranges_controller
      */
-    public function get_test_rubric_ranges(context $context, string $component,
-                                           string $area): gradingform_rubric_ranges_controller {
+    public function get_test_rubric_ranges(
+        context $context,
+        string $component,
+        string $area
+    ): gradingform_rubric_ranges_controller {
         $criteria = [
             [
                 'name' => 'Spelling is important',
@@ -227,7 +229,7 @@ class gradingform_rubric_ranges_generator extends component_generator_base {
                     'More than one picture' => 2,
                 ],
                 'isranged' => 0,
-            ]
+            ],
         ];
 
         return $this->create_instance($context, $component, $area, 'testrubric', 'Description text', $criteria);

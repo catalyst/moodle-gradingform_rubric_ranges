@@ -40,8 +40,7 @@ use gradingform_controller;
  *
  * @covers \gradingform_rubric_ranges_generator
  */
-class generator_test extends advanced_testcase {
-
+final class generator_test extends advanced_testcase {
     /**
      * Test rubric creation.
      */
@@ -81,7 +80,7 @@ class generator_test extends advanced_testcase {
                     '2, 5, and 10 times table known' => 8,
                 ],
                 'isranged' => 1,
-            ]
+            ],
         ];
 
         // Unit under test.
@@ -196,7 +195,7 @@ class generator_test extends advanced_testcase {
                     '2, 5, and 10 times table known' => 8,
                 ],
                 'isranged' => 0,
-            ]
+            ],
         ];
 
         $this->setUser($user);
@@ -280,7 +279,7 @@ class generator_test extends advanced_testcase {
             'Pictures' => [
                 'score' => 2,
                 'remark' => 'Lots of nice pictures!',
-            ]
+            ],
         ]);
 
         $this->assertIsArray($result);
@@ -322,8 +321,10 @@ class generator_test extends advanced_testcase {
         $result = $rubricgenerator->get_test_form_data(
             $controller,
             1839,
-            1, 'Propper good speling',
-            0, 'ASCII art is not a picture'
+            1,
+            'Propper good speling',
+            0,
+            'ASCII art is not a picture'
         );
 
         $this->assertIsArray($result);

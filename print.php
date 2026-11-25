@@ -22,19 +22,19 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once(__DIR__.'/../../../../config.php');
-require_once(__DIR__.'/lib.php');
-require_once($CFG->dirroot.'/grade/grading/lib.php');
+require_once(__DIR__ . '/../../../../config.php');
+require_once(__DIR__ . '/lib.php');
+require_once($CFG->dirroot . '/grade/grading/lib.php');
 
 $areaid = required_param('areaid', PARAM_INT);
 
 $manager = get_grading_manager($areaid);
 
-list($context, $course, $cm) = get_context_info_array($manager->get_context()->id);
+[$context, $course, $cm] = get_context_info_array($manager->get_context()->id);
 
 require_login($course, true, $cm);
 
 $controller = $manager->get_controller('rubric_ranges');
 
-$PAGE->set_url(new moodle_url('/grade/grading/form/rubric_ranges/print.php', array('areaid' => $areaid)));
+$PAGE->set_url(new moodle_url('/grade/grading/form/rubric_ranges/print.php', ['areaid' => $areaid]));
 $controller->print($PAGE);

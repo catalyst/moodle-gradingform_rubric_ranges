@@ -23,7 +23,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU Public License
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace gradingform_rubric_ranges\grades\grader\gradingpanel\external;
 
@@ -45,11 +45,11 @@ use moodle_exception;
  * @runTestsInSeparateProcesses
  * @covers \gradingform_rubric_ranges\grades\grader\gradingpanel\external\store
  */
-class store_test extends advanced_testcase {
-
+final class store_test extends advanced_testcase {
     public function setUp(): void {
         global $CFG;
         require_once("{$CFG->libdir}/externallib.php");
+        parent::setUp();
     }
 
     /**
@@ -139,9 +139,13 @@ class store_test extends advanced_testcase {
         $grade = $gradeitem->get_grade_for_user($student, $teacher);
         $instance = $gradeitem->get_advanced_grading_instance($teacher, $grade);
 
-        $submissiondata = $rubricgenerator->get_test_form_data($controller, (int) $student->id,
-            4, 'There are few mistakes.',
-            2, 'Great number of pictures. Well done.'
+        $submissiondata = $rubricgenerator->get_test_form_data(
+            $controller,
+            (int) $student->id,
+            4,
+            'There are few mistakes.',
+            2,
+            'Great number of pictures. Well done.'
         );
 
         $formdata = http_build_query((object) [

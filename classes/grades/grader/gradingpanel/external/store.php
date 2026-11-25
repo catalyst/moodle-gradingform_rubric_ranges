@@ -22,7 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace gradingform_rubric_ranges\grades\grader\gradingpanel\external;
 defined('MOODLE_INTERNAL') || die();
@@ -37,7 +37,7 @@ use core_external\external_function_parameters;
 use core_external\external_single_structure;
 use core_external\external_value;
 use moodle_exception;
-require_once($CFG->dirroot.'/grade/grading/form/rubric_ranges/lib.php');
+require_once($CFG->dirroot . '/grade/grading/form/rubric_ranges/lib.php');
 
 /**
  * Web services relating to storing of a rubric for the grading panel.
@@ -47,7 +47,6 @@ require_once($CFG->dirroot.'/grade/grading/form/rubric_ranges/lib.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class store extends external_api {
-
     /**
      * Describes the parameters for storing the grading panel for a simple grade.
      *
@@ -55,7 +54,7 @@ class store extends external_api {
      * @since Moodle 3.8
      */
     public static function execute_parameters(): external_function_parameters {
-        return new external_function_parameters ([
+        return new external_function_parameters([
             'component' => new external_value(
                 PARAM_ALPHANUMEXT,
                 'The name of the component',
@@ -102,8 +101,14 @@ class store extends external_api {
      *
      * @return array
      */
-    public static function execute(string $component, int $contextid, string $itemname, int $gradeduserid, bool $notifyuser,
-            string $formdata): array {
+    public static function execute(
+        string $component,
+        int $contextid,
+        string $itemname,
+        int $gradeduserid,
+        bool $notifyuser,
+        string $formdata
+    ): array {
         global $USER;
 
         [

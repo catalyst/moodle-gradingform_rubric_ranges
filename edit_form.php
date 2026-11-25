@@ -24,11 +24,13 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot.'/lib/formslib.php');
-require_once(__DIR__.'/rubricrangeseditor.php');
-MoodleQuickForm::registerElementType('rubricrangeseditor',
-    $CFG->dirroot.'/grade/grading/form/rubric_ranges/rubricrangeseditor.php',
-    'MoodleQuickForm_rubricrangeseditor');
+require_once($CFG->dirroot . '/lib/formslib.php');
+require_once(__DIR__ . '/rubricrangeseditor.php');
+MoodleQuickForm::registerElementType(
+    'rubricrangeseditor',
+    $CFG->dirroot . '/grade/grading/form/rubric_ranges/rubricrangeseditor.php',
+    'MoodleQuickForm_rubricrangeseditor'
+);
 
 /**
  * Defines the rubric edit form
@@ -38,7 +40,6 @@ MoodleQuickForm::registerElementType('rubricrangeseditor',
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class gradingform_rubric_ranges_editrubric extends moodleform {
-
     /**
      * Form element definition
      */
@@ -52,8 +53,12 @@ class gradingform_rubric_ranges_editrubric extends moodleform {
         $form->setType('returnurl', PARAM_LOCALURL);
 
         // Name.
-        $form->addElement('text', 'name', get_string('name', 'gradingform_rubric_ranges'),
-            array('size' => 52, 'aria-required' => 'true'));
+        $form->addElement(
+            'text',
+            'name',
+            get_string('name', 'gradingform_rubric_ranges'),
+            ['size' => 52, 'aria-required' => 'true']
+        );
         $form->addRule('name', get_string('required'), 'required', null, 'client');
         $form->setType('name', PARAM_TEXT);
 
@@ -63,29 +68,41 @@ class gradingform_rubric_ranges_editrubric extends moodleform {
         $form->setType('description_editor', PARAM_RAW);
 
         // Rubric completion status.
-        $choices = array();
-        $choices[gradingform_controller::DEFINITION_STATUS_DRAFT] = html_writer::tag('span',
-            get_string('statusdraft', 'core_grading'), array('class' => 'status draft'));
-        $choices[gradingform_controller::DEFINITION_STATUS_READY] = html_writer::tag('span',
-            get_string('statusready', 'core_grading'), array('class' => 'status ready'));
+        $choices = [];
+        $choices[gradingform_controller::DEFINITION_STATUS_DRAFT] = html_writer::tag(
+            'span',
+            get_string('statusdraft', 'core_grading'),
+            ['class' => 'status draft']
+        );
+        $choices[gradingform_controller::DEFINITION_STATUS_READY] = html_writer::tag(
+            'span',
+            get_string('statusready', 'core_grading'),
+            ['class' => 'status ready']
+        );
         $form->addElement('select', 'status', get_string('rubricstatus', 'gradingform_rubric_ranges'), $choices)->freeze();
 
         // Rubric editor.
-        $element = $form->addElement('rubricrangeseditor', 'rubricranges',
-            get_string('rubric', 'gradingform_rubric_ranges'));
+        $element = $form->addElement(
+            'rubricrangeseditor',
+            'rubricranges',
+            get_string('rubric', 'gradingform_rubric_ranges')
+        );
         $form->setType('rubricranges', PARAM_RAW);
 
-        $buttonarray = array();
+        $buttonarray = [];
         $buttonarray[] = &$form->createElement('submit', 'saverubric', get_string('saverubric', 'gradingform_rubric_ranges'));
         if ($this->_customdata['allowdraft']) {
-            $buttonarray[] = &$form->createElement('submit', 'saverubricdraft',
-                get_string('saverubricdraft', 'gradingform_rubric_ranges'));
+            $buttonarray[] = &$form->createElement(
+                'submit',
+                'saverubricdraft',
+                get_string('saverubricdraft', 'gradingform_rubric_ranges')
+            );
         }
         $editbutton = &$form->createElement('submit', 'editrubric', ' ');
         $editbutton->freeze();
         $buttonarray[] = &$editbutton;
         $buttonarray[] = &$form->createElement('cancel');
-        $form->addGroup($buttonarray, 'buttonar', '', array(' '), false);
+        $form->addGroup($buttonarray, 'buttonar', '', [' '], false);
         $form->closeHeaderBefore('buttonar');
     }
 
@@ -123,7 +140,7 @@ class gradingform_rubric_ranges_editrubric extends moodleform {
      */
     public function validation($data, $files) {
         $err = parent::validation($data, $files);
-        $err = array();
+        $err = [];
         $form = $this->_form;
         $rubricel = $form->getElement('rubricranges');
         if ($rubricel->non_js_button_pressed($data['rubricranges'])) {
@@ -188,7 +205,7 @@ class gradingform_rubric_ranges_editrubric extends moodleform {
         // Freeze form elements and pass the values in hidden fields.
         // TODO MDL-29421 description_editor does not freeze the normal way, uncomment below when fixed.
         $form = $this->_form;
-        foreach (array('rubricranges', 'name'/*, 'description_editor'*/) as $fieldname) {
+        foreach (['rubricranges', 'name'/*, 'description_editor'*/] as $fieldname) {
             $el =& $form->getElement($fieldname);
             $el->freeze();
             $el->setPersistantFreeze(true);
