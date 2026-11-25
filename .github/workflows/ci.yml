@@ -10,5 +10,4 @@ jobs:
     permissions:
       contents: write
     with:
-      disable_phpcpd: true
       disable_ci_validate: true
