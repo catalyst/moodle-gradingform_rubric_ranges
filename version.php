@@ -25,8 +25,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'gradingform_rubric_ranges';
-$plugin->version  = 2024112201;    // The current plugin version (Date: YYYYMMDDXX).
-$plugin->release  = 2024112201;    // Match release exactly to version.
+$plugin->version  = 2024112202;    // The current plugin version (Date: YYYYMMDDXX).
+$plugin->release  = 2024112202;    // Match release exactly to version.
 $plugin->requires = 2023042400;    // Requires Moodle 4.2.0 or later.
 $plugin->maturity = MATURITY_STABLE;
 $plugin->supported = [402, 405];
