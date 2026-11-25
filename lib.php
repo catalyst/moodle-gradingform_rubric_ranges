@@ -925,6 +925,7 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
     }
 }
 
+// phpcs:disable PSR1.Classes.ClassDeclaration.MultipleClasses -- Moodle requires both grading classes in the plugin's lib.php.
 /**
  * Class to manage one rubric grading instance.
  *
@@ -935,6 +936,8 @@ class gradingform_rubric_ranges_controller extends gradingform_controller {
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class gradingform_rubric_ranges_instance extends gradingform_instance {
+    // phpcs:enable PSR1.Classes.ClassDeclaration.MultipleClasses
+
     /** @var array stores the rubric, has two keys: 'criteria' and 'options' */
     protected $rubric;
 

@@ -315,7 +315,13 @@ class fetch extends external_api {
      * @param int $format The input format of the string
      * @return string
      */
-    protected static function get_formatted_text(context $context, int $definitionid, string $filearea, string $text, int $format): string {
+    protected static function get_formatted_text(
+        context $context,
+        int $definitionid,
+        string $filearea,
+        string $text,
+        int $format
+    ): string {
         $formatoptions = [
             'noclean' => false,
             'trusted' => false,
