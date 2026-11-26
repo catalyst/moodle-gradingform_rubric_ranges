@@ -75,9 +75,6 @@ $string['privacy:metadata:remark'] = 'Remarks related to the rubric criterion be
 $string['pts'] = 'pts';
 $string['range'] = 'Ranged';
 $string['ratings'] = 'Ratings';
-
-
-
 $string['regrademessage1'] = 'You are about to save changes to a rubric that has already been used for grading. Please indicate if existing grades need to be reviewed. If you set this then the rubric will be hidden from students until their item is regraded.';
 $string['regrademessage5'] = 'You are about to save significant changes to a rubric that has already been used for grading. The gradebook value will be unchanged, but the rubric will be hidden from students until their item is regraded.';
 $string['regradeoption0'] = 'Do not mark for regrade';
