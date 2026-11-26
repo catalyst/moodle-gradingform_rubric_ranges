@@ -22,7 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace gradingform_rubric_ranges\grades\grader\gradingpanel\external;
 defined('MOODLE_INTERNAL') || die();
@@ -40,7 +40,7 @@ use core_external\external_value;
 use core_external\external_warnings;
 use stdClass;
 use moodle_exception;
-require_once($CFG->dirroot.'/grade/grading/form/rubric_ranges/lib.php');
+require_once($CFG->dirroot . '/grade/grading/form/rubric_ranges/lib.php');
 require_once($CFG->dirroot . '/lib/externallib.php');
 
 /**
@@ -51,7 +51,6 @@ require_once($CFG->dirroot . '/lib/externallib.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class fetch extends external_api {
-
     /**
      * Describes the parameters for fetching the grading panel for a simple grade.
      *
@@ -59,7 +58,7 @@ class fetch extends external_api {
      * @since Moodle 3.8
      */
     public static function execute_parameters(): external_function_parameters {
-        return new external_function_parameters ([
+        return new external_function_parameters([
             'component' => new external_value(
                 PARAM_ALPHANUMEXT,
                 'The name of the component',
@@ -176,7 +175,7 @@ class fetch extends external_api {
         $criterion = [];
         if ($definition->rubric_criteria) {
             // Iterate over the defined criterion in the rubric and map out what we need to render each item.
-            $criterion = array_map(function($criterion) use ($definitionid, $fillings, $context, $hasgrade) {
+            $criterion = array_map(function ($criterion) use ($definitionid, $fillings, $context, $hasgrade) {
                 // The general structure we'll be returning, we still need to get the remark (if any) and the levels associated.
                 $result = [
                     'id' => $criterion['id'],
@@ -193,7 +192,8 @@ class fetch extends external_api {
                 $filling = [];
                 if (array_key_exists($criterion['id'], $fillings['criteria'])) {
                     $filling = $fillings['criteria'][$criterion['id']];
-                    $result['remark'] = self::get_formatted_text($context,
+                    $result['remark'] = self::get_formatted_text(
+                        $context,
                         $definitionid,
                         'remark',
                         $filling['remark'],
@@ -202,7 +202,7 @@ class fetch extends external_api {
                 }
 
                 // Lets build the levels within a criteria and figure out what needs to go where.
-                $result['levels'] = array_map(function($level) use ($criterion, $filling, $context, $definitionid) {
+                $result['levels'] = array_map(function ($level) use ($criterion, $filling, $context, $definitionid) {
                     // The bulk of what'll be returned can be defined easily we'll add to this further down.
                     $result = [
                         'id' => $level['id'],
@@ -281,8 +281,11 @@ class fetch extends external_api {
                     new external_single_structure([
                         'id' => new external_value(PARAM_INT, 'ID of the Criteria'),
                         'description' => new external_value(PARAM_RAW, 'Description of the Criteria'),
-                        'remark' => new external_value(PARAM_RAW, 'Any remarks for this criterion for the user being assessed',
-                         VALUE_OPTIONAL),
+                        'remark' => new external_value(
+                            PARAM_RAW,
+                            'Any remarks for this criterion for the user being assessed',
+                            VALUE_OPTIONAL
+                        ),
                         'levels' => new external_multiple_structure(new external_single_structure([
                             'id' => new external_value(PARAM_INT, 'ID of level'),
                             'criterionid' => new external_value(PARAM_INT, 'ID of the criterion this matches to'),
@@ -312,8 +315,13 @@ class fetch extends external_api {
      * @param int $format The input format of the string
      * @return string
      */
-    protected static function get_formatted_text(context $context, int $definitionid, string $filearea, string $text, int $format)
-    : string {
+    protected static function get_formatted_text(
+        context $context,
+        int $definitionid,
+        string $filearea,
+        string $text,
+        int $format
+    ): string {
         $formatoptions = [
             'noclean' => false,
             'trusted' => false,

@@ -37,7 +37,6 @@ use stdClass;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class rubric_ranges {
-
     /** @var array $criteria The criteria for this rubric. */
     protected $criteria = [];
 
@@ -79,7 +78,7 @@ class rubric_ranges {
             'description_editor' => [
                 'text' => $this->description,
                 'format' => FORMAT_HTML,
-                'itemid' => 1
+                'itemid' => 1,
             ],
             'rubricranges' => [
                 'criteria' => $this->get_all_criterion_values(),
@@ -128,6 +127,5 @@ class rubric_ranges {
         }
 
         return $result;
-
     }
 }

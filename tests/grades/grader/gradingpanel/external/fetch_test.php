@@ -20,10 +20,10 @@
  * @package   gradingform_rubric_ranges
  * @category  test
  * @copyright 2022 Heena Agheda <heenaagheda@catalyst-au.net>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU Public License
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace gradingform_rubric_ranges\grades\grader\gradingpanel\external;
 
@@ -45,11 +45,11 @@ use moodle_exception;
  * @runTestsInSeparateProcesses
  * @covers \gradingform_rubric_ranges\grades\grader\gradingpanel\external\fetch
  */
-class fetch_test extends advanced_testcase {
-
+final class fetch_test extends advanced_testcase {
     public function setUp(): void {
         global $CFG;
         require_once("{$CFG->libdir}/externallib.php");
+        parent::setUp();
     }
 
     /**
@@ -235,7 +235,7 @@ class fetch_test extends advanced_testcase {
      *
      * @return void
      */
-    private function execute_and_assert_fetch ($forum, $controller, $definition, $fetcheruser, $grader, $gradeduser) {
+    private function execute_and_assert_fetch($forum, $controller, $definition, $fetcheruser, $grader, $gradeduser) {
         $generator = \testing_util::get_data_generator();
         $rubricgenerator = $generator->get_plugin_generator('gradingform_rubric_ranges');
 
@@ -245,9 +245,13 @@ class fetch_test extends advanced_testcase {
         $grade = $gradeitem->get_grade_for_user($gradeduser, $grader);
         $instance = $gradeitem->get_advanced_grading_instance($grader, $grade);
 
-        $submissiondata = $rubricgenerator->get_test_form_data($controller, (int) $gradeduser->id,
-            1, 'Too many mistakes. Please try again.',
-            2, 'Great number of pictures. Well done.'
+        $submissiondata = $rubricgenerator->get_test_form_data(
+            $controller,
+            (int) $gradeduser->id,
+            1,
+            'Too many mistakes. Please try again.',
+            2,
+            'Great number of pictures. Well done.'
         );
 
         $gradeitem->store_grade_from_formdata($gradeduser, $grader, (object) [
@@ -306,7 +310,6 @@ class fetch_test extends advanced_testcase {
                 $this->assertArrayHasKey('score', $level);
                 $this->assertEquals($sourcelevel['score'], $level['score']);
             }
-
         }
 
         $this->assertEquals(1, $criteria[0]['levels'][2]['checked']);
@@ -364,8 +367,10 @@ class fetch_test extends advanced_testcase {
         $data = $this->get_test_form_data(
             $controller,
             $itemid,
-            1, 'This user made several mistakes.',
-            0, 'Please add more pictures.'
+            1,
+            'This user made several mistakes.',
+            0,
+            'Please add more pictures.'
         );
 
         // Update this instance with data.

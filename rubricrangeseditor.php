@@ -43,7 +43,7 @@ require_once("HTML/QuickForm/input.php");
  */
 class MoodleQuickForm_rubricrangeseditor extends HTML_QuickForm_input {
     /** @var string help message */
-    public $_helpbutton = '';
+    public $_helpbutton = ''; // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore -- Used by QuickForm's addHelpButton().
     /** @var string|bool stores the result of the last validation: null - undefined, false - no errors, string - error(s) text */
     protected $validationerrors = null;
     /** @var bool if element has already been validated **/

@@ -30,7 +30,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class restore_gradingform_rubric_ranges_plugin extends restore_gradingform_plugin {
-
     /**
      * Declares the rubric XML paths attached to the form definition element
      *
@@ -38,13 +37,17 @@ class restore_gradingform_rubric_ranges_plugin extends restore_gradingform_plugi
      */
     protected function define_definition_plugin_structure() {
 
-        $paths = array();
+        $paths = [];
 
-        $paths[] = new restore_path_element('gradingform_rubric_ranges_criterion',
-            $this->get_pathfor('/rubric_ranges_criteria/rubric_ranges_criterion'));
+        $paths[] = new restore_path_element(
+            'gradingform_rubric_ranges_criterion',
+            $this->get_pathfor('/rubric_ranges_criteria/rubric_ranges_criterion')
+        );
 
-        $paths[] = new restore_path_element('gradingform_rubric_ranges_level',
-            $this->get_pathfor('/rubric_ranges_criteria/rubric_ranges_criterion/rubric_ranges_levels/rubric_ranges_level'));
+        $paths[] = new restore_path_element(
+            'gradingform_rubric_ranges_level',
+            $this->get_pathfor('/rubric_ranges_criteria/rubric_ranges_criterion/rubric_ranges_levels/rubric_ranges_level')
+        );
 
         return $paths;
     }
@@ -56,10 +59,12 @@ class restore_gradingform_rubric_ranges_plugin extends restore_gradingform_plugi
      */
     protected function define_instance_plugin_structure() {
 
-        $paths = array();
+        $paths = [];
 
-        $paths[] = new restore_path_element('gradinform_rubric_ranges_filling',
-            $this->get_pathfor('/rubric_ranges_fillings/rubric_ranges_filling'));
+        $paths[] = new restore_path_element(
+            'gradinform_rubric_ranges_filling',
+            $this->get_pathfor('/rubric_ranges_fillings/rubric_ranges_filling')
+        );
 
         return $paths;
     }
@@ -116,6 +121,5 @@ class restore_gradingform_rubric_ranges_plugin extends restore_gradingform_plugi
         if (!empty($data->criterionid)) {
             $DB->insert_record('gradingform_rubric_ranges_f', $data);
         }
-
     }
 }

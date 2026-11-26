@@ -30,7 +30,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class backup_gradingform_rubric_ranges_plugin extends backup_gradingform_plugin {
-
     /**
      * Declares rubric structures to append to the grading form definition
      */
@@ -49,13 +48,13 @@ class backup_gradingform_rubric_ranges_plugin extends backup_gradingform_plugin 
 
         $criteria = new backup_nested_element('rubric_ranges_criteria');
 
-        $criterion = new backup_nested_element('rubric_ranges_criterion', array('id'), array(
-            'sortorder', 'isranged', 'description', 'descriptionformat'));
+        $criterion = new backup_nested_element('rubric_ranges_criterion', ['id'], [
+            'sortorder', 'isranged', 'description', 'descriptionformat']);
 
         $levels = new backup_nested_element('rubric_ranges_levels');
 
-        $level = new backup_nested_element('rubric_ranges_level', array('id'), array(
-            'score', 'definition', 'definitionformat'));
+        $level = new backup_nested_element('rubric_ranges_level', ['id'], [
+            'score', 'definition', 'definitionformat']);
 
         // Build elements hierarchy.
         $pluginwrapper->add_child($criteria);
@@ -65,11 +64,15 @@ class backup_gradingform_rubric_ranges_plugin extends backup_gradingform_plugin 
 
         // Set sources to populate the data.
 
-        $criterion->set_source_table('gradingform_rubric_ranges_c',
-                array('definitionid' => backup::VAR_PARENTID));
+        $criterion->set_source_table(
+            'gradingform_rubric_ranges_c',
+            ['definitionid' => backup::VAR_PARENTID]
+        );
 
-        $level->set_source_table('gradingform_rubric_ranges_l',
-                array('criterionid' => backup::VAR_PARENTID));
+        $level->set_source_table(
+            'gradingform_rubric_ranges_l',
+            ['criterionid' => backup::VAR_PARENTID]
+        );
 
         // No need to annotate ids or files yet (one day when criterion definition supports
         // Embedded files, they must be annotated here).
@@ -95,8 +98,8 @@ class backup_gradingform_rubric_ranges_plugin extends backup_gradingform_plugin 
 
         $fillings = new backup_nested_element('rubric_ranges_fillings');
 
-        $filling = new backup_nested_element('rubric_ranges_filling', array('id'), array(
-            'criterionid', 'levelid', 'grade', 'remark', 'remarkformat'));
+        $filling = new backup_nested_element('rubric_ranges_filling', ['id'], [
+            'criterionid', 'levelid', 'grade', 'remark', 'remarkformat']);
 
         // Build elements hierarchy.
 
@@ -106,12 +109,14 @@ class backup_gradingform_rubric_ranges_plugin extends backup_gradingform_plugin 
         // Set sources to populate the data.
 
         // Binding criterionid to ensure it's existence.
-        $filling->set_source_sql('SELECT rf.*
+        $filling->set_source_sql(
+            'SELECT rf.*
                 FROM {gradingform_rubric_ranges_f} rf
                 JOIN {grading_instances} gi ON gi.id = rf.instanceid
                 JOIN {gradingform_rubric_ranges_c} rc ON rc.id = rf.criterionid AND gi.definitionid = rc.definitionid
                 WHERE rf.instanceid = :instanceid',
-                array('instanceid' => backup::VAR_PARENTID));
+            ['instanceid' => backup::VAR_PARENTID]
+        );
 
         // No need to annotate ids or files yet (one day when remark field supports.
         // Embedded fileds, they must be annotated here).

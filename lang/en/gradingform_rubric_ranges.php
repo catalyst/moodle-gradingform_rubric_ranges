@@ -24,20 +24,13 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'Ranged rubric';
-$string['criteria'] = 'Criteria';
-$string['ratings'] = 'Ratings';
-$string['points'] = 'Points';
-$string['pts'] = 'pts';
-$string['range'] = 'Ranged';
-$string['downloadpdf'] = 'Download PDF';
-
 $string['addcriterion'] = 'Add criterion';
 $string['additionalfeedback'] = 'Additional feedback';
 $string['alwaysshowdefinition'] = 'Allow users to preview rubric (otherwise it will only be displayed after grading)';
 $string['backtoediting'] = 'Back to editing';
 $string['confirmdeletecriterion'] = 'Are you sure you want to delete this criterion?';
 $string['confirmdeletelevel'] = 'Are you sure you want to delete this level?';
+$string['criteria'] = 'Criteria';
 $string['criterion'] = 'Criterion {$a}';
 $string['criterionaddlevel'] = 'Add level';
 $string['criteriondelete'] = 'Delete criterion';
@@ -48,19 +41,20 @@ $string['criterionmoveup'] = 'Move up';
 $string['criterionremark'] = 'Remark for criterion {$a->description}: {$a->remark}';
 $string['definerubric'] = 'Define rubric';
 $string['description'] = 'Description';
+$string['downloadpdf'] = 'Download PDF';
 $string['enableremarks'] = 'Allow grader to add text remarks for each criterion';
+$string['err_duplicatescore'] = 'Number of points for each level must be a unique number';
 $string['err_mintwolevels'] = 'Each criterion must have at least two levels';
 $string['err_nocriteria'] = 'Rubric must contain at least one criterion';
 $string['err_nodefinition'] = 'Level definition can not be empty';
 $string['err_nodescription'] = 'Criterion description can not be empty';
 $string['err_novariations'] = 'Criterion levels cannot all be worth the same number of points';
 $string['err_scoreformat'] = 'Number of points for each level must be a valid number';
-$string['err_duplicatescore'] = 'Number of points for each level must be a unique number';
 $string['err_totalscore'] = 'Maximum number of points possible when graded by the rubric must be more than zero';
 $string['gradingof'] = '{$a} grading';
 $string['level'] = 'Level {$a->definition}, {$a->score} points.';
-$string['leveldelete'] = 'Delete level {$a}';
 $string['leveldefinition'] = 'Level {$a} definition';
+$string['leveldelete'] = 'Delete level {$a}';
 $string['levelempty'] = 'Click to edit level';
 $string['levelrange'] = '{$a->rangestart} to {$a->rangeend}';
 $string['levelsgroup'] = 'Levels group';
@@ -69,8 +63,8 @@ $string['lockzeropoints_help'] = 'This setting only applies if the sum of the mi
 $string['name'] = 'Name';
 $string['needregrademessage'] = 'The rubric definition was changed after this student had been graded. The student can not see this rubric until you check the rubric and update the grade.';
 $string['notset'] = 'Not set';
-
-
+$string['pluginname'] = 'Ranged rubric';
+$string['points'] = 'Points';
 $string['pointsvalue'] = '{$a} points';
 $string['previewrubric'] = 'Preview rubric';
 $string['privacy:metadata:criterionid'] = 'An identifier for a specific criterion being graded.';
@@ -78,6 +72,9 @@ $string['privacy:metadata:fillingssummary'] = 'Stores information about the user
 $string['privacy:metadata:instanceid'] = 'An identifier relating to a grade in an activity.';
 $string['privacy:metadata:levelid'] = 'The level obtained in the rubric.';
 $string['privacy:metadata:remark'] = 'Remarks related to the rubric criterion being assessed.';
+$string['pts'] = 'pts';
+$string['range'] = 'Ranged';
+$string['ratings'] = 'Ratings';
 $string['regrademessage1'] = 'You are about to save changes to a rubric that has already been used for grading. Please indicate if existing grades need to be reviewed. If you set this then the rubric will be hidden from students until their item is regraded.';
 $string['regrademessage5'] = 'You are about to save significant changes to a rubric that has already been used for grading. The gradebook value will be unchanged, but the rubric will be hidden from students until their item is regraded.';
 $string['regradeoption0'] = 'Do not mark for regrade';

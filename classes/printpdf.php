@@ -28,7 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 
 global $CFG, $SITE;
 
-require_once($CFG->libdir.'/pdflib.php');
+require_once($CFG->libdir . '/pdflib.php');
 
 /**
  * Extending pdf class to customise it.
